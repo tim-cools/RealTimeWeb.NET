@@ -14,11 +14,12 @@ class Application extends Component {
         return (
             <div>
                 <Header
-                    user={user}
+                    userAuthenticated={user.status == userStatus.authenticated}
+                    userName={user.name}
                     onLogonClick={() => dispatch(userActions.logon('haha'))}
                     onLogoffClick={() => dispatch(userActions.logoff())} />
+                {this.props.children}
                 <Container>
-                    {this.props.children}
                     <Footer />
                 </Container>
             </div>

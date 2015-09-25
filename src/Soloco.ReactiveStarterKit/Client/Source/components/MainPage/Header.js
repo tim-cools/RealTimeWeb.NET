@@ -6,12 +6,12 @@ import { Container } from 'react-bootstrap-grid';
 
 class Header extends Component {
     render() {
-        const { dispatch, user, onLogonClick, onLogoffClick } = this.props;
+        const { dispatch, userAuthenticated, userName, onLogonClick, onLogoffClick } = this.props;
 
-        var items = user.status == userStatus.authenticated
+        var items = userAuthenticated
             ? [ (
                 <Nav>
-                    <NavItem>authenticated: {  user.name }</NavItem>
+                    <NavItem>authenticated: {  userName }</NavItem>
                 </Nav>
                 ), (
                 <Nav right={true}>
@@ -39,10 +39,9 @@ class Header extends Component {
 Header.propTypes = {
     onLogonClick: PropTypes.func.isRequired,
     onLogoffClick: PropTypes.func.isRequired,
-    user: PropTypes.shape({
-        status: React.PropTypes.oneOf(userStatus.values).isRequired,
-        name: PropTypes.string
-    }).isRequired
+
+    userAuthenticated: PropTypes.bool.isRequired,
+    userName: PropTypes.string
 };
 
 export default Header;

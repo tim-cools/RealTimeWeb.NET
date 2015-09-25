@@ -1,10 +1,17 @@
+export const userStatus = {
+    notAuthenticated: 'notAuthenticated',
+    authenticated: 'authenticated',
+    logonPending: 'logonPending',
+    values: ['notAuthenticated', 'authenticated', 'logonPending']
+};
+
 let notAuthenticated = {
     status: userStatus.notAuthenticated
 };
 
 function authenticated(name) {
     return {
-        status: userStatus.authenticated,
+        status: userStatus.notAuthenticated,
         name: name
     };
 }
@@ -13,13 +20,6 @@ export const actionsDefinitions = {
     LOG_OFF: 'LOG_OFF',
     LOG_ON: 'LOG_ON',
     LOG_ON_PENDING: 'LOG_ON_PENDING'
-};
-
-export const userStatus = {
-    notAuthenticated: 'notAuthenticated',
-    authenticated: 'authenticated',
-    logonPending: 'logonPending',
-    values: ['notAuthenticated', 'authenticated', 'logonPending']
 };
 
 export const actions = {
@@ -39,7 +39,10 @@ export const actions = {
 export function reducer(state = notAuthenticated, action) {
     switch (action.type) {
         case actionsDefinitions.LOG_ON:
-            return authenticated(action.name);
+            return {
+                status: userStatus.authenticated,
+                name: action.name
+            };
 
         case actionsDefinitions.LOG_ON_PENDING:
             return { status: userStatus.logonPending };

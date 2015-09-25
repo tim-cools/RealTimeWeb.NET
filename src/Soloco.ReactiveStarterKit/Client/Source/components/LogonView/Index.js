@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
 import { actions as userActions, userStatus } from '../../state/user'
-//import userApi from '../../api/user'
+import userApi from '../../api/membership'
 
 class LogonPage extends Component {
     onClick() {
@@ -12,13 +13,17 @@ class LogonPage extends Component {
         var userName = userNameInput.getValue();
         var password = passwordInput.getValue();
 
-        //userApi.login(userName, password);
+        userApi.login(userName, password);
 
-        dispatch(actions.logonPending());
+        dispatch(userActions.logonPending());
     }
 
     render() {
         var title = ( <h2>Log On</h2> );
+        var loader = this.props.logonPending
+            ? ( <div>Loading</div> )
+            : null;
+
         return (
             <Grid>
                 <Row className="show-grid">
@@ -33,24 +38,21 @@ class LogonPage extends Component {
                                 type="text"
                                 placeholder="Email or username"
                                 hasFeedback
-                                ref="userName"/>
+                                ref="userNameInput"/>
                             <Input
                                 type="password"
                                 placeholder="Password"
                                 hasFeedback
-                                ref="password"/>
+                                ref="passwordInput"/>
                             <Button bsStyle="success" onClick={this.onClick.bind(this)} >
                                 Log On
                             </Button>
-                            { if (this.state.logonPending) {
-                                    <Div>Loading<Div/>
-                                }}
+                            {loader}
                         </Panel>
-
                     </Col>
                 </Row>
             </Grid>
-            );
+        );
     }
 }
 
