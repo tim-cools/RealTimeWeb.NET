@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 
 var separatorStyle = {
-    'border-bottom': '1px solid #ccc',
-    'font-size': '1px',
-    'height': '8px',
-    'margin-bottom': '8px'
+    borderBottom: '1px solid #ccc',
+    fontSize: '1px',
+    height: '8px',
+    marginBottom: '8px'
 };
 
 class Footer extends Component {

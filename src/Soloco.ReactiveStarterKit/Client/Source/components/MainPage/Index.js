@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Panel, Jumbotron } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
 
-import { actions as userActions } from '../../state/user'
+import { actions as userActions, userStatus } from '../../state/user'
 import Header from './header';
 import Footer from './footer';
 
@@ -28,7 +28,7 @@ class Application extends Component {
 
 Application.propTypes = {
     user: PropTypes.shape({
-        authenticated: PropTypes.bool.isRequired,
+        status: React.PropTypes.oneOf(userStatus.values),
         name: PropTypes.string
     }).isRequired
 };

@@ -8,7 +8,7 @@ class Header extends Component {
     render() {
         const { dispatch, user, onLogonClick, onLogoffClick } = this.props;
 
-        var items = user.authenticated
+        var items = user.status == userStatus.authenticated
             ? [ (
                 <Nav>
                     <NavItem>authenticated: {  user.name }</NavItem>
@@ -40,7 +40,7 @@ Header.propTypes = {
     onLogonClick: PropTypes.func.isRequired,
     onLogoffClick: PropTypes.func.isRequired,
     user: PropTypes.shape({
-        authenticated: PropTypes.bool.isRequired,
+        status: React.PropTypes.oneOf(userStatus.values).isRequired,
         name: PropTypes.string
     }).isRequired
 };

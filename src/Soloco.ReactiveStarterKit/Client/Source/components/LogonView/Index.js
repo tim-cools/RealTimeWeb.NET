@@ -2,11 +2,22 @@ import React, { PropTypes, Component } from 'react';
 
 import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
-import { actions as userActions } from '../../state/user'
+import { actions as userActions, userStatus } from '../../state/user'
+//import userApi from '../../api/user'
 
 class LogonPage extends Component {
+    onClick() {
+        const { dispatch } = this.props;
+        const { userNameInput, passwordInput } = this.refs;
+        var userName = userNameInput.getValue();
+        var password = passwordInput.getValue();
+
+        //userApi.login(userName, password);
+
+        dispatch(actions.logonPending());
+    }
+
     render() {
-        const { dispatch, user } = this.props;
         var title = ( <h2>Log On</h2> );
         return (
             <Grid>
@@ -27,9 +38,15 @@ class LogonPage extends Component {
                                 type="password"
                                 placeholder="Password"
                                 hasFeedback
-                                ref="userName"/>
-                            <Button bsStyle="success">Log On</Button>
+                                ref="password"/>
+                            <Button bsStyle="success" onClick={this.onClick.bind(this)} >
+                                Log On
+                            </Button>
+                            { if (this.state.logonPending) {
+                                    <Div>Loading<Div/>
+                                }}
                         </Panel>
+
                     </Col>
                 </Row>
             </Grid>
@@ -37,4 +54,14 @@ class LogonPage extends Component {
     }
 }
 
-export default LogonPage;
+LogonPage.propTypes = {
+    logonPending: PropTypes.bool.isRequired
+};
+
+function select(state) {
+    return {
+        logonPending: state.user.status == userStatus.logonPending
+    };
+}
+
+export default connect(select)(LogonPage);
