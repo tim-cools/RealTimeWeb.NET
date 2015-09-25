@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Input, Button, Panel, Grid, Row, Col } from 'react-bootstrap';
+import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
 import { actions as userActions } from '../../state/user'
 
@@ -11,7 +11,12 @@ class LogonPage extends Component {
         return (
             <Grid>
                 <Row className="show-grid">
-                    <Col xs={12} mdOffset={6} md={4}>
+                    <Col xs={12} md={8}>
+                        <Jumbotron>
+                            <h2>We would like to know you</h2>
+                        </Jumbotron>
+                    </Col>
+                    <Col xs={12} md={4}>
                         <Panel header={title} bsStyle="info">
                             <Input
                                 type="text"
@@ -23,6 +28,7 @@ class LogonPage extends Component {
                                 placeholder="Password"
                                 hasFeedback
                                 ref="userName"/>
+                            <Button bsStyle="success">Log On</Button>
                         </Panel>
                     </Col>
                 </Row>
