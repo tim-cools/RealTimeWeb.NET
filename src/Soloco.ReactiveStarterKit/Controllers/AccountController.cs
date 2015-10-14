@@ -1,19 +1,20 @@
-﻿using AngularJSAuthentication.API.Models;
-using AngularJSAuthentication.API.Results;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Soloco.ReactiveStarterKit;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json.Linq;
+using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Models;
+using Soloco.ReactiveStarterKit.Results;
+using ParsedExternalAccessToken = Soloco.ReactiveStarterKit.Models.ParsedExternalAccessToken;
 
-namespace AngularJSAuthentication.API.Controllers
+namespace Soloco.ReactiveStarterKit.Controllers
 {
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -40,7 +41,7 @@ namespace AngularJSAuthentication.API.Controllers
                 return BadRequest(ModelState);
             }
 
-             IdentityResult result = await _repo.RegisterUser(userModel);
+             IdentityResult result = await _repo.RegisterUser(userModel.UserName, userModel.Password);
 
              IHttpActionResult errorResult = GetErrorResult(result);
 
@@ -258,7 +259,7 @@ namespace AngularJSAuthentication.API.Controllers
                 return "client_Id is required";
             }
 
-            var client = _repo.FindClient(clientId);
+            var client = _repo.FindClientByKey(clientId);
 
             if (client == null)
             {

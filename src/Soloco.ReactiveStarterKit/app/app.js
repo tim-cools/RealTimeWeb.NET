@@ -42,7 +42,7 @@ app.config(function ($routeProvider) {
 
 });
 
-var serviceBase = 'https://localhost:44300/';
+var serviceBase = 'http://localhost:12777/';
 //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 app.constant('ngAuthSettings', {
     apiServiceBaseUri: serviceBase,

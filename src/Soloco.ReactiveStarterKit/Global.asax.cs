@@ -11,7 +11,7 @@ namespace Soloco.ReactiveStarterKit
         void Application_Start(object sender, EventArgs e)
         {
             AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configure(WebApiConfig.RegisterWebApi);
             RouteConfig.RegisterRoutes(RouteTable.Routes);            
         }
     }

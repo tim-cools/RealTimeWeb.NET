@@ -172,6 +172,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\angular-route.min.js" />
+    <Content Include="app\angular.min.js" />
     <Content Include="app\app.js" />
     <Content Include="app\controllers\associateController.js" />
     <Content Include="app\controllers\homeController.js" />
@@ -269,21 +271,18 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Order.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\RefreshTokensController.cs" />
-    <Compile Include="CustomUserStore.cs" />
-    <Compile Include="Entities\Client.cs" />
-    <Compile Include="Entities\RefreshToken.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Api\Membership.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="Models\Enums.cs" />
-    <Compile Include="Models\ExternalLoginModels.cs" />
+    <Compile Include="Models\ExternalLoginViewModel.cs" />
+    <Compile Include="Models\ParsedExternalAccessToken.cs" />
+    <Compile Include="Models\RegisterExternalBindingModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\FacebookAuthProvider.cs" />
@@ -321,6 +320,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Client\Source\Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
+      <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>
+      <Name>Soloco.ReactiveStarterKit.Membership</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace AngularJSAuthentication.API.Controllers
+namespace Soloco.ReactiveStarterKit.Controllers
 {
     [RoutePrefix("api/RefreshTokens")]
     public class RefreshTokensController : ApiController
@@ -29,7 +25,7 @@ namespace AngularJSAuthentication.API.Controllers
         //[Authorize(Users = "Admin")]
         [AllowAnonymous]
         [Route("")]
-        public async Task<IHttpActionResult> Delete(string tokenId)
+        public async Task<IHttpActionResult> Delete(Guid tokenId)
         {
             var result = await _repo.RemoveRefreshToken(tokenId);
             if (result)

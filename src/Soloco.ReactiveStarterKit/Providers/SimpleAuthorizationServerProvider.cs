@@ -1,15 +1,14 @@
-﻿using AngularJSAuthentication.API.Entities;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OAuth;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
-using AngularJSAuthentication.API.Models;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OAuth;
+using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Models;
 
-namespace AngularJSAuthentication.API.Providers
+namespace Soloco.ReactiveStarterKit.Providers
 {
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
@@ -36,7 +35,7 @@ namespace AngularJSAuthentication.API.Providers
 
             using (AuthRepository _repo = new AuthRepository())
             {
-                client = _repo.FindClient(context.ClientId);
+                client = _repo.FindClientByKey(context.ClientId);
             }
 
             if (client == null)
@@ -45,7 +44,7 @@ namespace AngularJSAuthentication.API.Providers
                 return Task.FromResult<object>(null);
             }
 
-            if (client.ApplicationType == Models.ApplicationTypes.NativeConfidential)
+            if (client.ApplicationType == ApplicationTypes.NativeConfidential)
             {
                 if (string.IsNullOrWhiteSpace(clientSecret))
                 {

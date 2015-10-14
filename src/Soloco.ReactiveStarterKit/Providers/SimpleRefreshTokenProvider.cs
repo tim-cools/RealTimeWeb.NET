@@ -1,14 +1,9 @@
-﻿using AngularJSAuthentication.API.Entities;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Infrastructure;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using System.Web;
+using Microsoft.Owin.Security.Infrastructure;
+using Soloco.ReactiveStarterKit.Membership.Models;
 
-namespace AngularJSAuthentication.API.Providers
+namespace Soloco.ReactiveStarterKit.Providers
 {
     public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
     {
@@ -28,10 +23,11 @@ namespace AngularJSAuthentication.API.Providers
             {
                 var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime"); 
                
-                var token = new RefreshToken() 
+                var token = new RefreshToken 
                 { 
-                    Id = Helper.GetHash(refreshTokenId),
-                    ClientId = clientid, 
+                    Id = Guid.NewGuid(),
+                    Hash = Helper.GetHash(refreshTokenId),
+                    ClientKey= clientid, 
                     Subject = context.Ticket.Identity.Name,
                     IssuedUtc = DateTime.UtcNow,
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime)) 
@@ -48,13 +44,11 @@ namespace AngularJSAuthentication.API.Providers
                 {
                     context.SetToken(refreshTokenId);
                 }
-             
             }
         }
 
         public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
-
             var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
@@ -68,7 +62,7 @@ namespace AngularJSAuthentication.API.Providers
                 {
                     //Get protectedTicket from refreshToken class
                     context.DeserializeTicket(refreshToken.ProtectedTicket);
-                    var result = await _repo.RemoveRefreshToken(hashedTokenId);
+                    var result = await _repo.RemoveRefreshToken(refreshToken);
                 }
             }
         }
