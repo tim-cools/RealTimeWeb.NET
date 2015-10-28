@@ -13,7 +13,6 @@ using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
 using Soloco.ReactiveStarterKit.Membership.Client.Queries;
 using Soloco.ReactiveStarterKit.Membership.Domain;
 using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
-using Soloco.ReactiveStarterKit.Membership.Services;
 using Soloco.ReactiveStarterKit.Models;
 using Soloco.ReactiveStarterKit.Results;
 using ParsedExternalAccessToken = Soloco.ReactiveStarterKit.Models.ParsedExternalAccessToken;

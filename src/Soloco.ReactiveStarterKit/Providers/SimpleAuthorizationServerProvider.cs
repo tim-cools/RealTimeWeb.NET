@@ -12,7 +12,6 @@ using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
 using Soloco.ReactiveStarterKit.Membership;
 using Soloco.ReactiveStarterKit.Membership.Client.Queries;
 using Soloco.ReactiveStarterKit.Membership.Domain;
-using Soloco.ReactiveStarterKit.Membership.Services;
 using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
 namespace Soloco.ReactiveStarterKit.Providers
@@ -49,10 +48,11 @@ namespace Soloco.ReactiveStarterKit.Providers
                 return Task.FromResult<object>(null);
             }
 
-            using (AuthRepository _repo = new AuthRepository())
-            {
-                client = _repo.FindClientByKey(context.ClientId);
-            }
+            throw new NotImplementedException();
+            //using (AuthRepository _repo = new AuthRepository())
+            //{
+            //    client = _repo.FindClientByKey(context.ClientId);
+            //}
 
             if (client == null)
             {

@@ -32,7 +32,10 @@ namespace Soloco.ReactiveStarterKit
 
         private static OAuthAuthorizationServerOptions CreateOptions(HttpConfiguration httpConfiguration)
         {
-            OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
+            OAuthBearerOptions = new OAuthBearerAuthenticationOptions
+            {
+                
+            };
 
             var OAuthServerOptions = new OAuthAuthorizationServerOptions
             {
