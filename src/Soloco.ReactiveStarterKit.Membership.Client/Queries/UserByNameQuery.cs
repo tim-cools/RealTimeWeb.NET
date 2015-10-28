@@ -3,13 +3,13 @@ using Soloco.ReactiveStarterKit.Membership.Client.Model;
 
 namespace Soloco.ReactiveStarterKit.Membership.Client.Queries
 {
-    public class UserByIdQuery : IMessage<User>
+    public class UserByNameQuery : IMessage<User>
     {
-        public string UserId { get; }
+        public string UserName { get; }
 
-        public UserByIdQuery(string userId)
+        public UserByNameQuery(string userName)
         {
-            UserId = userId;
+            UserName = userName;
         }
     }
 }

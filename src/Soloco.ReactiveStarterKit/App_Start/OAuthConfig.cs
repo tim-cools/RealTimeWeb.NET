@@ -1,68 +1,53 @@
 ﻿using System;
 using System.Web.Http;
-using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using Soloco.ReactiveStarterKit;
 using Soloco.ReactiveStarterKit.Providers;
-
-[assembly: OwinStartup(typeof(Startup))]
 
 namespace Soloco.ReactiveStarterKit
 {
-    public class Startup
+    public static class OAuthConfig
     {
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
         public static GoogleOAuth2AuthenticationOptions googleAuthOptions { get; private set; }
         public static FacebookAuthenticationOptions facebookAuthOptions { get; private set; }
 
-        public void Configuration(IAppBuilder app)
-        {
-            ConfigureOAuth(app);
-
-            var config = new HttpConfiguration();
-            config.RegisterWebApi();
-
-            app
-                .UseWebApi(config)
-                .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
-                .MapSignalR("/sockets", new HubConfiguration());
-        }
-
-        private void ConfigureOAuth(IAppBuilder app)
+        public static IAppBuilder ConfigureOAuth(this IAppBuilder app, HttpConfiguration httpConfiguration)
         {
             //use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
 
-            var OAuthServerOptions = CreateOptions();
+            var OAuthServerOptions = CreateOptions(httpConfiguration);
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
             app.UseOAuthBearerAuthentication(OAuthBearerOptions);
 
             ConfigureGoogle(app);
             ConfigureFacebook(app);
+
+            return app;
         }
 
-        private static OAuthAuthorizationServerOptions CreateOptions()
+        private static OAuthAuthorizationServerOptions CreateOptions(HttpConfiguration httpConfiguration)
         {
             OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
 
-            var OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            var OAuthServerOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
-                Provider = new SimpleAuthorizationServerProvider(),
-                RefreshTokenProvider = new SimpleRefreshTokenProvider()
+                Provider = new SimpleAuthorizationServerProvider(httpConfiguration.DependencyResolver),
+                RefreshTokenProvider = new SimpleRefreshTokenProvider(httpConfiguration.DependencyResolver)
             };
             return OAuthServerOptions;
         }
 
         private static void ConfigureGoogle(IAppBuilder app)
         {
-//Configure Google External Login
+            //Configure Google External Login
             googleAuthOptions = new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "342962424267-h6dfsc4sgn0spf9fk6506d3iqf8ul8fj.apps.googleusercontent.com",
@@ -74,7 +59,7 @@ namespace Soloco.ReactiveStarterKit
 
         private static void ConfigureFacebook(IAppBuilder app)
         {
-//Configure Facebook External Login
+            //Configure Facebook External Login
             facebookAuthOptions = new FacebookAuthenticationOptions()
             {
                 AppId = "1648062998809846",

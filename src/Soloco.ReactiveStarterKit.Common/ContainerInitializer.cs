@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
 
 namespace Soloco.ReactiveStarterKit.Common

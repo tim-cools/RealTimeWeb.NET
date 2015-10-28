@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Soloco.ReactiveStarterKit.Membership.Models
+namespace Soloco.ReactiveStarterKit.Membership.Domain
 {
     public class IdentityUserClaim
     {

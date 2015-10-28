@@ -1,17 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Http.Dependencies;
+using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
-using Soloco.ReactiveStarterKit.Membership.Models;
-using Soloco.ReactiveStarterKit.Models;
+using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
+using Soloco.ReactiveStarterKit.Membership;
+using Soloco.ReactiveStarterKit.Membership.Client.Queries;
+using Soloco.ReactiveStarterKit.Membership.Domain;
+using Soloco.ReactiveStarterKit.Membership.Services;
+using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
 namespace Soloco.ReactiveStarterKit.Providers
 {
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
+        private readonly IDependencyResolver _dependencyResolver;
+
+        public SimpleAuthorizationServerProvider(IDependencyResolver dependencyResolver)
+        {
+            if (dependencyResolver == null) throw new ArgumentNullException(nameof(dependencyResolver));
+
+            _dependencyResolver = dependencyResolver;
+        }
+
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
 
@@ -76,22 +92,21 @@ namespace Soloco.ReactiveStarterKit.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-
             var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
 
             if (allowedOrigin == null) allowedOrigin = "*";
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-            using (AuthRepository _repo = new AuthRepository())
-            {
-                IdentityUser user = await _repo.FindUser(context.UserName, context.Password);
+            var messageDispatcher = (IMessageDispatcher) _dependencyResolver.GetService(typeof(IMessageDispatcher));
 
-                if (user == null)
-                {
-                    context.SetError("invalid_grant", "The user name or password is incorrect.");
-                    return;
-                }
+            var query = new ValidUserLoginQuery(context.UserName, context.Password);
+            var valid = await messageDispatcher.Execute(query);
+
+            if (!valid)
+            {
+                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                return;
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
@@ -102,7 +117,7 @@ namespace Soloco.ReactiveStarterKit.Providers
             var props = new AuthenticationProperties(new Dictionary<string, string>
                 {
                     { 
-                        "as:client_id", (context.ClientId == null) ? string.Empty : context.ClientId
+                        "as:client_id", context.ClientId ?? string.Empty
                     },
                     { 
                         "userName", context.UserName

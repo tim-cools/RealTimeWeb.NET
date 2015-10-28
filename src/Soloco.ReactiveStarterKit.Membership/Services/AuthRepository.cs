@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Membership.Domain;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.ReactiveStarterKit.Membership.Services
 {
 
     public class AuthRepository : IDisposable
@@ -78,12 +78,6 @@ namespace Soloco.ReactiveStarterKit
              return  _ctx.RefreshTokensToList();
         }
 
-        public async Task<IdentityUser> FindAsync(UserLoginInfo loginInfo)
-        {
-            IdentityUser user = await _userManager.FindAsync(loginInfo);
-
-            return user;
-        }
 
         public async Task<IdentityResult> CreateAsync(IdentityUser user)
         {

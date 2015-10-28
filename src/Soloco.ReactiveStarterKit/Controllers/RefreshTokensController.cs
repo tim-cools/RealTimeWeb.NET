@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Controllers
 {

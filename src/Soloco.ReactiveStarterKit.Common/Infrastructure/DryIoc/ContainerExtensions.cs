@@ -13,7 +13,7 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
 
             foreach (var implementingClass in implementingClasses)
             {
-                container.RegisterAll(implementingClass, Reuse.Singleton);
+                container.RegisterAll(implementingClass, Reuse.InResolutionScope);
             }
 
             return container;
@@ -23,11 +23,19 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
         {
             if (implementation == null) throw new ArgumentNullException(nameof(implementation));
 
+            var factory = WithFactory(implementation, reuse);
+
+            container.Register(factory, implementation, null, IfAlreadyRegistered.AppendNotKeyed, true);
+
             foreach (var @interface in implementation.GetInterfaces())
             {
-                var factory = new ReflectionFactory(implementation, reuse);
                 container.Register(factory, @interface, null, IfAlreadyRegistered.AppendNotKeyed, true);
             }
+        }
+
+        private static Factory WithFactory(Type implementation, IReuse reuse)
+        {
+            return new ReflectionFactory(implementation, reuse);
         }
 
         private static IEnumerable<Type> ImplementingClasses(Assembly assembly, string[] namespacesFilter)

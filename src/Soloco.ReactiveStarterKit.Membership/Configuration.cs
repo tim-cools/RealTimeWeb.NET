@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Membership.Domain;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.ReactiveStarterKit.Membership
 {
     internal sealed class Configuration // : DbMigrationsConfiguration<AngularJSAuthentication.API.AuthContext>
     {

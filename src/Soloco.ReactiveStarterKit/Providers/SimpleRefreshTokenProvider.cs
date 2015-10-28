@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web.Http.Dependencies;
 using Microsoft.Owin.Security.Infrastructure;
-using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Membership;
+using Soloco.ReactiveStarterKit.Membership.Domain;
+using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Providers
 {
     public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
     {
+        private readonly IDependencyResolver _dependencyResolver;
+
+        public SimpleRefreshTokenProvider(IDependencyResolver dependencyResolver)
+        {
+            if (dependencyResolver == null) throw new ArgumentNullException(nameof(dependencyResolver));
+            _dependencyResolver = dependencyResolver;
+        }
 
         public async Task CreateAsync(AuthenticationTokenCreateContext context)
         {

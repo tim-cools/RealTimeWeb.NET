@@ -11,11 +11,7 @@ namespace Soloco.ReactiveStarterKit.Common.Tests
         {
             if (_container != null) throw new InvalidOperationException("Initialize already called");
 
-            _container = new Container();
-
-            initializer?.Invoke(_container);
-
-            _container.RegisterInstance<IContainer>(_container);
+            _container = ContainerFactory.Create(initializer);
         }
 
         public static T Resolve<T>()

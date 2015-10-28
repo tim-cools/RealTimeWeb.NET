@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AssemblySetup.cs" />
     <Compile Include="Integration\User\RegisterUserSpecifications\WhenRegistringAUser.cs" />
+    <Compile Include="Integration\MessageDispatcherExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

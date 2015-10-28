@@ -269,7 +269,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ContainerInitialize.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\OAuthConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -290,7 +292,7 @@
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Providers\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="App_Start\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -322,6 +324,18 @@
     <Folder Include="Client\Source\Styles\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Common\Soloco.ReactiveStarterKit.Common.csproj">
+      <Project>{64FD3253-191F-47D2-99C9-6CA423EEAD07}</Project>
+      <Name>Soloco.ReactiveStarterKit.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Client\Soloco.ReactiveStarterKit.Membership.Client.csproj">
+      <Project>{58C28353-A953-42E6-B09A-BC2F42C49E02}</Project>
+      <Name>Soloco.ReactiveStarterKit.Membership.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Messages\Soloco.ReactiveStarterKit.Membership.Messages.csproj">
+      <Project>{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}</Project>
+      <Name>Soloco.ReactiveStarterKit.Membership.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
       <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>
       <Name>Soloco.ReactiveStarterKit.Membership</Name>

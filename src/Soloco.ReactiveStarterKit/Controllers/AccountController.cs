@@ -9,7 +9,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Linq;
-using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
+using Soloco.ReactiveStarterKit.Membership.Client.Queries;
+using Soloco.ReactiveStarterKit.Membership.Domain;
+using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.ReactiveStarterKit.Membership.Services;
 using Soloco.ReactiveStarterKit.Models;
 using Soloco.ReactiveStarterKit.Results;
 using ParsedExternalAccessToken = Soloco.ReactiveStarterKit.Models.ParsedExternalAccessToken;
@@ -19,16 +23,18 @@ namespace Soloco.ReactiveStarterKit.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private AuthRepository _repo = null;
+        private readonly IMessageDispatcher _messageDispatcher;
 
         private IAuthenticationManager Authentication
         {
             get { return Request.GetOwinContext().Authentication; }
         }
 
-        public AccountController()
+        public AccountController(IMessageDispatcher messageDispatcher)
         {
-            _repo = new AuthRepository();
+            if (messageDispatcher == null) throw new ArgumentNullException(nameof(messageDispatcher));
+
+            _messageDispatcher = messageDispatcher;
         }
 
         // POST api/Account/Register
@@ -36,21 +42,16 @@ namespace Soloco.ReactiveStarterKit.Controllers
         [Route("Register")]
         public async Task<IHttpActionResult> Register(UserModel userModel)
         {
-             if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-             IdentityResult result = await _repo.RegisterUser(userModel.UserName, userModel.Password);
+            var command = new RegisterUserCommand(userModel.UserName, userModel.Password);
 
-             IHttpActionResult errorResult = GetErrorResult(result);
+            var result = await _messageDispatcher.Execute(command);
 
-             if (errorResult != null)
-             {
-                 return errorResult;
-             }
-
-             return Ok();
+            return GetErrorResult(result) ?? Ok();
         }
 
         // GET api/Account/ExternalLogin
@@ -60,7 +61,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
         [Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
-            string redirectUri = string.Empty;
+            var redirectUri = string.Empty;
 
             if (error != null)
             {
@@ -72,14 +73,14 @@ namespace Soloco.ReactiveStarterKit.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            var redirectUriValidationResult = ValidateClientAndRedirectUri(this.Request, ref redirectUri);
+            var redirectUriValidationResult = ValidateClientAndRedirectUri(Request, ref redirectUri);
 
             if (!string.IsNullOrWhiteSpace(redirectUriValidationResult))
             {
                 return BadRequest(redirectUriValidationResult);
             }
 
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             if (externalLogin == null)
             {
@@ -92,16 +93,15 @@ namespace Soloco.ReactiveStarterKit.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            IdentityUser user = await _repo.FindAsync(new UserLoginInfo(externalLogin.LoginProvider, externalLogin.ProviderKey));
+            var query = new UserLoginQuery(externalLogin.LoginProvider, externalLogin.ProviderKey);
+            var userLogin = _messageDispatcher.Execute(query);
 
-            bool hasRegistered = user != null;
+            var hasRegistered = userLogin != null;
 
-            redirectUri = string.Format("{0}#external_access_token={1}&provider={2}&haslocalaccount={3}&external_user_name={4}",
-                                            redirectUri,
-                                            externalLogin.ExternalAccessToken,
-                                            externalLogin.LoginProvider,
-                                            hasRegistered.ToString(),
-                                            externalLogin.UserName);
+            redirectUri = $"{redirectUri}#external_access_token={externalLogin.ExternalAccessToken}" +
+                          $"&provider={externalLogin.LoginProvider}" +
+                          $"&haslocalaccount={hasRegistered}" +
+                          $"&external_user_name={externalLogin.UserName}";
 
             return Redirect(redirectUri);
 
@@ -113,50 +113,53 @@ namespace Soloco.ReactiveStarterKit.Controllers
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
-            var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken);
-            if (verifiedAccessToken == null)
-            {
-                return BadRequest("Invalid Provider or External Access Token");
-            }
+            //var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken);
+            //if (verifiedAccessToken == null)
+            //{
+            //    return BadRequest("Invalid Provider or External Access Token");
+            //}
 
-            IdentityUser user = await _repo.FindAsync(new UserLoginInfo(model.Provider, verifiedAccessToken.user_id));
+            //var query = new UserLoginQuery(model.Provider, verifiedAccessToken.user_id);
+            //var userLogin = _messageDispatcher.Execute(query);
 
-            bool hasRegistered = user != null;
+            //bool hasRegistered = userLogin != null;
 
-            if (hasRegistered)
-            {
-                return BadRequest("External user is already registered");
-            }
+            //if (hasRegistered)
+            //{
+            //    return BadRequest("External user is already registered");
+            //}
 
-            user = new IdentityUser() { UserName = model.UserName };
+            //var user = new IdentityUser() { UserName = model.UserName };
 
-            IdentityResult result = await _repo.CreateAsync(user);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
+            //IdentityResult result = await _repo.CreateAsync(user);
+            //if (!result.Succeeded)
+            //{
+            //    return GetErrorResult(result);
+            //}
 
-            var info = new ExternalLoginInfo()
-            {
-                DefaultUserName = model.UserName,
-                Login = new UserLoginInfo(model.Provider, verifiedAccessToken.user_id)
-            };
+            //var info = new ExternalLoginInfo()
+            //{
+            //    DefaultUserName = model.UserName,
+            //    Login = new UserLoginInfo(model.Provider, verifiedAccessToken.user_id)
+            //};
 
-            result = await _repo.AddLoginAsync(user.Id, info.Login);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
+            //result = await _repo.AddLoginAsync(user.Id, info.Login);
+            //if (!result.Succeeded)
+            //{
+            //    return GetErrorResult(result);
+            //}
 
-            //generate access token response
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
+            ////generate access token response
+            //var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
 
-            return Ok(accessTokenResponse);
+            //return Ok(accessTokenResponse);
+
+            throw new NotImplementedException("");
         }
 
         [AllowAnonymous]
@@ -165,41 +168,31 @@ namespace Soloco.ReactiveStarterKit.Controllers
         public async Task<IHttpActionResult> ObtainLocalAccessToken(string provider, string externalAccessToken)
         {
 
-            if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
-            {
-                return BadRequest("Provider or external access token is not sent");
-            }
+            //if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
+            //{
+            //    return BadRequest("Provider or external access token is not sent");
+            //}
 
-            var verifiedAccessToken = await VerifyExternalAccessToken(provider, externalAccessToken);
-            if (verifiedAccessToken == null)
-            {
-                return BadRequest("Invalid Provider or External Access Token");
-            }
+            //var verifiedAccessToken = await VerifyExternalAccessToken(provider, externalAccessToken);
+            //if (verifiedAccessToken == null)
+            //{
+            //    return BadRequest("Invalid Provider or External Access Token");
+            //}
 
-            IdentityUser user = await _repo.FindAsync(new UserLoginInfo(provider, verifiedAccessToken.user_id));
+            //IdentityUser user = await _repo.FindAsync(new UserLoginInfo(provider, verifiedAccessToken.user_id));
 
-            bool hasRegistered = user != null;
+            //bool hasRegistered = user != null;
 
-            if (!hasRegistered)
-            {
-                return BadRequest("External user is not registered");
-            }
+            //if (!hasRegistered)
+            //{
+            //    return BadRequest("External user is not registered");
+            //}
 
-            //generate access token response
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName);
+            ////generate access token response
+            //var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName);
 
-            return Ok(accessTokenResponse);
-
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _repo.Dispose();
-            }
-
-            base.Dispose(disposing);
+            //return Ok(accessTokenResponse);
+            throw new NotImplementedException("");
         }
 
         #region Helpers
@@ -235,46 +228,45 @@ namespace Soloco.ReactiveStarterKit.Controllers
 
         private string ValidateClientAndRedirectUri(HttpRequestMessage request, ref string redirectUriOutput)
         {
+            //Uri redirectUri;
 
-            Uri redirectUri;
+            //var redirectUriString = GetQueryString(Request, "redirect_uri");
 
-            var redirectUriString = GetQueryString(Request, "redirect_uri");
+            //if (string.IsNullOrWhiteSpace(redirectUriString))
+            //{
+            //    return "redirect_uri is required";
+            //}
 
-            if (string.IsNullOrWhiteSpace(redirectUriString))
-            {
-                return "redirect_uri is required";
-            }
+            //bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
 
-            bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
+            //if (!validUri)
+            //{
+            //    return "redirect_uri is invalid";
+            //}
 
-            if (!validUri)
-            {
-                return "redirect_uri is invalid";
-            }
+            //var clientId = GetQueryString(Request, "client_id");
 
-            var clientId = GetQueryString(Request, "client_id");
+            //if (string.IsNullOrWhiteSpace(clientId))
+            //{
+            //    return "client_Id is required";
+            //}
 
-            if (string.IsNullOrWhiteSpace(clientId))
-            {
-                return "client_Id is required";
-            }
+            //var client = _repo.FindClientByKey(clientId);
 
-            var client = _repo.FindClientByKey(clientId);
+            //if (client == null)
+            //{
+            //    return string.Format("Client_id '{0}' is not registered in the system.", clientId);
+            //}
 
-            if (client == null)
-            {
-                return string.Format("Client_id '{0}' is not registered in the system.", clientId);
-            }
+            //if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
+            //{
+            //    return string.Format("The given URL is not allowed by Client_id '{0}' configuration.", clientId);
+            //}
 
-            if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
-            {
-                return string.Format("The given URL is not allowed by Client_id '{0}' configuration.", clientId);
-            }
+            //redirectUriOutput = redirectUri.AbsoluteUri;
 
-            redirectUriOutput = redirectUri.AbsoluteUri;
-
-            return string.Empty;
-
+            //return string.Empty;
+            throw new NotImplementedException("");
         }
 
         private string GetQueryString(HttpRequestMessage request, string key)
@@ -300,7 +292,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
             {
                 //You can get it from here: https://developers.facebook.com/tools/accesstoken/
                 //More about debug_tokn here: http://stackoverflow.com/questions/16641083/how-does-one-get-the-app-access-token-for-debug-token-inspection-on-facebook
-                verifyTokenEndPoint = string.Format("https://graph.facebook.com/debug_token?input_token={0}&access_token={1}|{2}", accessToken, Startup.facebookAuthOptions.AppId, Startup.facebookAuthOptions.AppSecret);
+                verifyTokenEndPoint = string.Format("https://graph.facebook.com/debug_token?input_token={0}&access_token={1}|{2}", accessToken, OAuthConfig.facebookAuthOptions.AppId, OAuthConfig.facebookAuthOptions.AppSecret);
             }
             else if (provider == "Google")
             {
@@ -328,7 +320,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
                     parsedToken.user_id = jObj["data"]["user_id"];
                     parsedToken.app_id = jObj["data"]["app_id"];
 
-                    if (!string.Equals(Startup.facebookAuthOptions.AppId, parsedToken.app_id, StringComparison.OrdinalIgnoreCase))
+                    if (!string.Equals(OAuthConfig.facebookAuthOptions.AppId, parsedToken.app_id, StringComparison.OrdinalIgnoreCase))
                     {
                         return null;
                     }
@@ -338,7 +330,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
                     parsedToken.user_id = jObj["user_id"];
                     parsedToken.app_id = jObj["audience"];
 
-                    if (!string.Equals(Startup.googleAuthOptions.ClientId, parsedToken.app_id, StringComparison.OrdinalIgnoreCase))
+                    if (!string.Equals(OAuthConfig.googleAuthOptions.ClientId, parsedToken.app_id, StringComparison.OrdinalIgnoreCase))
                     {
                         return null;
                     }
@@ -368,16 +360,16 @@ namespace Soloco.ReactiveStarterKit.Controllers
 
             var ticket = new AuthenticationTicket(identity, props);
 
-            var accessToken = Startup.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
+            var accessToken = OAuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
 
-            JObject tokenResponse = new JObject(
+            var tokenResponse = new JObject(
                                         new JProperty("userName", userName),
                                         new JProperty("access_token", accessToken),
                                         new JProperty("token_type", "bearer"),
                                         new JProperty("expires_in", tokenExpiration.TotalSeconds.ToString()),
                                         new JProperty(".issued", ticket.Properties.IssuedUtc.ToString()),
                                         new JProperty(".expires", ticket.Properties.ExpiresUtc.ToString())
-        );
+                );
 
             return tokenResponse;
         }
@@ -398,7 +390,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
 
                 Claim providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
 
-                if (providerKeyClaim == null || String.IsNullOrEmpty(providerKeyClaim.Issuer) || String.IsNullOrEmpty(providerKeyClaim.Value))
+                if (providerKeyClaim == null || string.IsNullOrEmpty(providerKeyClaim.Issuer) || String.IsNullOrEmpty(providerKeyClaim.Value))
                 {
                     return null;
                 }

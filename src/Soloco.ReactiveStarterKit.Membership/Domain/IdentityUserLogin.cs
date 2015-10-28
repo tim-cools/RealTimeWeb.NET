@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Membership.Models
+namespace Soloco.ReactiveStarterKit.Membership.Domain
 {
     /// <summary>
     /// Entity type for a user's login (i.e. facebook, google)

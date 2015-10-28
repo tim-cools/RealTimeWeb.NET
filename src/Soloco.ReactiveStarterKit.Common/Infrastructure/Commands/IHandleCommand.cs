@@ -1,8 +1,10 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Commands
 {
-    public interface IHandleMessage<in TMessage, out TResult> where TMessage : IMessage<TResult>
+    public interface IHandleMessage<in TMessage, TResult> where TMessage : IMessage<TResult>
     {
-        TResult Handle(TMessage query);
+        Task<TResult> Handle(TMessage command);
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Commands
+﻿using System.Threading.Tasks;
+
+namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Commands
 {
     public interface IMessageDispatcher
     {
-        TResult Execute<TResult>(IMessage<TResult> message); 
+        Task<TResult> Execute<TResult>(IMessage<TResult> message); 
     }
 }

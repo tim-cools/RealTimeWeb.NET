@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Membership.Models;
+using Soloco.ReactiveStarterKit.Membership.Domain;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.ReactiveStarterKit.Membership.Services
 {
     public class CustomUserStore : IUserStore<IdentityUser, Guid>, IUserPasswordStore<IdentityUser, Guid>, IUserLoginStore<IdentityUser, Guid>
     {

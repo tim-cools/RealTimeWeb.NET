@@ -30,6 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elephanet">
+      <HintPath>..\packages\Elephanet.0.3.10\lib\net45\Elephanet.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,17 +47,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContainerInitializer.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\UserByIdQuery.cs" />
+    <Compile Include="Queries\ValidUserLoginQuery.cs" />
+    <Compile Include="QueryHandlers\UserByNameQueryHandler.cs" />
+    <Compile Include="QueryHandlers\ValidUserLoginQueryHandler.cs" />
+    <Compile Include="QueryHandlers\UserLoginQueryHandler.cs" />
+    <Compile Include="Queries\UserLoginQuery.cs" />
+    <Compile Include="Queries\UserByNameQuery.cs" />
+    <Compile Include="Model\UserLogin.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Common\Soloco.ReactiveStarterKit.Common.csproj">
       <Project>{64FD3253-191F-47D2-99C9-6CA423EEAD07}</Project>
       <Name>Soloco.ReactiveStarterKit.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
+      <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>
+      <Name>Soloco.ReactiveStarterKit.Membership</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
