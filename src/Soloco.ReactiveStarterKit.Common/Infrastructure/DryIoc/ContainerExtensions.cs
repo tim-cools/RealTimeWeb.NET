@@ -7,16 +7,35 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
 {
     public static class ContainerExtensions
     {
-        public static IContainer RegisterAssemblyServices(this IContainer container, Assembly assembly, params string[] namespacesFilter)
+        public static IContainer RegisterServicesInNamespace(this IContainer container, IReuse reuse, params Type[] typesWithNamespaceFilter)
         {
-            var implementingClasses = ImplementingClasses(assembly, namespacesFilter);
+            if (reuse == null) throw new ArgumentNullException(nameof(reuse));
 
-            foreach (var implementingClass in implementingClasses)
+            var assemblies = typesWithNamespaceFilter.GroupBy(
+                type => type.Assembly,
+                (assembly, types) => new { assembly, types });
+
+            foreach (var assemblyWithType in assemblies)
             {
-                container.RegisterAll(implementingClass, Reuse.InResolutionScope);
+                container.RegisterTypes(assemblyWithType.assembly, assemblyWithType.types, reuse);
             }
 
             return container;
+        }
+
+        public static IContainer RegisterServicesInNamespace(this IContainer container, params Type[] typesWithNamespaceFilter)
+        {
+            return container.RegisterServicesInNamespace(Reuse.InResolutionScope, typesWithNamespaceFilter);
+        }
+
+        private static void RegisterTypes(this IContainer container, Assembly assembly, IEnumerable<Type> types, IReuse reuse)
+        {
+            var implementingClasses = ImplementingClasses(assembly, types);
+
+            foreach (var implementingClass in implementingClasses)
+            {
+                container.RegisterAll(implementingClass, reuse);
+            }
         }
 
         private static void RegisterAll(this IContainer container, Type implementation, IReuse reuse)
@@ -29,7 +48,15 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
 
             foreach (var @interface in implementation.GetInterfaces())
             {
-                container.Register(factory, @interface, null, IfAlreadyRegistered.AppendNotKeyed, true);
+                if (!container.Register(factory, @interface, null, IfAlreadyRegistered.AppendNotKeyed, true))
+                {
+                    throw new InvalidOperationException("Could not register type: " + @interface);
+                }
+
+                //foreach (var baseInterface in @interface.GetImplementedInterfaces())
+                //{
+                //    container.Register(factory, baseInterface, null, IfAlreadyRegistered.AppendNotKeyed, true);
+                //}
             }
         }
 
@@ -38,24 +65,23 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
             return new ReflectionFactory(implementation, reuse);
         }
 
-        private static IEnumerable<Type> ImplementingClasses(Assembly assembly, string[] namespacesFilter)
+        private static IEnumerable<Type> ImplementingClasses(Assembly assembly, IEnumerable<Type> namespacesFilterTypes)
         {
             var types = assembly.GetTypes();
             return types
-                .Where(type => IsValidNameSpace(namespacesFilter, type) 
-                    && type.IsPublic 
+                .Where(type => IsValidNameSpace(namespacesFilterTypes, type)
+                    && type.IsPublic
                     && !type.IsInterface
                     && !type.IsValueType
-                    && !type.IsAbstract 
+                    && !type.IsAbstract
                     && type.GetInterfaces().Any());
         }
 
-        private static bool IsValidNameSpace(string[] namespacesFilter, Type type)
+        private static bool IsValidNameSpace(IEnumerable<Type> namespacesFilter, Type type)
         {
             return namespacesFilter == null
-                || namespacesFilter.Length == 0
-                || namespacesFilter.Any(@namespace => type.Namespace != null 
-                    && type.Namespace.StartsWith(@namespace));
+                || namespacesFilter.Any(@namespace => type.Namespace != null
+                    && type.Namespace.StartsWith(@namespace.Namespace));
         }
     }
 }

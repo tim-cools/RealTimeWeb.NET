@@ -1,12 +1,13 @@
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
+using Soloco.ReactiveStarterKit.Common.Infrastructure;
+using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 
 namespace Soloco.ReactiveStarterKit.Membership.Messages.Commands
 {
-    public class RegisterUserCommand : IMessage<IdentityResult>
+    public class RegisterUserCommand : IMessage<CommandResult>
     {
-        public string UserName { get; private set; }
-        public string Password { get; private set; }
+        public string UserName { get; }
+        public string Password { get; }
 
         public RegisterUserCommand(string userName, string password)
         {

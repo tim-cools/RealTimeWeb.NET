@@ -30,11 +30,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Marten">
+      <HintPath>..\packages-local\Marten.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages-local\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq">
+      <HintPath>..\packages-local\Remotion.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -56,28 +66,97 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\Commands\Commandispatcher.cs" />
-    <Compile Include="Infrastructure\Commands\ICommand.cs" />
-    <Compile Include="Infrastructure\Commands\IMessageDispatcher.cs" />
-    <Compile Include="Infrastructure\Commands\IHandleCommand.cs" />
-    <Compile Include="Infrastructure\Commands\INonResultCommand.cs" />
+    <Compile Include="Infrastructure\CommandResult.cs" />
+    <Compile Include="Infrastructure\DryIoc\Arg.cs" />
+    <Compile Include="Infrastructure\DryIoc\ArrayTools.cs" />
+    <Compile Include="Infrastructure\DryIoc\ContainerException.cs" />
+    <Compile Include="Infrastructure\DryIoc\ContainerTools.cs" />
+    <Compile Include="Infrastructure\DryIoc\ContainerWeakRef.cs" />
+    <Compile Include="Infrastructure\DryIoc\CreateScopedValue.cs" />
+    <Compile Include="Infrastructure\DryIoc\CurrentScopeReuse.cs" />
+    <Compile Include="Infrastructure\DryIoc\DefaultKey.cs" />
+    <Compile Include="Infrastructure\DryIoc\DelegateFactory.cs" />
+    <Compile Include="Infrastructure\DryIoc\Error.cs" />
+    <Compile Include="Infrastructure\DryIoc\ErrorCheck.cs" />
+    <Compile Include="Infrastructure\DryIoc\ExpressionFactory.cs" />
+    <Compile Include="Infrastructure\DryIoc\ExpressionTools.cs" />
+    <Compile Include="Infrastructure\DryIoc\Factory.cs" />
+    <Compile Include="Infrastructure\DryIoc\FactoryCompiler.cs" />
+    <Compile Include="Infrastructure\DryIoc\FactoryDelegate.cs" />
+    <Compile Include="Infrastructure\DryIoc\FactoryMethod.cs" />
+    <Compile Include="Infrastructure\DryIoc\FactoryMethodSelector.cs" />
+    <Compile Include="Infrastructure\DryIoc\FactoryType.cs" />
+    <Compile Include="Infrastructure\DryIoc\IConcreteFactoryGenerator.cs" />
+    <Compile Include="Infrastructure\DryIoc\IContainer.cs" />
+    <Compile Include="Infrastructure\DryIoc\IfAlreadyRegistered.cs" />
+    <Compile Include="Infrastructure\DryIoc\IfUnresolved.cs" />
+    <Compile Include="Infrastructure\DryIoc\ImTreeMap.cs" />
+    <Compile Include="Infrastructure\DryIoc\ImTreeMapIntToObj.cs" />
+    <Compile Include="Infrastructure\DryIoc\IRegistrator.cs" />
+    <Compile Include="Infrastructure\DryIoc\IResolver.cs" />
+    <Compile Include="Infrastructure\DryIoc\IResolverContext.cs" />
+    <Compile Include="Infrastructure\DryIoc\IReuse.cs" />
+    <Compile Include="Infrastructure\DryIoc\IScope.cs" />
+    <Compile Include="Infrastructure\DryIoc\IScopeAccess.cs" />
+    <Compile Include="Infrastructure\DryIoc\IScopeContext.cs" />
+    <Compile Include="Infrastructure\DryIoc\IServiceInfo.cs" />
+    <Compile Include="Infrastructure\DryIoc\KV.cs" />
+    <Compile Include="Infrastructure\DryIoc\LazyEnumerable.cs" />
+    <Compile Include="Infrastructure\DryIoc\Made.cs" />
+    <Compile Include="Infrastructure\DryIoc\Meta.cs" />
+    <Compile Include="Infrastructure\DryIoc\Parameters.cs" />
+    <Compile Include="Infrastructure\DryIoc\ParameterSelector.cs" />
+    <Compile Include="Infrastructure\DryIoc\ParameterServiceInfo.cs" />
+    <Compile Include="Infrastructure\DryIoc\Portable.cs" />
+    <Compile Include="Infrastructure\DryIoc\PrintTools.cs" />
+    <Compile Include="Infrastructure\DryIoc\PropertiesAndFields.cs" />
+    <Compile Include="Infrastructure\DryIoc\PropertiesAndFieldsSelector.cs" />
+    <Compile Include="Infrastructure\DryIoc\PropertyOrFieldServiceInfo.cs" />
+    <Compile Include="Infrastructure\DryIoc\Ref.cs" />
+    <Compile Include="Infrastructure\DryIoc\ReflectionFactory.cs" />
+    <Compile Include="Infrastructure\DryIoc\ReflectionTools.cs" />
+    <Compile Include="Infrastructure\DryIoc\Registrator.cs" />
+    <Compile Include="Infrastructure\DryIoc\Request.cs" />
+    <Compile Include="Infrastructure\DryIoc\ResolutionScopeReuse.cs" />
+    <Compile Include="Infrastructure\DryIoc\ResolveManyBehavior.cs" />
+    <Compile Include="Infrastructure\DryIoc\Resolver.cs" />
+    <Compile Include="Infrastructure\DryIoc\Reuse.cs" />
+    <Compile Include="Infrastructure\DryIoc\Rules.cs" />
+    <Compile Include="Infrastructure\DryIoc\Scope.cs" />
+    <Compile Include="Infrastructure\DryIoc\ScopeContext.cs" />
+    <Compile Include="Infrastructure\DryIoc\ScopeEntry.cs" />
+    <Compile Include="Infrastructure\DryIoc\ServiceDetails.cs" />
+    <Compile Include="Infrastructure\DryIoc\ServiceInfo.cs" />
+    <Compile Include="Infrastructure\DryIoc\ServiceInfoTools.cs" />
+    <Compile Include="Infrastructure\DryIoc\ServiceRegistrationInfo.cs" />
+    <Compile Include="Infrastructure\DryIoc\SetCurrentScopeHandler.cs" />
+    <Compile Include="Infrastructure\DryIoc\Setup.cs" />
+    <Compile Include="Infrastructure\DryIoc\SingletonReuse.cs" />
+    <Compile Include="Infrastructure\DryIoc\SingletonScope.cs" />
+    <Compile Include="Infrastructure\DryIoc\ThreadScopeContext.cs" />
+    <Compile Include="Infrastructure\DryIoc\Throw.cs" />
+    <Compile Include="Infrastructure\DryIoc\ThrowInGeneratedCode.cs" />
+    <Compile Include="Infrastructure\DryIoc\Update.cs" />
+    <Compile Include="Infrastructure\DryIoc\WrappersSupport.cs" />
+    <Compile Include="Infrastructure\BusinessException.cs" />
+    <Compile Include="Infrastructure\Messages\ICommand.cs" />
+    <Compile Include="Infrastructure\Messages\IHandleCommand.cs" />
+    <Compile Include="Infrastructure\Messages\MessageDispatcher.cs" />
+    <Compile Include="Infrastructure\Messages\IMessage.cs" />
+    <Compile Include="Infrastructure\Messages\IMessageDispatcher.cs" />
+    <Compile Include="Infrastructure\Messages\IHandleMessage.cs" />
     <Compile Include="Infrastructure\DryIoc\ContainerExtensions.cs" />
     <Compile Include="Infrastructure\DryIoc\AsyncExecutionFlowScopeContext.cs" />
     <Compile Include="Infrastructure\DryIoc\Container.cs" />
-    <Compile Include="Infrastructure\DryIoc\HttpDependencyResolver - Copy.cs" />
     <Compile Include="Infrastructure\DryIoc\HttpDependencyResolver.cs" />
+    <Compile Include="Infrastructure\DryIoc\HttpDependencyExtensions.cs" />
     <Compile Include="Infrastructure\DryIoc\MvcDependencyResolver.cs" />
     <Compile Include="Infrastructure\DryIoc\ContainerFactory.cs" />
-    <Compile Include="Infrastructure\EmptyResult.cs" />
     <Compile Include="Infrastructure\IdentifyableExtensions.cs" />
     <Compile Include="Infrastructure\IIdentifyable.cs" />
-    <Compile Include="Infrastructure\Queries\EntityById.cs" />
-    <Compile Include="Infrastructure\Queries\IHandleListQuery.cs" />
-    <Compile Include="Infrastructure\Queries\IHandleQuery.cs" />
-    <Compile Include="Infrastructure\Queries\IListQuery.cs" />
-    <Compile Include="Infrastructure\Queries\IQuery.cs" />
-    <Compile Include="Infrastructure\Queries\IQueryDispatcher.cs" />
-    <Compile Include="Infrastructure\Queries\QueryDispatcher.cs" />
+    <Compile Include="Infrastructure\Messages\CommandHandler.cs" />
+    <Compile Include="Infrastructure\Store\SessionExtension.cs" />
+    <Compile Include="Infrastructure\Store\StoreFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ContainerInitializer.cs" />
   </ItemGroup>

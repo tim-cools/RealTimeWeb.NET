@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
+using Soloco.ReactiveStarterKit.Controllers;
 
 namespace Soloco.ReactiveStarterKit
 {
@@ -10,7 +11,7 @@ namespace Soloco.ReactiveStarterKit
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
 
-            container.RegisterAssemblyServices(Assembly.GetExecutingAssembly(), "Soloco.ReactiveStarterKit.Controllers");
+            container.RegisterServicesInNamespace(typeof(AccountController));
 
             return container;
         }

@@ -13,9 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership.Messages", "Soloco.ReactiveStarterKit.Membership.Messages\Soloco.ReactiveStarterKit.Membership.Messages.csproj", "{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership.Client", "Soloco.ReactiveStarterKit.Membership.Client\Soloco.ReactiveStarterKit.Membership.Client.csproj", "{58C28353-A953-42E6-B09A-BC2F42C49E02}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Common.Tests", "Soloco.ReactiveStarterKit.Common.Tests\Soloco.ReactiveStarterKit.Common.Tests.csproj", "{02395C44-A068-40CB-991A-6D35B7AE18DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership.Views", "Soloco.ReactiveStarterKit.Membership.Views\Soloco.ReactiveStarterKit.Membership.Views.csproj", "{58C28353-A953-42E6-B09A-BC2F42C49E02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +43,14 @@ Global
 		{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C28353-A953-42E6-B09A-BC2F42C49E02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

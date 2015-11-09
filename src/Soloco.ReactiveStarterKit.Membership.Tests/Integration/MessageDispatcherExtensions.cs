@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Commands;
+using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 
 namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration
 {
@@ -12,7 +12,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration
             if (message == null) throw new ArgumentNullException(nameof(message));
 
             var task = messageDispatcher.Execute(message);
-            if (!task.Wait(3000))
+            if (!task.Wait(300000))
             {
                 throw new AssertionException("Timeout on executing message.");
             }

@@ -34,9 +34,29 @@
       <HintPath>..\packages\Elephanet.0.3.10\lib\net45\\Elephanet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Marten, Version=0.0.1.51212, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages-local\Marten.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -52,8 +72,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblySetup.cs" />
-    <Compile Include="Integration\User\RegisterUserSpecifications\WhenRegistringAUser.cs" />
+    <Compile Include="IntegrationTestSetup.cs" />
+    <Compile Include="Integration\User\RegisterExternalUserSpecifications\WhenRegisteringAGoogleUser.cs" />
+    <Compile Include="Integration\User\RegisterExternalUserSpecifications\WhenRegisteringAFacebookUser.cs" />
+    <Compile Include="Integration\User\RegisterUserSpecifications\WhenRegisteringAUser.cs" />
     <Compile Include="Integration\MessageDispatcherExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,13 +88,13 @@
       <Project>{64FD3253-191F-47D2-99C9-6CA423EEAD07}</Project>
       <Name>Soloco.ReactiveStarterKit.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Client\Soloco.ReactiveStarterKit.Membership.Client.csproj">
-      <Project>{58C28353-A953-42E6-B09A-BC2F42C49E02}</Project>
-      <Name>Soloco.ReactiveStarterKit.Membership.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Messages\Soloco.ReactiveStarterKit.Membership.Messages.csproj">
       <Project>{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}</Project>
       <Name>Soloco.ReactiveStarterKit.Membership.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Views\Soloco.ReactiveStarterKit.Membership.Views.csproj">
+      <Project>{58C28353-A953-42E6-B09A-BC2F42C49E02}</Project>
+      <Name>Soloco.ReactiveStarterKit.Membership.Views</Name>
     </ProjectReference>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
       <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>

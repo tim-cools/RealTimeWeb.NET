@@ -16,8 +16,8 @@ namespace Soloco.ReactiveStarterKit.Membership.Domain
         [MaxLength(50)]
         public string ClientKey { get; set; }
 
-        public DateTime IssuedUtc { get; set; }
-        public DateTime ExpiresUtc { get; set; }
+        public DateTimeOffset? IssuedUtc { get; set; }
+        public DateTimeOffset? ExpiresUtc { get; set; }
         [Required]
         public string ProtectedTicket { get; set; }
 

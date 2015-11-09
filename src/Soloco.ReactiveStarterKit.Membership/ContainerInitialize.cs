@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Reflection;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
+using Soloco.ReactiveStarterKit.Membership.CommandHandlers;
+using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Membership
 {
@@ -10,10 +11,9 @@ namespace Soloco.ReactiveStarterKit.Membership
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
 
-            container.RegisterAssemblyServices(Assembly.GetExecutingAssembly(),
-                "Soloco.ReactiveStarterKit.Membership.Users.CommandHandlers");
-
-            return container;
+            return container
+                .RegisterServicesInNamespace(typeof(InitializeDatabaseCommandHandler))
+                .RegisterServicesInNamespace(Reuse.Singleton, typeof(OAuthConfiguration));
         }
     }
 }

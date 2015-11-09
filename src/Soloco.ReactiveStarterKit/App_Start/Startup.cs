@@ -5,8 +5,11 @@ using Owin;
 using Soloco.ReactiveStarterKit;
 using Soloco.ReactiveStarterKit.Common;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
+using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 using Soloco.ReactiveStarterKit.Membership;
 using Soloco.ReactiveStarterKit.Membership.Client;
+using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -18,10 +21,20 @@ namespace Soloco.ReactiveStarterKit
         {
             var httpConfiguration = HttpConfiguration();
             app
-                .UseWebApi(httpConfiguration)
                 .ConfigureOAuth(httpConfiguration)
+                .UseWebApi(httpConfiguration)
                 .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
                 .MapSignalR("/sockets", new HubConfiguration());
+
+            InitializeDatabase(httpConfiguration.DependencyResolver);
+        }
+
+        private static void InitializeDatabase(IDependencyResolver dependencyResolver)
+        {
+            var messageDispatcher = dependencyResolver.GetMessageDispatcher(); 
+
+            var command = new InitialzeDatabaseCommand();
+            messageDispatcher.Execute(command).Wait();
         }
 
         private static HttpConfiguration HttpConfiguration()
@@ -32,7 +45,7 @@ namespace Soloco.ReactiveStarterKit
                 .RegisterDependencyResolver(configure => configure
                     .RegisterCommon()
                     .RegisterMembership()
-                    .RegisterMembershipClient()
+                    .RegisterMembershipViews()
                     .RegisterApiControllers()
                 );
         }

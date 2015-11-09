@@ -4,9 +4,9 @@ namespace Soloco.ReactiveStarterKit.Membership.Domain
 {
     public class PasswordHash
     {
-        public Guid Id { get; private set; }
-        public Guid UserId { get; private set; }
-        public string Hash { get; private set; }
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public string Hash { get; set; }
 
         public PasswordHash()
         {

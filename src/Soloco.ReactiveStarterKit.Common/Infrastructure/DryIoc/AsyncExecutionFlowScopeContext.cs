@@ -26,17 +26,7 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
 {
     using System;
     using System.Runtime.Remoting.Messaging;
-    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
-
-    static partial class ScopeContext
-    {
-        [SuppressMessage("ReSharper", "RedundantAssignment", Justification = "ref is the only way for partial methods.")]
-        static partial void GetDefaultScopeContext(ref IScopeContext resultContext)
-        {
-            resultContext = new AsyncExecutionFlowScopeContext();
-        }
-    }
 
     /// <summary>Stores scopes propagating through async-await boundaries.</summary>
     public sealed class AsyncExecutionFlowScopeContext : IScopeContext, IDisposable
@@ -80,12 +70,5 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
 
         private static int _seedKey;
         private readonly string _currentScopeEntryKey;
-    }
-
-    [Serializable]
-    internal sealed class ScopeEntry<T> : MarshalByRefObject
-    {
-        public readonly T Value;
-        public ScopeEntry(T value) { Value = value; }
     }
 }

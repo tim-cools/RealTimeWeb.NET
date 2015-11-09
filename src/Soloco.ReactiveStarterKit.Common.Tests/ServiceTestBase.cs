@@ -1,10 +1,9 @@
-﻿using Elephanet;
-using Soloco.ReactiveStarterKit.Common.Tests;
-using Soloco.ReactiveStarterKit.Common.Tests.Storage;
+﻿using Marten;
+using Marten.Schema;
 
-namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.User.RegisterUserSpecifications
+namespace Soloco.ReactiveStarterKit.Common.Tests
 {
-    public class ServiceTestBase<T> : SpecificationBase
+    public abstract class ServiceTestBase<T> : SpecificationBase
     {
         protected IDocumentSession Session { get; private set; }
 
@@ -15,13 +14,16 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.User.RegisterUs
             base.Given();
 
             Service = TestContainer.Resolve<T>();
+
+            var cleaner = TestContainer.Resolve<IDocumentCleaner>();
+            cleaner.DeleteAllDocuments();
         }
 
         protected override void When()
         {
             base.When();
 
-            Session = TestStore.CreateSession();
+            Session = TestContainer.Resolve<IDocumentSession>();
         }
 
         protected override void CleanUp()

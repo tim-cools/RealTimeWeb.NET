@@ -2,7 +2,6 @@ using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using Elephanet;
 
 namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
 {
@@ -10,33 +9,14 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
     {
         private const string psqlPath = @"C:\Program Files\PostgreSQL\9.4\bin\psql.exe"; //todo add alternative paths or move to config if necessary
 
-        private static DocumentStore _store;
-        
         static TestStore()
         {
             CreateCleanStoreDatabase();
-            CreateStore();
-        }
-
-        private static void CreateStore()
-        {
-            var connectionString = GetConnectionString();
-            _store = new DocumentStore(connectionString.ConnectionString);
-        }
-
-        private static ConnectionStringSettings GetConnectionString()
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["documentStore"];
-            if (string.IsNullOrWhiteSpace(connectionString?.ConnectionString))
-            {
-                throw new InvalidOperationException("ConnectionString 'documentStore' not found in app.config");
-            }
-            return connectionString;
         }
 
         private static void CreateCleanStoreDatabase()
         {
-            Debug.WriteLine($"Test Store Database Creating");
+            Debug.WriteLine("Test Store Database Creating");
 
             var tempScriptFileName = WriteTempSqlScript();
             var command = $"-f {tempScriptFileName} -U postgres";
@@ -45,7 +25,7 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
 
             StartAndOutputProcess(command);
 
-            Debug.WriteLine($"Test Store Database Created");
+            Debug.WriteLine("Test Store Database Created");
 
             File.Delete(tempScriptFileName);
         }
@@ -54,10 +34,10 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
         {
             var process = new Process { StartInfo = ProcessInfo(command) };
             process.Start();
-            WriiteOutputToDebug(process);
+            WriteOutputToDebug(process);
         }
 
-        private static void WriiteOutputToDebug(Process process)
+        private static void WriteOutputToDebug(Process process)
         {
             while (!process.StandardOutput.EndOfStream)
             {
@@ -85,11 +65,6 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
             var tempScriptFileName = Path.GetTempFileName();
             File.WriteAllText(tempScriptFileName, script);
             return tempScriptFileName;
-        }
-
-        public static IDocumentSession CreateSession()
-        {
-            return _store.OpenSession();
         }
     }
 }

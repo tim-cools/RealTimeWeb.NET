@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -266,9 +267,12 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\DependencyResolverExtensions.cs" />
     <Compile Include="App_Start\ContainerInitialize.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\OAuthConfig.cs" />
@@ -283,14 +287,12 @@
     </Compile>
     <Compile Include="Api\Membership.cs" />
     <Compile Include="Models\ExternalLoginViewModel.cs" />
-    <Compile Include="Models\ParsedExternalAccessToken.cs" />
     <Compile Include="Models\RegisterExternalBindingModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\ValidatClientResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\FacebookAuthProvider.cs" />
-    <Compile Include="Providers\GoogleAuthProvider.cs" />
-    <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
-    <Compile Include="Providers\SimpleRefreshTokenProvider.cs" />
+    <Compile Include="Providers\AuthorizationServerProvider.cs" />
+    <Compile Include="Providers\RefreshTokenProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="App_Start\Startup.cs" />
   </ItemGroup>
@@ -328,13 +330,13 @@
       <Project>{64FD3253-191F-47D2-99C9-6CA423EEAD07}</Project>
       <Name>Soloco.ReactiveStarterKit.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Client\Soloco.ReactiveStarterKit.Membership.Client.csproj">
-      <Project>{58C28353-A953-42E6-B09A-BC2F42C49E02}</Project>
-      <Name>Soloco.ReactiveStarterKit.Membership.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Messages\Soloco.ReactiveStarterKit.Membership.Messages.csproj">
       <Project>{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}</Project>
       <Name>Soloco.ReactiveStarterKit.Membership.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Views\Soloco.ReactiveStarterKit.Membership.Views.csproj">
+      <Project>{58C28353-A953-42E6-B09A-BC2F42C49E02}</Project>
+      <Name>Soloco.ReactiveStarterKit.Membership.Views</Name>
     </ProjectReference>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
       <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>
