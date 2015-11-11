@@ -1,6 +1,8 @@
 using System;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Membership.Domain;
+using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.Services
 {
@@ -8,7 +10,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
     {
         private readonly IOAuthConfiguration _ioAuthConfiguration;
 
-        public override string Name => "facebook";
+        public override LoginProvider Provider => LoginProvider.Facebook;
 
         public FacebookProviderTokenValidator(IOAuthConfiguration ioAuthConfiguration)
         {

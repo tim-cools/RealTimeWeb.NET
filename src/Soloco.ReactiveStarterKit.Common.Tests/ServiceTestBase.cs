@@ -14,6 +14,7 @@ namespace Soloco.ReactiveStarterKit.Common.Tests
             base.Given();
 
             Service = TestContainer.Resolve<T>();
+            Session = TestContainer.Resolve<IDocumentSession>();
 
             var cleaner = TestContainer.Resolve<IDocumentCleaner>();
             cleaner.DeleteAllDocuments();

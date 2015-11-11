@@ -5,10 +5,10 @@ namespace Soloco.ReactiveStarterKit.Membership.Messages.Queries
 {
     public class VerifyExternalUserQuery : IMessage<VerifyExternalUserResult>
     {
-        public string Provider { get; }
-        public string ExternalAccessToken { get; set; }
+        public LoginProvider Provider { get; }
+        public string ExternalAccessToken { get; }
 
-        public VerifyExternalUserQuery(string provider, string externalAccessToken)
+        public VerifyExternalUserQuery(LoginProvider provider, string externalAccessToken)
         {
             Provider = provider;
             ExternalAccessToken = externalAccessToken;         

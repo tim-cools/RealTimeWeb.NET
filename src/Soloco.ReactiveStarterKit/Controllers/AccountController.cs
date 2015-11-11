@@ -10,8 +10,10 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Linq;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
+using Soloco.ReactiveStarterKit.Membership.Domain;
 using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
+using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 using Soloco.ReactiveStarterKit.Membership.Services;
 using Soloco.ReactiveStarterKit.Models;
 using Soloco.ReactiveStarterKit.Results;
@@ -24,10 +26,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
         private readonly IMessageDispatcher _messageDispatcher;
         private readonly IOAuthConfiguration _ioAuthConfiguration;
 
-        private IAuthenticationManager Authentication
-        {
-            get { return Request.GetOwinContext().Authentication; }
-        }
+        private IAuthenticationManager Authentication => Request.GetOwinContext().Authentication;
 
         public AccountController(IMessageDispatcher messageDispatcher, IOAuthConfiguration ioAuthConfiguration)
         {
@@ -79,13 +78,12 @@ namespace Soloco.ReactiveStarterKit.Controllers
             }
 
             var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
             if (externalLogin == null)
             {
                 return InternalServerError();
             }
 
-            if (externalLogin.LoginProvider != provider)
+            if (externalLogin.LoginProvider != provider.AsLoginProvider())
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
                 return new ChallengeResult(provider, this);
@@ -114,7 +112,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
                 return BadRequest(ModelState);
             }
 
-            var command = new RegisterExternalUserCommand(model.UserName, model.Provider, model.ExternalAccessToken);
+            var command = new RegisterExternalUserCommand(model.UserName, model.Provider.AsLoginProvider(), model.ExternalAccessToken);
             var result = await _messageDispatcher.Execute(command);
             if (!result.Succeeded)
             {
@@ -136,7 +134,7 @@ namespace Soloco.ReactiveStarterKit.Controllers
                 return BadRequest("Provider or external access token is not sent");
             }
 
-            var command = new VerifyExternalUserQuery(provider, externalAccessToken);
+            var command = new VerifyExternalUserQuery(provider.AsLoginProvider(), externalAccessToken);
             var result = await _messageDispatcher.Execute(command);
             if (!result.Registered)
             {
@@ -147,8 +145,6 @@ namespace Soloco.ReactiveStarterKit.Controllers
             return Ok(accessTokenResponse);
         }
 
-        #region Helpers
-
         private IHttpActionResult GetErrorResult(CommandResult result)
         {
             if (result == null)
@@ -156,48 +152,39 @@ namespace Soloco.ReactiveStarterKit.Controllers
                 return InternalServerError();
             }
 
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
-                if (result.Errors != null)
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
-
-                if (ModelState.IsValid)
-                {
-                    // No ModelState errors are available to send, so just return an empty BadRequest.
-                    return BadRequest();
-                }
-
-                return BadRequest(ModelState);
+                return null;
             }
 
-            return null;
+            if (result.Errors != null)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
+            }
+
+            return ModelState.IsValid ? (IHttpActionResult) BadRequest() : BadRequest(ModelState);
         }
 
         private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequestMessage request)
         {
             Uri redirectUri;
 
-            var redirectUriString = GetQueryString(Request, "redirect_uri");
-
+            var redirectUriString = GetQueryString(request, "redirect_uri");
             if (string.IsNullOrWhiteSpace(redirectUriString))
             {
                 return new ValidatClientResult("redirect_uri is required");
             }
 
-            bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
-
+            var validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
             if (!validUri)
             {
                 return new ValidatClientResult("redirect_uri is invalid");
             }
 
-            var clientId = GetQueryString(Request, "client_id");
-
+            var clientId = GetQueryString(request, "client_id");
             if (string.IsNullOrWhiteSpace(clientId))
             {
                 return new ValidatClientResult("client_Id is required");
@@ -219,17 +206,16 @@ namespace Soloco.ReactiveStarterKit.Controllers
             return new ValidatClientResult(null, redirectUri.AbsoluteUri);
         }
 
-        private string GetQueryString(HttpRequestMessage request, string key)
+        private static string GetQueryString(HttpRequestMessage request, string key)
         {
             var queryStrings = request.GetQueryNameValuePairs();
 
             if (queryStrings == null) return null;
 
-            var match = queryStrings.FirstOrDefault(keyValue => string.Compare(keyValue.Key, key, true) == 0);
+            var match = queryStrings
+                .FirstOrDefault(keyValue => string.Compare(keyValue.Key, key, StringComparison.OrdinalIgnoreCase) == 0);
 
-            if (string.IsNullOrEmpty(match.Value)) return null;
-
-            return match.Value;
+            return string.IsNullOrEmpty(match.Value) ? null : match.Value;
         }
 
         private JObject GenerateLocalAccessTokenResponse(string userName)
@@ -262,43 +248,5 @@ namespace Soloco.ReactiveStarterKit.Controllers
 
             return tokenResponse;
         }
-
-        private class ExternalLoginData
-        {
-            public string LoginProvider { get; set; }
-            public string ProviderKey { get; set; }
-            public string UserName { get; set; }
-            public string ExternalAccessToken { get; set; }
-
-            public static ExternalLoginData FromIdentity(ClaimsIdentity identity)
-            {
-                if (identity == null)
-                {
-                    return null;
-                }
-
-                Claim providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
-
-                if (providerKeyClaim == null || string.IsNullOrEmpty(providerKeyClaim.Issuer) || String.IsNullOrEmpty(providerKeyClaim.Value))
-                {
-                    return null;
-                }
-
-                if (providerKeyClaim.Issuer == ClaimsIdentity.DefaultIssuer)
-                {
-                    return null;
-                }
-
-                return new ExternalLoginData
-                {
-                    LoginProvider = providerKeyClaim.Issuer,
-                    ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name),
-                    ExternalAccessToken = identity.FindFirstValue("ExternalAccessToken"),
-                };
-            }
-        }
-
-        #endregion
     }
 }

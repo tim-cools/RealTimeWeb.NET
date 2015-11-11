@@ -4,6 +4,7 @@ using Microsoft.Owin;
 using Owin;
 using Soloco.ReactiveStarterKit;
 using Soloco.ReactiveStarterKit.Common;
+using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 using Soloco.ReactiveStarterKit.Membership;
@@ -19,6 +20,8 @@ namespace Soloco.ReactiveStarterKit
     {
         public void Configuration(IAppBuilder app)
         {
+            LoggingInitializer.Initialize();
+
             var httpConfiguration = HttpConfiguration();
             app
                 .ConfigureOAuth(httpConfiguration)

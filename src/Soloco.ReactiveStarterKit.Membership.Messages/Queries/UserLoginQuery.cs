@@ -5,10 +5,10 @@ namespace Soloco.ReactiveStarterKit.Membership.Messages.Queries
 {
     public class UserLoginQuery : IMessage<UserLogin>
     {
-        public string LoginProvider { get; }
+        public LoginProvider LoginProvider { get; }
         public string ProviderKey { get; }
 
-        public UserLoginQuery(string loginProvider, string providerKey)
+        public UserLoginQuery(LoginProvider loginProvider, string providerKey)
         {
             LoginProvider = loginProvider;
             ProviderKey = providerKey;

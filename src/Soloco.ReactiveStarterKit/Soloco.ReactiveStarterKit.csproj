@@ -286,7 +286,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Api\Membership.cs" />
-    <Compile Include="Models\ExternalLoginViewModel.cs" />
     <Compile Include="Models\RegisterExternalBindingModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\ValidatClientResult.cs" />

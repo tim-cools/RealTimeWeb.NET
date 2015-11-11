@@ -80,7 +80,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandHandlers\DeleteRefreshTokenHandler.cs" />
     <Compile Include="CommandHandlers\CreateRefreshTokenHandler.cs" />
+    <Compile Include="Domain\ExternalLoginData.cs" />
     <Compile Include="Services\FacebookAuthProvider.cs" />
     <Compile Include="Services\FacebookProviderTokenValidator.cs" />
     <Compile Include="Services\GoogleAuthProvider.cs" />

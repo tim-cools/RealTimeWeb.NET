@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Marten;
-using Microsoft.Owin.Logging;
+using Serilog;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
 using Soloco.ReactiveStarterKit.Membership.Domain;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
 using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
-using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
 {
     public class ValidateClientAuthenticationHandler : IHandleMessage<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
     {
-        private readonly ILogger _logger;
         private readonly IDisposable _scope;
         private readonly IDocumentSession _session;
 
@@ -30,7 +28,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
                 var client = _session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
                 if (client == null)
                 {
-                    _logger.WriteWarning("Client '{0}' is not registered in the system.", query.ClientId);
+                    Log.Warning($"Client '{query.ClientId}' is not registered in the system.");
                     return new ValidateClientAuthenticationResult(false);
                 }
 
@@ -38,19 +36,19 @@ namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
                 {
                     if (string.IsNullOrWhiteSpace(query.ClientSecret))
                     {
-                        _logger.WriteWarning("Client secret should be sent.");
+                        Log.Warning("Client secret should be sent.");
                         return new ValidateClientAuthenticationResult(false);
                     }
                     if (client.Secret != Helper.GetHash(query.ClientSecret))
                     {
-                        _logger.WriteWarning("Client secret is invalid.");
+                        Log.Warning("Client secret is invalid.");
                         return new ValidateClientAuthenticationResult(false);
                     }
                 }
 
                 if (!client.Active)
                 {
-                    _logger.WriteWarning("Client is inactive.");
+                    Log.Warning("Client is inactive.");
                     return new ValidateClientAuthenticationResult(false);
                 }
 

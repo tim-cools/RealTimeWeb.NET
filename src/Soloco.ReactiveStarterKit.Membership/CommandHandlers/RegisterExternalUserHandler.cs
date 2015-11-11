@@ -5,7 +5,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
 using Soloco.ReactiveStarterKit.Membership.Domain;
 using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
@@ -41,7 +40,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
         private async Task VerifyNotRegistered(RegisterExternalUserCommand command, ParsedExternalAccessToken verifiedAccessToken)
         {
             var query = new UserLoginQuery(command.Provider, verifiedAccessToken.UserId);
-            var loginInfo = new UserLoginInfo(query.LoginProvider, query.ProviderKey);
+            var loginInfo = new UserLoginInfo(query.LoginProvider.ToString(), query.ProviderKey);
             var userLogin = await _userManager.FindAsync(loginInfo);
 
             if (userLogin != null)
@@ -62,10 +61,10 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
 
         private async Task<CommandResult> CreateLogin(RegisterExternalUserCommand command, IdentityUser user, string verifiedAccessTokenuser_id)
         {
-            var info = new ExternalLoginInfo()
+            var info = new ExternalLoginInfo
             {
                 DefaultUserName = command.UserName,
-                Login = new UserLoginInfo(command.Provider, verifiedAccessTokenuser_id)
+                Login = new UserLoginInfo(command.Provider.ToString(), verifiedAccessTokenuser_id)
             };
 
             var result = await _userManager.AddLoginAsync(user.Id, info.Login);

@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Linq;
-using Marten;
 using NUnit.Framework;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 using Soloco.ReactiveStarterKit.Common.Tests;
 using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
+using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+using Soloco.ReactiveStarterKit.Membership.Tests.Integration.Infrastructure;
 
 namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.User.RegisterExternalUserSpecifications
 {
     [TestFixture]
     public class WhenRegisteringAGoogleUser : ServiceTestBase<IMessageDispatcher>
     {
-        private const string _externalAccessToken = "ya29.JwIJQlpMGnnkjk3HX1laTOZTU8aSdkS8NncacxshTnUpdaZUkuU6gkcqyYojHi398M7ceg";
-        private const string _provider = "Google";
-
         private CommandResult _result;
         private RegisterExternalUserCommand _command;
         private string _name;
@@ -25,7 +23,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.User.RegisterEx
             base.When();
 
             _name = Guid.NewGuid().ToString("n");
-            _command = new RegisterExternalUserCommand(_name, _provider, _externalAccessToken);
+            _command = new RegisterExternalUserCommand(_name, LoginProvider.Google, ExternalAccessTokens.Google);
 
             _result = Service.ExecuteNowWithTimeout(_command);
         }
@@ -58,7 +56,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.User.RegisterEx
         [Test]
         public void ThenAUserShouldBeAbleToLogin()
         {
-            var query = new VerifyExternalUserQuery(_provider, _externalAccessToken);
+            var query = new VerifyExternalUserQuery(LoginProvider.Google, ExternalAccessTokens.Google);
             var result = Service.ExecuteNowWithTimeout(query);
 
             Assert.That(result.Registered, Is.True);

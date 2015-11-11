@@ -18,11 +18,5 @@ namespace Soloco.ReactiveStarterKit.Controllers
 
             return Ok(Order.CreateOrders());
         }
-
     }
-
-
-    #region Helpers
-
-    #endregion
 }

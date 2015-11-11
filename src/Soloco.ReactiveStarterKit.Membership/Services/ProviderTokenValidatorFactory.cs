@@ -1,5 +1,7 @@
 using System;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
+using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.Services
 {
@@ -14,11 +16,11 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
             _providerTokenValidators = providerTokenValidators;
         }
 
-        public IProviderTokenValidator Create(string provider)
+        public IProviderTokenValidator Create(LoginProvider provider)
         {
             foreach (var validator in _providerTokenValidators)
             {
-                if (validator.Name.Equals(provider, StringComparison.InvariantCultureIgnoreCase))
+                if (validator.Provider == provider)
                 {
                     return validator;
                 }

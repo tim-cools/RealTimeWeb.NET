@@ -1,7 +1,10 @@
+using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+
 namespace Soloco.ReactiveStarterKit.Membership.Services
 {
     public interface IProviderTokenValidatorFactory
     {
-        IProviderTokenValidator Create(string provider);
+        IProviderTokenValidator Create(LoginProvider provider);
     }
 }

@@ -5,12 +5,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Membership.Domain;
+using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.Services
 {
     public abstract class ProviderTokenValidator : IProviderTokenValidator
     {
-        public abstract string Name { get; }
+        public abstract LoginProvider Provider { get; }
 
         public async Task<ParsedExternalAccessToken> ValidateToken(string accessToken)
         {

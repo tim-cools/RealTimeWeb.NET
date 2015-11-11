@@ -61,6 +61,10 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Shouldly, Version=2.6.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.2.6.0\lib\net40\Shouldly.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -73,6 +77,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntegrationTestSetup.cs" />
+    <Compile Include="Integration\Infrastructure\ExternalAccessTokens.cs" />
+    <Compile Include="Integration\Queries\WhenQueryingClientByKey.cs" />
+    <Compile Include="Integration\Queries\WhenQueryingRefreshTokens.cs" />
+    <Compile Include="Integration\Queries\WhenQueryingUserByName.cs" />
+    <Compile Include="Integration\Queries\WhenValidatingClientAuthentication.cs" />
+    <Compile Include="Integration\Queries\WhenValidatingUserLogin.cs" />
+    <Compile Include="Integration\Queries\WhenVerifyingExternalUser.cs" />
     <Compile Include="Integration\User\RegisterExternalUserSpecifications\WhenRegisteringAGoogleUser.cs" />
     <Compile Include="Integration\User\RegisterExternalUserSpecifications\WhenRegisteringAFacebookUser.cs" />
     <Compile Include="Integration\User\RegisterUserSpecifications\WhenRegisteringAUser.cs" />

@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Controllers
+namespace Soloco.ReactiveStarterKit.Models
 {
     internal class ValidatClientResult
     {

@@ -27,7 +27,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
         {
             using (_scope)
             {
-                var loginInfo = new UserLoginInfo(query.LoginProvider, query.ProviderKey);
+                var loginInfo = new UserLoginInfo(query.LoginProvider.ToString(), query.ProviderKey);
                 var result = await _userManager.FindAsync(loginInfo);
                 return result != null ? new UserLogin { } : null;
             }

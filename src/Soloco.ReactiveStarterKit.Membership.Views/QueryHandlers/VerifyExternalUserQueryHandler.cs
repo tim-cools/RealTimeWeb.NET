@@ -37,7 +37,8 @@ namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
                     return new VerifyExternalUserResult(false);
                 }
 
-                var user = await _userManager.FindAsync(new UserLoginInfo(query.Provider, verifiedAccessToken.UserId));
+                var login = new UserLoginInfo(query.Provider.ToString(), verifiedAccessToken.UserId);
+                var user = await _userManager.FindAsync(login);
 
                 return user == null
                     ? new VerifyExternalUserResult(false)

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Soloco.ReactiveStarterKit.Common;
+using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Tests;
 using Soloco.ReactiveStarterKit.Membership.Client;
 
@@ -11,6 +12,8 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests
         [SetUp]
         public void Setup()
         {
+            LoggingInitializer.Initialize();
+
             TestContainer.Initialize(container => container
                 .RegisterCommon()
                 .RegisterMembership()
