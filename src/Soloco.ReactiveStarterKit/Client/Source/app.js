@@ -3,11 +3,12 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import reducers from './state/reducers';
+import dispatcher from './state/dispatcher';
+
 import Router from './router';
-import api from './api/';
 
 let store = createStore(reducers);
-api.setDispatch(store.dispatch);
+dispatcher.set(store.dispatch);
 
 let contentElement = document.getElementById('application-content');
 

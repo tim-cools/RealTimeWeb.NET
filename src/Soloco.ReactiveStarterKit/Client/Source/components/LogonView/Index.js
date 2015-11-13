@@ -48,6 +48,7 @@ class LogonPage extends Component {
                                 Log On
                             </Button>
                             {loader}
+                            {this.props.message}
                         </Panel>
                     </Col>
                 </Row>
@@ -57,12 +58,14 @@ class LogonPage extends Component {
 }
 
 LogonPage.propTypes = {
-    logonPending: PropTypes.bool.isRequired
+    logonPending: PropTypes.bool.isRequired,
+    message: PropTypes.string
 };
 
 function select(state) {
     return {
-        logonPending: state.user.status == userStatus.logonPending
+        logonPending: state.user.status == userStatus.logonPending,
+        message: state.user.message
     };
 }
 

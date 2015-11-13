@@ -1,5 +1,6 @@
 ﻿'use strict';
-app.controller('loginController', ['$scope', '$location', 'authService', 'ngAuthSettings', function ($scope, $location, authService, ngAuthSettings) {
+app.controller('loginController', ['$scope', '$location', 'authService', 'ngAuthSettings',
+    function ($scope, $location, authService, ngAuthSettings) {
 
     $scope.loginData = {
         userName: "",

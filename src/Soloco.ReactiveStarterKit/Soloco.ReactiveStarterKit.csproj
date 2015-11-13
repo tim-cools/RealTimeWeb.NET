@@ -207,6 +207,8 @@
     <Content Include="Client\Build\bootstrap-3.3.5-dist\js\npm.js" />
     <Content Include="Client\Build\normalize.css" />
     <Content Include="Client\Build\vendor.js" />
+    <Content Include="Client\Source\api\index.js" />
+    <Content Include="Client\Source\api\membership.js" />
     <Content Include="Client\Source\app.js" />
     <Content Include="Client\Source\app.kit.js" />
     <Content Include="Client\Source\components\AboutView\About.js" />
@@ -225,6 +227,7 @@
     <Content Include="Client\Source\decorators\withStyles.js" />
     <Content Include="Client\Source\decorators\withViewport.js" />
     <Content Include="Client\Source\router.js" />
+    <Content Include="Client\Source\state\dispatcher.js" />
     <Content Include="Client\Source\state\actions.js" />
     <Content Include="Client\Source\state\reducers.js" />
     <Content Include="Client\Source\state\user.js" />
@@ -259,6 +262,7 @@
     <Content Include="content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Client\Source\api\package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="index.html" />
     <Content Include="Scripts\angular-local-storage.min.js" />

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Router, Route, Link } from 'react-router';
+import { Router, Route, Link, IndexRoute } from 'react-router';
 
 import MainPage from './components/MainPage';
 import AboutView from './components/AboutView';
@@ -13,6 +13,7 @@ class ApplicationRouter extends Component {
         return (
             <Router>
                 <Route path="/" component={MainPage}>
+                    <IndexRoute component={LogonView}/>.
                     <Route path="about" component={AboutView} />
                     <Route path="todo" component={ToDoExampleView} />
                     <Route path="logon" component={LogonView} />

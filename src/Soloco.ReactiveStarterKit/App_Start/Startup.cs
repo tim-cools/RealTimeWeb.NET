@@ -6,7 +6,6 @@ using Soloco.ReactiveStarterKit;
 using Soloco.ReactiveStarterKit.Common;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 using Soloco.ReactiveStarterKit.Membership;
 using Soloco.ReactiveStarterKit.Membership.Client;
 using Soloco.ReactiveStarterKit.Membership.Messages.Commands;

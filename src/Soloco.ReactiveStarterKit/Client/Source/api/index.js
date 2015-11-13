@@ -1,15 +1,9 @@
 
-var dispatch;
-
-function setDispatch(value) {
-    dispatch = value;
-}
-
-function getDispatch(value) {
-    return dispatch;
-}
+const serviceBase = 'http://localhost:12777/';
+//var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
+const clientId = 'ngAuthApp';
 
 export default {
-    setDispatch: setDispatch,
-    getDispatch: getDispatch
+    serviceBase: serviceBase,
+    clientId: clientId
 }

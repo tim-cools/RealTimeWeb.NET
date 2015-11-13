@@ -5,36 +5,43 @@ export const userStatus = {
     values: ['notAuthenticated', 'authenticated', 'logonPending']
 };
 
-let notAuthenticated = {
-    status: userStatus.notAuthenticated
-};
-
-function authenticated(name) {
-    return {
-        status: userStatus.notAuthenticated,
-        name: name
-    };
-}
-
 export const actionsDefinitions = {
     LOG_OFF: 'LOG_OFF',
     LOG_ON: 'LOG_ON',
-    LOG_ON_PENDING: 'LOG_ON_PENDING'
+    LOG_ON_PENDING: 'LOG_ON_PENDING',
+    LOG_ON_FAILED: 'LOG_ON_FAILED'
 };
 
 export const actions = {
-    logon: function (name) {
-        return {type: actionsDefinitions.LOG_ON, name};
+    logon: function (name, refreshTokens) {
+        return {
+            type: actionsDefinitions.LOG_ON, 
+            name: name, 
+            refreshTokens: refreshTokens
+        };
     },
 
     logonPending: function () {
-        return {type: actionsDefinitions.LOG_ON_PENDING};
+        return {
+            type: actionsDefinitions.LOG_ON_PENDING
+        };
+    },
+
+    logonFailed: function (message) {
+        return {
+            type: actionsDefinitions.LOG_ON_FAILED, 
+            message: message
+        };
     },
 
     logoff: function () {
-        return {type: actionsDefinitions.LOG_OFF};
+        return {
+            type: actionsDefinitions.LOG_OFF
+        };
     }
 };
+
+const notAuthenticated = { status: userStatus.notAuthenticated };
 
 export function reducer(state = notAuthenticated, action) {
     switch (action.type) {
@@ -45,10 +52,20 @@ export function reducer(state = notAuthenticated, action) {
             };
 
         case actionsDefinitions.LOG_ON_PENDING:
-            return { status: userStatus.logonPending };
+            return {
+                 status: userStatus.logonPending
+            };
+
+        case actionsDefinitions.LOG_ON_FAILED:
+            return {
+                status: userStatus.notAuthenticated, 
+                message: action.message
+            };
 
         case actionsDefinitions.LOG_OFF:
-            return notAuthenticated;
+            return {
+                 status: userStatus.notAuthenticated
+            };
 
         default:
             return state;
