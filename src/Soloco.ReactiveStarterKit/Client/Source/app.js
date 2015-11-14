@@ -10,6 +10,7 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import { reduxReactRouter } from 'redux-router';
 import { createHistory } from 'history';
 
+import membership from './api/membership';
 import reducers from './state/reducers';
 import dispatcher from './state/dispatcher';
 
@@ -38,4 +39,6 @@ ReactDom.render((
         </DebugPanel>
     </div>
 ), contentElement);
+
+membership.initialize();
 

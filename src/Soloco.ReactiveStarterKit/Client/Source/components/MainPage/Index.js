@@ -15,9 +15,7 @@ class Application extends Component {
             <div>
                 <Header
                     userAuthenticated={user.status == userStatus.authenticated}
-                    userName={user.name}
-                    onLogonClick={() => dispatch(userActions.logon('haha'))}
-                    onLogoffClick={() => dispatch(userActions.logoff())} />
+                    userName={user.name} />
                 {this.props.children}
                 <Container>
                     <Footer />

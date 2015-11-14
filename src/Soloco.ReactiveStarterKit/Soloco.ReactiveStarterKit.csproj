@@ -208,6 +208,7 @@
     <Content Include="Client\Build\normalize.css" />
     <Content Include="Client\Build\vendor.js" />
     <Content Include="Client\Source\api\index.js" />
+    <Content Include="Client\Source\api\navigate.js" />
     <Content Include="Client\Source\api\membership.js" />
     <Content Include="Client\Source\app.js" />
     <Content Include="Client\Source\app.kit.js" />

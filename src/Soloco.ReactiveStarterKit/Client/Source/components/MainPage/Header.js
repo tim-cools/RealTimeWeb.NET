@@ -3,10 +3,12 @@ import { Router, Route, Link } from 'react-router'
 
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
+import navigate from './../../api/navigate';
+import membership from './../../api/membership';
 
 class Header extends Component {
     render() {
-        const { dispatch, userAuthenticated, userName, onLogonClick, onLogoffClick } = this.props;
+        const { userAuthenticated, userName } = this.props;
 
         var items = userAuthenticated
             ? [ (
@@ -15,14 +17,14 @@ class Header extends Component {
                 </Nav>
                 ), (
                 <Nav right={true}>
-                    <NavItem onSelect={onLogoffClick}>
+                    <NavItem onSelect={() => membership.logOff()}>
                         Log Off
                     </NavItem>
                 </Nav>
                 ) ]
             :   (
                 <Nav right={true}>
-                    <NavItem onSelect={onLogonClick}>
+                    <NavItem onSelect={() => navigate.to('/logon')}>
                     Log On
                     </NavItem>
                 </Nav>
@@ -38,9 +40,6 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-    onLogonClick: PropTypes.func.isRequired,
-    onLogoffClick: PropTypes.func.isRequired,
-
     userAuthenticated: PropTypes.bool.isRequired,
     userName: PropTypes.string
 };

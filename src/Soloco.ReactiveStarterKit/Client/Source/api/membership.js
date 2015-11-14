@@ -1,12 +1,12 @@
 import api from './';
+import navigate from './navigate';
 import { actions as userActions } from '../state/user';
 import dispatcher from '../state/dispatcher';
 import reqwest from 'reqwest';
-import Storage from 'storage';
-import { pushState } from 'redux-router';
+import store from 'store';
 
-var proxy = $.connection.membership;
-var storage = new Storage();
+const proxy = $.connection.membership;
+const storageKey = 'authorizationData';
 
 proxy.client.LoginSuccessful = function (name) {
     var action = userActions.logon(name);
@@ -27,12 +27,8 @@ function login(userName, password, useRefreshTokens) {
             useRefreshTokens: useRefreshTokens ? true : false,
             refreshToken: useRefreshTokens ? response.refresh_token : null
         };
-
-        storage.set('authorizationData', data);
-        
-        const action = userActions.logon(userName, useRefreshTokens);
-        dispatcher.dispatch(action);
-        dispatcher.dispatch(pushState(null, '/about'));
+        store.set(storageKey, data);
+        loggedOn(userName, useRefreshTokens);
     }
 
     function handleError(request) {
@@ -57,10 +53,37 @@ function login(userName, password, useRefreshTokens) {
     });
 };
 
+function logOff() {
+
+    store.remove(storageKey);
+
+    const action = userActions.logoff();
+    dispatcher.dispatch(action);
+
+    navigate.to('/');
+};
+
+function loggedOn(userName, useRefreshTokens) {
+            
+    const action = userActions.logon(userName, useRefreshTokens);
+    dispatcher.dispatch(action);
+
+    navigate.to('/about');
+}
+
+function initialize() {
+    const data = store.get(storageKey);
+    if (data) {
+        loggedOn(data.userName, data.useRefreshTokens);
+    }
+}
+
 $.connection.hub.start()
     .done(function(){ console.log('Now connected, connection ID=' + $.connection.hub.id); })
     .fail(function(){ console.log('Could not Connect!'); });
 
 export default {
-    login: login
+    login: login,
+    logOff: logOff,
+    initialize: initialize
 }

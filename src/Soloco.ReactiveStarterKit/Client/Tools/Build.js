@@ -34,7 +34,7 @@ var config = {
         'history',
         'redux-thunk',
         'reqwest',
-        'storage'
+        'store'
     ],
     statics:[
         './Client/Statics/**/*.*'
