@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership.Views", "Soloco.ReactiveStarterKit.Membership.Views\Soloco.ReactiveStarterKit.Membership.Views.csproj", "{58C28353-A953-42E6-B09A-BC2F42C49E02}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{26EE359E-2896-4B4F-AF99-828CC927209C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
