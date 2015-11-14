@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 
@@ -16,16 +15,16 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
 
         private static void CreateCleanStoreDatabase()
         {
-            Debug.WriteLine("Test Store Database Creating");
+            Console.WriteLine("Test Store Database Creating");
 
             var tempScriptFileName = WriteTempSqlScript();
             var command = $"-f {tempScriptFileName} -U postgres";
 
-            Debug.WriteLine($"Executing script {tempScriptFileName} with exe {psqlPath} and command {command}.");
+            Console.WriteLine($"Executing script {tempScriptFileName} with exe {psqlPath} and command {command}.");
 
             StartAndOutputProcess(command);
 
-            Debug.WriteLine("Test Store Database Created");
+            Console.WriteLine("Test Store Database Created");
 
             File.Delete(tempScriptFileName);
         }
@@ -42,7 +41,7 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
             while (!process.StandardOutput.EndOfStream)
             {
                 var line = process.StandardOutput.ReadLine();
-                Debug.WriteLine(line);
+                Console.WriteLine(line);
             }
         }
 
