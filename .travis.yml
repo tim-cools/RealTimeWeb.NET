@@ -7,4 +7,4 @@ addons:
   postgresql: "9.5"
 
 script:
-  - ./scripts/build.sh
+  - sudo ./scripts/build.sh
