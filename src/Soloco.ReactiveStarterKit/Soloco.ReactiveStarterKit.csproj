@@ -213,6 +213,7 @@
     <Content Include="Client\Source\app.js" />
     <Content Include="Client\Source\app.kit.js" />
     <Content Include="Client\Source\components\AboutView\About.js" />
+    <Content Include="Client\Source\components\HomeView\Index.js" />
     <Content Include="Client\Source\components\LogonView\Index.js" />
     <Content Include="Client\Source\components\MainPage\Footer.js" />
     <Content Include="Client\Source\components\MainPage\Header.js" />
@@ -265,6 +266,7 @@
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Client\Source\api\package.json" />
     <Content Include=".babelrc" />
+    <Content Include="Client\Source\components\HomeView\package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="index.html" />
     <Content Include="Scripts\angular-local-storage.min.js" />

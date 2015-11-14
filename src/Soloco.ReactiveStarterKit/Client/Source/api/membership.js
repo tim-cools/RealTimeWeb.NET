@@ -68,7 +68,7 @@ function loggedOn(userName, useRefreshTokens) {
     const action = userActions.logon(userName, useRefreshTokens);
     dispatcher.dispatch(action);
 
-    navigate.to('/about');
+    navigate.to('/home');
 }
 
 function initialize() {
