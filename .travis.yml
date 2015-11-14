@@ -4,7 +4,7 @@ mono:
 env: VERSION=0.3.10
 solution: src/Soloco.ReactiveStarterKit.sln
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
 
 script:
-  - xbuild /p:Configuration=Release src/Soloco.ReactiveStarterKit.sln
+  - ./scripts/build.sh

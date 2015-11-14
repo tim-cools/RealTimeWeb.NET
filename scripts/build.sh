@@ -1,0 +1,1 @@
+xbuild /p:Configuration=Release src/Soloco.ReactiveStarterKit.sln /p:TargetFrameworkVersion="v4.5"
