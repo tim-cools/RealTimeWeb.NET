@@ -3,6 +3,7 @@ import { actions as userActions } from '../state/user';
 import dispatcher from '../state/dispatcher';
 import reqwest from 'reqwest';
 import Storage from 'storage';
+import { pushState } from 'redux-router';
 
 var proxy = $.connection.membership;
 var storage = new Storage();
@@ -31,6 +32,7 @@ function login(userName, password, useRefreshTokens) {
         
         const action = userActions.logon(userName, useRefreshTokens);
         dispatcher.dispatch(action);
+        dispatcher.dispatch(pushState(null, '/about'));
     }
 
     function handleError(request) {

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Router, Route, Link } from 'react-router'
 
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
 
 class Header extends Component {
@@ -29,7 +29,8 @@ class Header extends Component {
                 );
 
         return (
-            <Navbar brand="Soloco - Reactive Starter Kit">
+            <Navbar>
+                <NavBrand>Soloco - Reactive Starter Kit</NavBrand>
                 {items}
             </Navbar>
         );
