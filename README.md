@@ -1,4 +1,4 @@
-# ReactiveStarterKit.NET
+# ReactiveStarterKit.NET [![Build Status](https://travis-ci.org/tim-cools/ReactiveStarterKit.NET.svg?branch=master)](https://travis-ci.org/tim-cools/ReactiveStarterKit.NET)
 A Reactive Starter Kit for the .NET Framework
 
 Used technology
