@@ -1,6 +1,6 @@
 language: csharp
 mono:
-  - alpha
+  - 4.0.3
 env: VERSION=0.3.10
 solution: src/Soloco.ReactiveStarterKit.sln
 addons:
