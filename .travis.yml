@@ -7,7 +7,7 @@ addons:
   postgresql: "9.4"
 
 before_script:
- - chmod +x ./scripts/build.sh
+ - chmod +x ./scripts/build.sh ./scripts/run-tests.sh
  
 script:
   - ./scripts/build.sh
