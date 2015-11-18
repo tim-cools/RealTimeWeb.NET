@@ -12,3 +12,8 @@ before_script:
 script:
   - ./scripts/build.sh
   - ./scripts/run-tests.sh
+
+after_failure:
+  - ls -LR src/packages
+
+  
