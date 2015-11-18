@@ -4,10 +4,11 @@ mono:
 env: VERSION=0.3.10
 solution: src/Soloco.ReactiveStarterKit.sln
 addons:
-  postgresql: "9.5"
+  postgresql: "9.4"
 
 before_script:
  - chmod +x ./scripts/build.sh
  
 script:
   - ./scripts/build.sh
+  - ./scripts/run-tests.sh
