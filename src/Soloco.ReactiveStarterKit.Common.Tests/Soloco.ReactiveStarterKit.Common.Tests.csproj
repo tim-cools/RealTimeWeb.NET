@@ -53,8 +53,9 @@
     <Compile Include="Resources.cs" />
     <Compile Include="ServiceTestBase.cs" />
     <Compile Include="SpecificationBase.cs" />
+    <Compile Include="Storage\Environment.cs" />
+    <Compile Include="Storage\TestStoreDatabaseFactory.cs" />
     <Compile Include="TestContainer.cs" />
-    <Compile Include="Storage\TestStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Common\Soloco.ReactiveStarterKit.Common.csproj">
