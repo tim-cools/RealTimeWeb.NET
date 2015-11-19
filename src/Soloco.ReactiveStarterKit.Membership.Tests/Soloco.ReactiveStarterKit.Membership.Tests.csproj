@@ -81,6 +81,7 @@
     <Compile Include="Integration\Infrastructure\ExternalAccessTokens.cs" />
     <Compile Include="Integration\Queries\WhenQueryingClientByKey.cs" />
     <Compile Include="Integration\Queries\WhenQueryingRefreshTokens.cs" />
+    <Compile Include="Integration\Queries\WhenQueryingUserByName.cs" />
     <Compile Include="Integration\Queries\WhenValidatingClientAuthentication.cs" />
     <Compile Include="Integration\Queries\WhenValidatingUserLogin.cs" />
     <Compile Include="Integration\Queries\WhenVerifyingExternalUser.cs" />

@@ -65,6 +65,7 @@
     <Compile Include="ContainerInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHandlers\RefreshTokensQueryHandler.cs" />
+    <Compile Include="QueryHandlers\UserByNameQueryHandler.cs" />
     <Compile Include="QueryHandlers\ValidateClientAuthenticationQuery.cs" />
     <Compile Include="QueryHandlers\VerifyExternalUserQueryHandler.cs" />
     <Compile Include="QueryHandlers\ClientByKeyQueryHandler.cs" />
