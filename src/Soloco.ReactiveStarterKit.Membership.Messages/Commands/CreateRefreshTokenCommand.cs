@@ -1,5 +1,4 @@
 using System;
-using Microsoft.AspNet.Identity;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
 

@@ -68,7 +68,6 @@
     <Compile Include="QueryHandlers\ValidateClientAuthenticationQuery.cs" />
     <Compile Include="QueryHandlers\VerifyExternalUserQueryHandler.cs" />
     <Compile Include="QueryHandlers\ClientByKeyQueryHandler.cs" />
-    <Compile Include="QueryHandlers\UserByNameQueryHandler.cs" />
     <Compile Include="QueryHandlers\ValidUserLoginQueryHandler.cs" />
     <Compile Include="QueryHandlers\UserLoginQueryHandler.cs" />
   </ItemGroup>

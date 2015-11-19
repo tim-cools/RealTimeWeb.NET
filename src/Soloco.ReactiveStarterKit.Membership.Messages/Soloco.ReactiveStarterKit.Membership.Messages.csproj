@@ -50,14 +50,13 @@
   <ItemGroup>
     <Compile Include="Commands\DeleteRefreshTokenCommand.cs" />
     <Compile Include="ViewModel\LoginProvider.cs" />
-    <Compile Include="Commands\InitialzeDatabaseCommand.cs" />
+    <Compile Include="Commands\InitializeDatabaseCommand.cs" />
     <Compile Include="Commands\RegisterExternalUserCommand.cs" />
     <Compile Include="Commands\CreateRefreshTokenCommand.cs" />
     <Compile Include="Commands\RegisterUserCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\RefreshTokensQuery.cs" />
     <Compile Include="Queries\ClientByKeyQuery.cs" />
-    <Compile Include="Queries\UserByNameQuery.cs" />
     <Compile Include="Queries\UserLoginQuery.cs" />
     <Compile Include="Queries\ValidateClientAuthenticationQuery.cs" />
     <Compile Include="ViewModel\LoginProviderExtensions.cs" />
@@ -66,7 +65,6 @@
     <Compile Include="Queries\ValidUserLoginQuery.cs" />
     <Compile Include="Queries\VerifyExternalUserQuery.cs" />
     <Compile Include="ViewModel\ClientInfo.cs" />
-    <Compile Include="ViewModel\User.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\VerifyExternalUserResult.cs" />
   </ItemGroup>

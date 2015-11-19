@@ -9,7 +9,7 @@ using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 
 namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
 {
-    public class InitializeDatabaseCommandHandler : IHandleMessage<InitialzeDatabaseCommand, CommandResult>
+    public class InitializeDatabaseCommandHandler : IHandleMessage<InitializeDatabaseCommand, CommandResult>
     {
         private readonly IDocumentSession _session;
         private readonly IDisposable _scope;
@@ -20,7 +20,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
             _scope = scope;
         }
 
-        public async Task<CommandResult> Handle(InitialzeDatabaseCommand command)
+        public async Task<CommandResult> Handle(InitializeDatabaseCommand command)
         {
             using (_scope)
             {

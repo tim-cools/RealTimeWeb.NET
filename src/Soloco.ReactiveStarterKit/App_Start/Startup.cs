@@ -35,7 +35,7 @@ namespace Soloco.ReactiveStarterKit
         {
             var messageDispatcher = dependencyResolver.GetMessageDispatcher(); 
 
-            var command = new InitialzeDatabaseCommand();
+            var command = new InitializeDatabaseCommand();
             messageDispatcher.Execute(command).Wait();
         }
 

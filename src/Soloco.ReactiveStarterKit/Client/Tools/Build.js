@@ -8,7 +8,6 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
 var minify = require('gulp-minify-css');
-var babel = require("gulp-babel");
 
 var browserify = require('browserify');
 var watchify = require('watchify');

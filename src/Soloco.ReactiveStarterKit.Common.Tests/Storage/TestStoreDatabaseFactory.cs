@@ -7,18 +7,18 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
     public static class TestStoreDatabaseFactory
     {
         //todo add alternative paths or move to config if necessary
-        private static readonly string[] _versions = {"9.4", "9.5"};
+        private static readonly string[] _versions = {"9.5", "9.4"};
         private const string _psqlPath = @"C:\Program Files\PostgreSQL\{version}\bin\psql.exe";
-        private const string _psqlPathMono = "psql";
+        private const string _psqlPathLinux = "psql";
 
         public static void CreateCleanStoreDatabase()
         {
             Debug.WriteLine("Test Store Database Creating");
 
             var tempScriptFileName = WriteTempSqlScript();
-            var command = $"-f {tempScriptFileName} -U postgres";
+            var command = $"-f {tempScriptFileName} -U postgres -v ON_ERROR_STOP=1";
 
-            var path = Environment.IsRunningOnMono ? _psqlPathMono : GetWindowsPath();
+            var path = Environment.IsRunningOnMono && Environment.IsLinux ? _psqlPathLinux : GetWindowsPath();
 
             Debug.WriteLine($"Executing script {tempScriptFileName} with exe {path} and command {command}.");
 
@@ -50,6 +50,10 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
             {
                 process.Start();
                 WriteOutputToDebug(process);
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException($"Could not initilaize database. exit code: {process.ExitCode}" );
+                }
             }
         }
 

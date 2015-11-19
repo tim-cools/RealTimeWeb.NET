@@ -26,14 +26,16 @@ namespace Soloco.ReactiveStarterKit.Common
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
 
-            container.Register<IConnectionFactory, ConnectionFromConfig>(Reuse.Singleton);
+            container.Register<IQueryParser, MartenQueryParser>(Reuse.Singleton);
             container.Register<IDocumentSchema, DocumentSchema>(Reuse.Singleton);
-            container.Register<IDocumentSession, DocumentSession>();
+
+            container.Register<IConnectionFactory, ConnectionFromConfig>();
+            container.Register<IDocumentSession, TrackingSession>();
             container.Register<ISerializer, JsonNetSerializer>();
             container.Register<IDocumentSchemaCreation, DevelopmentSchemaCreation>();
-            container.Register<IMartenQueryExecutor, MartenQueryExecutor>();
+            container.Register<ICommandRunner, CommandRunner>();
             container.Register<IDocumentCleaner, DocumentCleaner>();
-            container.Register<IQueryParser, MartenQueryParser>(Reuse.Singleton);
+            container.Register<IMartenQueryExecutor, MartenQueryExecutor>();
 
             return container;
         }
