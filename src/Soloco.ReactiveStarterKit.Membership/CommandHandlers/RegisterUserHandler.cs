@@ -14,7 +14,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
     {
         private readonly UserManager<User, Guid> _userManager;
 
-        public RegisterUserHandler(IDocumentSession session, IDisposable scope) : base(session, scope)
+        public RegisterUserHandler(ITrackingSession session, IDisposable scope) : base(session, scope)
         {
             var userStore = new UserStore(session);
             _userManager = new UserManager<User, Guid>(userStore);            

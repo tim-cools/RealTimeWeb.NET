@@ -10,39 +10,35 @@ using User = Soloco.ReactiveStarterKit.Membership.Domain.User;
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class VerifyExternalUserQueryHandler : IHandleMessage<VerifyExternalUserQuery, VerifyExternalUserResult>
+    public class VerifyExternalUserQueryHandler : QueryHandler<VerifyExternalUserQuery, VerifyExternalUserResult>
     {
-        private readonly IDisposable _scope;
         private readonly UserManager<User, Guid> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
-        public VerifyExternalUserQueryHandler(IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
+        public VerifyExternalUserQueryHandler(ISession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
+            : base(session, scope)
         {
-            _scope = scope;
             _providerTokenValidatorFactory = providerTokenValidatorFactory;
 
             var userStore = new UserStore(session);
             _userManager = new UserManager<User, Guid>(userStore);
         }
 
-        public async Task<VerifyExternalUserResult> Handle(VerifyExternalUserQuery query)
+        protected override async Task<VerifyExternalUserResult> Execute(VerifyExternalUserQuery query)
         {
-            using (_scope)
+            var validator = _providerTokenValidatorFactory.Create(query.Provider);
+            var verifiedAccessToken = await validator.ValidateToken(query.ExternalAccessToken);
+            if (verifiedAccessToken == null)
             {
-                var validator = _providerTokenValidatorFactory.Create(query.Provider);
-                var verifiedAccessToken = await validator.ValidateToken(query.ExternalAccessToken);
-                if (verifiedAccessToken == null)
-                {
-                    return new VerifyExternalUserResult(false);
-                }
-
-                var login = new UserLoginInfo(query.Provider.ToString(), verifiedAccessToken.UserId);
-                var user = await _userManager.FindAsync(login);
-
-                return user == null
-                    ? new VerifyExternalUserResult(false)
-                    : new VerifyExternalUserResult(true, user.UserName);
+                return new VerifyExternalUserResult(false);
             }
+
+            var login = new UserLoginInfo(query.Provider.ToString(), verifiedAccessToken.UserId);
+            var user = await _userManager.FindAsync(login);
+
+            return user == null
+                ? new VerifyExternalUserResult(false)
+                : new VerifyExternalUserResult(true, user.UserName);
         }
     }
 }

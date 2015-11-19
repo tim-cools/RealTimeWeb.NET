@@ -9,26 +9,17 @@ using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 
 namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
 {
-    public class InitializeDatabaseCommandHandler : IHandleMessage<InitializeDatabaseCommand, CommandResult>
+    public class InitializeDatabaseCommandHandler : CommandHandler<InitializeDatabaseCommand>
     {
-        private readonly IDocumentSession _session;
-        private readonly IDisposable _scope;
-
-        public InitializeDatabaseCommandHandler(IDocumentSession session, IDisposable scope)
+        public InitializeDatabaseCommandHandler(ITrackingSession session, IDisposable scope)
+             : base(session, scope)
         {
-            _session = session;
-            _scope = scope;
         }
 
-        public async Task<CommandResult> Handle(InitializeDatabaseCommand command)
+        protected override async Task<CommandResult> Execute(InitializeDatabaseCommand command)
         {
-            using (_scope)
-            {
-                UpdateClients(_session);
-                _session.SaveChanges();
-
-                return await Task.FromResult(CommandResult.Success);
-            }
+            UpdateClients(Session);
+            return CommandResult.Success;
         }
 
         private static void UpdateClients(IDocumentSession session)

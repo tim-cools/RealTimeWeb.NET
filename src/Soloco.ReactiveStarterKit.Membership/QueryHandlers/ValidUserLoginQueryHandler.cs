@@ -9,26 +9,22 @@ using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class ValidUserLoginQueryHandler : IHandleMessage<ValidUserLoginQuery, bool>
+    public class ValidUserLoginQueryHandler : QueryHandler<ValidUserLoginQuery, bool>
     {
-        private readonly IDisposable _scope;
         private readonly UserManager<User, Guid> _userManager;
 
-        public ValidUserLoginQueryHandler(IDocumentSession session, IDisposable scope)
+        public ValidUserLoginQueryHandler(ISession session, IDisposable scope)
+              : base(session, scope)
         {
-            _scope = scope;
             var userStore = new UserStore(session);
             _userManager = new UserManager<User, Guid>(userStore);
         }
 
-        public async Task<bool> Handle(ValidUserLoginQuery query)
+        protected override async Task<bool> Execute(ValidUserLoginQuery query)
         {
-            using (_scope)
-            {
-                var result = await _userManager.FindAsync(query.UserName, query.Password);
+            var result = await _userManager.FindAsync(query.UserName, query.Password);
 
-                return result != null;
-            }
+            return result != null;
         }
     }
 }

@@ -51,7 +51,7 @@
       <HintPath>..\packages\Serilog.1.5.12\lib\net45\Serilog.FullNetFx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-	<Reference Include="mscorlib" />
+    <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -149,6 +149,7 @@
     <Compile Include="Infrastructure\DryIoc\Update.cs" />
     <Compile Include="Infrastructure\DryIoc\WrappersSupport.cs" />
     <Compile Include="Infrastructure\BusinessException.cs" />
+    <Compile Include="Infrastructure\Messages\QueryHandler.cs" />
     <Compile Include="Infrastructure\Messages\ICommand.cs" />
     <Compile Include="Infrastructure\Messages\IHandleCommand.cs" />
     <Compile Include="Infrastructure\Messages\MessageDispatcher.cs" />
@@ -162,8 +163,6 @@
     <Compile Include="Infrastructure\DryIoc\HttpDependencyExtensions.cs" />
     <Compile Include="Infrastructure\DryIoc\MvcDependencyResolver.cs" />
     <Compile Include="Infrastructure\DryIoc\ContainerFactory.cs" />
-    <Compile Include="Infrastructure\IdentifyableExtensions.cs" />
-    <Compile Include="Infrastructure\IIdentifyable.cs" />
     <Compile Include="Infrastructure\Messages\CommandHandler.cs" />
     <Compile Include="Infrastructure\Store\SessionExtension.cs" />
     <Compile Include="Infrastructure\Store\StoreFactory.cs" />

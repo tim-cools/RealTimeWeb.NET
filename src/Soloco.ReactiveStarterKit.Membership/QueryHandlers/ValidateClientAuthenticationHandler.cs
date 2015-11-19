@@ -10,50 +10,43 @@ using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class ValidateClientAuthenticationHandler : IHandleMessage<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
+    public class ValidateClientAuthenticationHandler : QueryHandler<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
     {
-        private readonly IDisposable _scope;
-        private readonly IDocumentSession _session;
-
-        public ValidateClientAuthenticationHandler(IDocumentSession session, IDisposable scope)
+        public ValidateClientAuthenticationHandler(ISession session, IDisposable scope)
+              : base(session, scope)
         {
-            _scope = scope;
-            _session = session;
         }
 
-        public async Task<ValidateClientAuthenticationResult> Handle(ValidateClientAuthenticationQuery query)
+        protected override async Task<ValidateClientAuthenticationResult> Execute(ValidateClientAuthenticationQuery query)
         {
-            using (_scope)
+            var client = Session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
+            if (client == null)
             {
-                var client = _session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
-                if (client == null)
-                {
-                    Log.Warning($"Client '{query.ClientId}' is not registered in the system.");
-                    return new ValidateClientAuthenticationResult(false);
-                }
-
-                if (client.ApplicationType == ApplicationTypes.NativeConfidential)
-                {
-                    if (string.IsNullOrWhiteSpace(query.ClientSecret))
-                    {
-                        Log.Warning("Client secret should be sent.");
-                        return new ValidateClientAuthenticationResult(false);
-                    }
-                    if (client.Secret != Helper.GetHash(query.ClientSecret))
-                    {
-                        Log.Warning("Client secret is invalid.");
-                        return new ValidateClientAuthenticationResult(false);
-                    }
-                }
-
-                if (!client.Active)
-                {
-                    Log.Warning("Client is inactive.");
-                    return new ValidateClientAuthenticationResult(false);
-                }
-
-                return new ValidateClientAuthenticationResult(true, client.AllowedOrigin, client.RefreshTokenLifeTime);
+                Log.Warning($"Client '{query.ClientId}' is not registered in the system.");
+                return new ValidateClientAuthenticationResult(false);
             }
+
+            if (client.ApplicationType == ApplicationTypes.NativeConfidential)
+            {
+                if (string.IsNullOrWhiteSpace(query.ClientSecret))
+                {
+                    Log.Warning("Client secret should be sent.");
+                    return new ValidateClientAuthenticationResult(false);
+                }
+                if (client.Secret != Helper.GetHash(query.ClientSecret))
+                {
+                    Log.Warning("Client secret is invalid.");
+                    return new ValidateClientAuthenticationResult(false);
+                }
+            }
+
+            if (!client.Active)
+            {
+                Log.Warning("Client is inactive.");
+                return new ValidateClientAuthenticationResult(false);
+            }
+
+            return new ValidateClientAuthenticationResult(true, client.AllowedOrigin, client.RefreshTokenLifeTime);
         }
     }
 }

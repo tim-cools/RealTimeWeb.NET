@@ -8,29 +8,22 @@ using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class ClientByKeyQueryHandler : IHandleMessage<ClientByKeyQuery, ClientInfo>
+    public class ClientByKeyQueryHandler : QueryHandler<ClientByKeyQuery, Client>
     {
-        private readonly IDocumentSession _session;
-        private readonly IDisposable _scope;
-
-        public ClientByKeyQueryHandler(IDocumentSession session, IDisposable scope)
+        public ClientByKeyQueryHandler(ISession session, IDisposable scope)
+              : base(session, scope)
         {
-            _session = session;
-            _scope = scope;
         }
 
-        public async Task<ClientInfo> Handle(ClientByKeyQuery query)
-        {
-            using (_scope)
-            {
-                var result = _session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
-                return result != null ? Map(result) : null;
-            }
+        protected override async Task<Client> Execute(ClientByKeyQuery query)
+        { 
+            var result = Session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
+            return result != null ? Map(result) : null;
         }
 
-        private static ClientInfo Map(Domain.Client result)
+        private static Client Map(Domain.Client result)
         {
-            return new ClientInfo
+            return new Client
             {
                 AllowedOrigin = result.AllowedOrigin
             };

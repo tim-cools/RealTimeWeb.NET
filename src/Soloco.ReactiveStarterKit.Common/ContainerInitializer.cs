@@ -30,7 +30,9 @@ namespace Soloco.ReactiveStarterKit.Common
             container.Register<IDocumentSchema, DocumentSchema>(Reuse.Singleton);
 
             container.Register<IConnectionFactory, ConnectionFromConfig>();
-            container.Register<IDocumentSession, TrackingSession>();
+            container.Register<ITrackingSession, TrackingSession>();
+            container.Register<ISession, Session>();
+
             container.Register<ISerializer, JsonNetSerializer>();
             container.Register<IDocumentSchemaCreation, DevelopmentSchemaCreation>();
             container.Register<ICommandRunner, CommandRunner>();

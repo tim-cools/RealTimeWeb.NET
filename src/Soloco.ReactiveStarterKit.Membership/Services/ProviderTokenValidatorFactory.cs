@@ -1,6 +1,6 @@
 using System;
+using System.Linq;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.Services
@@ -18,15 +18,12 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
 
         public IProviderTokenValidator Create(LoginProvider provider)
         {
-            foreach (var validator in _providerTokenValidators)
+            var validator = _providerTokenValidators.SingleOrDefault(criteria => criteria.Provider == provider);
+            if (validator == null)
             {
-                if (validator.Provider == provider)
-                {
-                    return validator;
-                }
+                throw new BusinessException("Invalid provider: " + provider);
             }
-
-            throw new BusinessException("Invalid provider: " + provider);
+            return validator;
         }
     }
 }

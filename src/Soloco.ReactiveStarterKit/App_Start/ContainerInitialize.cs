@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
 using Soloco.ReactiveStarterKit.Controllers;
 

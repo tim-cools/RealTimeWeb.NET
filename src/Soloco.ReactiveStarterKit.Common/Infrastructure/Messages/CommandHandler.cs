@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Marten;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
 
 namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Messages
 {
@@ -12,7 +11,7 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Messages
 
         protected IDocumentSession Session { get; }
 
-        protected CommandHandler(IDocumentSession session, IDisposable scope)
+        protected CommandHandler(ITrackingSession session, IDisposable scope)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (scope == null) throw new ArgumentNullException(nameof(scope));

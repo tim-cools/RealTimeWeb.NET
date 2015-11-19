@@ -10,26 +10,22 @@ using UserLogin = Soloco.ReactiveStarterKit.Membership.Messages.ViewModel.UserLo
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class UserLoginQueryHandler : IHandleMessage<UserLoginQuery, UserLogin>
+    public class UserLoginQueryHandler : QueryHandler<UserLoginQuery, UserLogin>
     {
-        private readonly IDisposable _scope;
         private readonly UserManager<User, Guid> _userManager;
 
-        public UserLoginQueryHandler(IDocumentSession session, IDisposable scope)
+        public UserLoginQueryHandler(ISession session, IDisposable scope)
+              : base(session, scope)
         {
-            _scope = scope;
             var userStore = new UserStore(session);
             _userManager = new UserManager<User, Guid>(userStore);
         }
 
-        public async Task<UserLogin> Handle(UserLoginQuery query)
+        protected override async Task<UserLogin> Execute(UserLoginQuery query)
         {
-            using (_scope)
-            {
-                var loginInfo = new UserLoginInfo(query.LoginProvider.ToString(), query.ProviderKey);
-                var result = await _userManager.FindAsync(loginInfo);
-                return result != null ? new UserLogin { } : null;
-            }
+            var loginInfo = new UserLoginInfo(query.LoginProvider.ToString(), query.ProviderKey);
+            var result = await _userManager.FindAsync(loginInfo);
+            return result != null ? new UserLogin { } : null;
         }
     }
 }

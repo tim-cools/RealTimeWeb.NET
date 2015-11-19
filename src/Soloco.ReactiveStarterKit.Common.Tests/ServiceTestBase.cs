@@ -14,7 +14,7 @@ namespace Soloco.ReactiveStarterKit.Common.Tests
             base.Given();
 
             Service = TestContainer.Resolve<T>();
-            Session = TestContainer.Resolve<IDocumentSession>();
+            Session = TestContainer.Resolve<ITrackingSession>();
 
             var cleaner = TestContainer.Resolve<IDocumentCleaner>();
             cleaner.DeleteAllDocuments();
@@ -23,8 +23,9 @@ namespace Soloco.ReactiveStarterKit.Common.Tests
         protected override void When()
         {
             base.When();
+            Session.Dispose();
 
-            Session = TestContainer.Resolve<IDocumentSession>();
+            Session = TestContainer.Resolve<ITrackingSession>();
         }
 
         protected override void CleanUp()

@@ -1,0 +1,33 @@
+using System;
+using System.Threading.Tasks;
+using Marten;
+
+namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Messages
+{
+    public abstract class QueryHandler<TCommand, TResult> : IHandleMessage<TCommand, TResult> 
+        where TCommand : IMessage<TResult>
+    {
+        private readonly IDisposable _scope;
+
+        protected IDocumentSession Session { get; }
+
+        protected QueryHandler(ISession session, IDisposable scope)
+        {
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (scope == null) throw new ArgumentNullException(nameof(scope));
+
+            Session = session;
+            _scope = scope;
+        }
+
+        public async Task<TResult> Handle(TCommand query)
+        {
+            using (_scope)
+            {
+                return await Execute(query);
+            }
+        }
+
+        protected abstract Task<TResult> Execute(TCommand query);
+    }
+}

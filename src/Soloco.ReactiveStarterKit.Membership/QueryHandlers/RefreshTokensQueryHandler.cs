@@ -9,23 +9,17 @@ using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class RefreshTokensQueryHandler : IHandleMessage<RefreshTokensQuery, IEnumerable<RefreshToken>>
+    public class RefreshTokensQueryHandler : QueryHandler<RefreshTokensQuery, IEnumerable<RefreshToken>>
     {
-        private readonly IDocumentSession _session;
-        private readonly IDisposable _scope;
 
-        public RefreshTokensQueryHandler(IDocumentSession session, IDisposable scope)
+        public RefreshTokensQueryHandler(ISession session, IDisposable scope)
+              : base(session, scope)
         {
-            _session = session;
-            _scope = scope;
         }
 
-        public async Task<IEnumerable<RefreshToken>> Handle(RefreshTokensQuery query)
-        {
-            using (_scope)
-            {
-                return _session.Query<RefreshToken>().ToArray();
-            }
+        protected override async Task<IEnumerable<RefreshToken>> Execute(RefreshTokensQuery query)
+        { 
+            return Session.Query<RefreshToken>().ToArray();
         }
     }
 }

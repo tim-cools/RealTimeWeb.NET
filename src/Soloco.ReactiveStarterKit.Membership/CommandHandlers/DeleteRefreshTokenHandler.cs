@@ -11,7 +11,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
 {
     public class DeleteRefreshTokenHandler : CommandHandler<DeleteRefreshTokenCommand>
     {
-        public DeleteRefreshTokenHandler(IDocumentSession session, IDisposable scope) : base(session, scope)
+        public DeleteRefreshTokenHandler(ITrackingSession session, IDisposable scope) : base(session, scope)
         {
         }
 

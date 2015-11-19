@@ -9,25 +9,30 @@ using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
-    public class UserByNameQueryHandler : IHandleMessage<UserByNameQuery, User>
+    public class UserByNameQueryHandler : QueryHandler<UserByNameQuery, User>
     {
-        private readonly IDisposable _scope;
         private readonly UserManager<Domain.User, Guid> _userManager;
 
-        public UserByNameQueryHandler(IDocumentSession session, IDisposable scope)
+        public UserByNameQueryHandler(ISession session, IDisposable scope)
+              : base(session, scope)
         {
-            _scope = scope;
             var userStore = new UserStore(session);
             _userManager = new UserManager<Domain.User, Guid>(userStore);
         }
 
-        public async Task<User> Handle(UserByNameQuery query)
+        protected override async Task<User> Execute(UserByNameQuery query)
         {
-            using (_scope)
+            var result = await _userManager.FindByNameAsync(query.UserName);
+            return result != null ? Map(result) : null;
+        }
+
+        private User Map(Domain.User result)
+        {
+            return new User
             {
-                var result = await _userManager.FindByNameAsync(query.UserName);
-                return result != null ? new User { } : null;
-            }
+                Id = result.Id,
+                UserName = result.UserName
+            };
         }
     }
 }

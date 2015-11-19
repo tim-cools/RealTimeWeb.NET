@@ -11,7 +11,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.Queries
     [TestFixture]
     public class WhenQueryingClientByKey : ServiceTestBase<IMessageDispatcher>
     {
-        private ClientInfo _result;
+        private Client _result;
         private ClientByKeyQuery _query;
         private Domain.Client _client;
 
