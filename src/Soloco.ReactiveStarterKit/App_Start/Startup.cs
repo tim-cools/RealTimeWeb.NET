@@ -7,7 +7,6 @@ using Soloco.ReactiveStarterKit.Common;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
 using Soloco.ReactiveStarterKit.Membership;
-using Soloco.ReactiveStarterKit.Membership.Client;
 using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
 using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
@@ -47,7 +46,6 @@ namespace Soloco.ReactiveStarterKit
                 .RegisterDependencyResolver(configure => configure
                     .RegisterCommon()
                     .RegisterMembership()
-                    .RegisterMembershipViews()
                     .RegisterApiControllers()
                 );
         }

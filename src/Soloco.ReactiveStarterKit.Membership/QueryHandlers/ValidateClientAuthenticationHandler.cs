@@ -8,7 +8,7 @@ using Soloco.ReactiveStarterKit.Membership.Domain;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
 using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
+namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
     public class ValidateClientAuthenticationHandler : IHandleMessage<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
     {

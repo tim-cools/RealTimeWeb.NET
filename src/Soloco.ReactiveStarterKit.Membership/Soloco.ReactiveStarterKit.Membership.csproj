@@ -69,6 +69,14 @@
       <HintPath>..\packages\Npgsql.3.0.3\lib\net45\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.12\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.12\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -83,6 +91,13 @@
     <Compile Include="CommandHandlers\DeleteRefreshTokenHandler.cs" />
     <Compile Include="CommandHandlers\CreateRefreshTokenHandler.cs" />
     <Compile Include="Domain\ExternalLoginData.cs" />
+    <Compile Include="QueryHandlers\ClientByKeyQueryHandler.cs" />
+    <Compile Include="QueryHandlers\RefreshTokensQueryHandler.cs" />
+    <Compile Include="QueryHandlers\UserByNameQueryHandler.cs" />
+    <Compile Include="QueryHandlers\UserLoginQueryHandler.cs" />
+    <Compile Include="QueryHandlers\ValidateClientAuthenticationHandler.cs" />
+    <Compile Include="QueryHandlers\ValidUserLoginQueryHandler.cs" />
+    <Compile Include="QueryHandlers\VerifyExternalUserQueryHandler.cs" />
     <Compile Include="Services\FacebookAuthProvider.cs" />
     <Compile Include="Services\FacebookProviderTokenValidator.cs" />
     <Compile Include="Services\GoogleAuthProvider.cs" />
@@ -93,18 +108,12 @@
     <Compile Include="CommandHandlers\RegisterExternalUserHandler.cs" />
     <Compile Include="ContainerInitialize.cs" />
     <Compile Include="Domain\ParsedExternalAccessToken.cs" />
-    <Compile Include="Domain\PasswordHash.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Domain\ApplicationTypes.cs" />
     <Compile Include="Domain\Client.cs" />
-    <Compile Include="Domain\IdentityUserClaim.cs" />
-    <Compile Include="Domain\IdentityUserLogin.cs" />
     <Compile Include="Domain\RefreshToken.cs" />
-    <Compile Include="Domain\IdentityUser.cs" />
-    <Compile Include="Domain\IdentityUserRole.cs" />
+    <Compile Include="Domain\User.cs" />
     <Compile Include="CommandHandlers\RegisterUserHandler.cs" />
-    <Compile Include="Services\AuthRepository.cs" />
-    <Compile Include="Services\CustomUserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\UserLogin.cs" />
     <Compile Include="Services\IProviderTokenValidatorFactory.cs" />

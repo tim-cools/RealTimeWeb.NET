@@ -6,7 +6,7 @@ using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
 using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
+namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
     public class ClientByKeyQueryHandler : IHandleMessage<ClientByKeyQuery, ClientInfo>
     {

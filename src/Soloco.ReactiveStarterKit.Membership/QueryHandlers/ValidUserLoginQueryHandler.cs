@@ -7,18 +7,18 @@ using Soloco.ReactiveStarterKit.Membership.Domain;
 using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
 using Soloco.ReactiveStarterKit.Membership.Services;
 
-namespace Soloco.ReactiveStarterKit.Membership.Client.QueryHandlers
+namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
     public class ValidUserLoginQueryHandler : IHandleMessage<ValidUserLoginQuery, bool>
     {
         private readonly IDisposable _scope;
-        private readonly UserManager<IdentityUser, Guid> _userManager;
+        private readonly UserManager<User, Guid> _userManager;
 
         public ValidUserLoginQueryHandler(IDocumentSession session, IDisposable scope)
         {
             _scope = scope;
             var userStore = new UserStore(session);
-            _userManager = new UserManager<IdentityUser, Guid>(userStore);
+            _userManager = new UserManager<User, Guid>(userStore);
         }
 
         public async Task<bool> Handle(ValidUserLoginQuery query)

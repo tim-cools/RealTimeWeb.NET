@@ -3,7 +3,6 @@ using Soloco.ReactiveStarterKit.Common;
 using Soloco.ReactiveStarterKit.Common.Infrastructure;
 using Soloco.ReactiveStarterKit.Common.Tests;
 using Soloco.ReactiveStarterKit.Common.Tests.Storage;
-using Soloco.ReactiveStarterKit.Membership.Client;
 
 namespace Soloco.ReactiveStarterKit.Membership.Tests
 {
@@ -18,8 +17,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Tests
 
             TestContainer.Initialize(container => container
                 .RegisterCommon()
-                .RegisterMembership()
-                .RegisterMembershipViews());
+                .RegisterMembership());
         }
 
         [TearDown]

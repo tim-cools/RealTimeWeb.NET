@@ -14,7 +14,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
 {
     public class RegisterExternalUserHandler : CommandHandler<RegisterExternalUserCommand>
     {
-        private readonly UserManager<IdentityUser, Guid> _userManager;
+        private readonly UserManager<User, Guid> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
         public RegisterExternalUserHandler(IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory) : base(session, scope)
@@ -22,7 +22,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
             _providerTokenValidatorFactory = providerTokenValidatorFactory;
 
             var userStore = new UserStore(session);
-            _userManager = new UserManager<IdentityUser, Guid>(userStore);
+            _userManager = new UserManager<User, Guid>(userStore);
         }
 
         protected override async Task<CommandResult> Execute(RegisterExternalUserCommand command)
@@ -49,9 +49,9 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
             }
         }
 
-        private async Task<IdentityUser> CreateUser(RegisterExternalUserCommand command)
+        private async Task<User> CreateUser(RegisterExternalUserCommand command)
         {
-            var user = new IdentityUser(command.UserName);
+            var user = new User(command.UserName);
             var result = await _userManager.CreateAsync(user);
 
             result.ThrowWhenFailed("Could not create user");
@@ -59,7 +59,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
             return user;
         }
 
-        private async Task<CommandResult> CreateLogin(RegisterExternalUserCommand command, IdentityUser user, string verifiedAccessTokenuser_id)
+        private async Task<CommandResult> CreateLogin(RegisterExternalUserCommand command, User user, string verifiedAccessTokenuser_id)
         {
             var info = new ExternalLoginInfo
             {

@@ -8,7 +8,7 @@ using Soloco.ReactiveStarterKit.Membership.Domain;
 
 namespace Soloco.ReactiveStarterKit.Membership.Services
 {
-    public class UserStore : IUserStore<IdentityUser, Guid>, IUserPasswordStore<IdentityUser, Guid>, IUserLoginStore<IdentityUser, Guid>
+    public class UserStore : IUserStore<User, Guid>, IUserPasswordStore<User, Guid>, IUserLoginStore<User, Guid>
     {
         private readonly IDocumentSession _session;
 
@@ -23,30 +23,30 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
         {
         }
 
-        public async Task CreateAsync(IdentityUser user)
+        public async Task CreateAsync(User user)
+        {            
+            _session.Store(user);
+        }
+
+        public async Task UpdateAsync(User user)
         {
             _session.Store(user);
         }
 
-        public async Task UpdateAsync(IdentityUser user)
-        {
-            _session.Store(user);
-        }
-
-        public async Task DeleteAsync(IdentityUser user)
+        public async Task DeleteAsync(User user)
         {
             //_users.Remove(user.Id);
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityUser> FindByIdAsync(Guid userId)
+        public async Task<User> FindByIdAsync(Guid userId)
         {
-            return _session.Load<IdentityUser>(userId);
+            return _session.Load<User>(userId);
         }
 
-        public async Task<IdentityUser> FindByNameAsync(string userName)
+        public async Task<User> FindByNameAsync(string userName)
         {
-            var identityUser = _session.GetFirst<IdentityUser>(user => user.UserName == userName);
+            var identityUser = _session.GetFirst<User>(user => user.UserName == userName);
             return identityUser;
         }
 
@@ -93,37 +93,22 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
             throw new NotImplementedException();
         }
 
-        public async Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
+        public async Task SetPasswordHashAsync(User user, string passwordHash)
         {
-            var hash = _session.GetFirst<PasswordHash>(criteria => criteria.UserId == user.Id);
-            if (hash != null)
-            {
-                hash.SetPassword(passwordHash);
-                return;
-            }
-
-            CreatePasswordHash(user, passwordHash);
+            user.PasswordHash = passwordHash;
         }
 
-        private void CreatePasswordHash(IdentityUser user, string passwordHash)
+        public async Task<string> GetPasswordHashAsync(User user)
         {
-            var hash = new PasswordHash(user.Id, passwordHash);
-            _session.Store(hash);
+            return user.PasswordHash;
         }
 
-        public async Task<string> GetPasswordHashAsync(IdentityUser user)
+        public async Task<bool> HasPasswordAsync(User user)
         {
-            var passwordHash = _session.GetFirst<PasswordHash>(hash => hash.UserId == user.Id);
-            return passwordHash?.Hash;
+            return user.PasswordHash != null;
         }
 
-        public async Task<bool> HasPasswordAsync(IdentityUser user)
-        {
-            //return _usersPasswords.ContainsKey(user.Id);
-            throw new NotImplementedException();
-        }
-
-        public async Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
+        public async Task AddLoginAsync(User user, UserLoginInfo login)
         {
             var entity = new Domain.UserLogin
             {
@@ -136,7 +121,7 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
             _session.Store(entity);
         }
 
-        public async Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
+        public async Task RemoveLoginAsync(User user, UserLoginInfo login)
         {
             //var entry =
             //    _usersLogin.SingleOrDefault(
@@ -145,13 +130,13 @@ namespace Soloco.ReactiveStarterKit.Membership.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(User user)
         {
             //return _usersLogin.Where(@where => user.Id == @where.User.Id).Select(entry => entry.Info).ToList();
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityUser> FindAsync(UserLoginInfo login)
+        public async Task<User> FindAsync(UserLoginInfo login)
         {
             var userLogin = _session.GetFirst<UserLogin>(criteria => criteria.ProviderKey == login.ProviderKey);
             return userLogin != null ? await FindByIdAsync(userLogin.UserId) : null;

@@ -7,7 +7,7 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
     public static class TestStoreDatabaseFactory
     {
         //todo add alternative paths or move to config if necessary
-        private static readonly string[] _versions = {"9.5", "9.4"};
+        private static readonly string[] _versions = { "9.5", "9.4" };
         private const string _psqlPath = @"C:\Program Files\PostgreSQL\{version}\bin\psql.exe";
         private const string _psqlPathLinux = "psql";
 
@@ -46,13 +46,15 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
 
         private static void StartAndOutputProcess(string path, string command)
         {
-            using (var process = new Process {StartInfo = ProcessInfo(path, command)})
+            using (var process = new Process { StartInfo = ProcessInfo(path, command) })
             {
                 process.Start();
                 WriteOutputToDebug(process);
                 if (process.ExitCode != 0)
                 {
-                    throw new InvalidOperationException($"Could not initilaize database. exit code: {process.ExitCode}" );
+                    throw new InvalidOperationException(
+                        $"{$"Could not initilaize database. exit code: {process.ExitCode}"}{System.Environment.NewLine}" +
+                        "The database will be dropped. Are you connected you the database?");
                 }
             }
         }

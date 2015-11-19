@@ -341,10 +341,6 @@
       <Project>{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}</Project>
       <Name>Soloco.ReactiveStarterKit.Membership.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Views\Soloco.ReactiveStarterKit.Membership.Views.csproj">
-      <Project>{58C28353-A953-42E6-B09A-BC2F42C49E02}</Project>
-      <Name>Soloco.ReactiveStarterKit.Membership.Views</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
       <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>
       <Name>Soloco.ReactiveStarterKit.Membership</Name>

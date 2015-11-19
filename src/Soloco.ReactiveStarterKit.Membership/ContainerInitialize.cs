@@ -1,6 +1,7 @@
 ﻿using System;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
 using Soloco.ReactiveStarterKit.Membership.CommandHandlers;
+using Soloco.ReactiveStarterKit.Membership.QueryHandlers;
 using Soloco.ReactiveStarterKit.Membership.Services;
 
 namespace Soloco.ReactiveStarterKit.Membership
@@ -13,6 +14,7 @@ namespace Soloco.ReactiveStarterKit.Membership
 
             return container
                 .RegisterServicesInNamespace(typeof(InitializeDatabaseCommandHandler))
+                .RegisterServicesInNamespace(typeof(ClientByKeyQueryHandler))
                 .RegisterServicesInNamespace(Reuse.Singleton, typeof(OAuthConfiguration));
         }
     }
