@@ -71,6 +71,15 @@ function loggedOn(userName, useRefreshTokens) {
     navigate.to('/home');
 }
 
+function externalProviderUrl(provider) {
+    var redirectUri = location.protocol + '//' + location.host + '/authcomplete.html';
+
+    return ngAuthSettings.apiServiceBaseUri + "api/Account/ExternalLogin?provider=" + provider
+        + "&response_type=token&client_id=" + ngAuthSettings.clientId
+        + "&redirect_uri=" + redirectUri;
+}
+
+
 function initialize() {
     const data = store.get(storageKey);
     if (data) {
@@ -85,5 +94,6 @@ $.connection.hub.start()
 export default {
     login: login,
     logOff: logOff,
-    initialize: initialize
+    initialize: initialize,
+    externalProviderUrl: externalProviderUrl
 }

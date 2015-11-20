@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
 import { actions as userActions, userStatus } from '../../state/user'
-import userApi from '../../api/membership'
+import membership from '../../api/membership'
 
 class LogonPage extends Component {
     onClick() {
@@ -13,9 +13,15 @@ class LogonPage extends Component {
         var userName = userNameInput.getValue();
         var password = passwordInput.getValue();
 
-        userApi.login(userName, password);
+        membership.login(userName, password);
 
         dispatch(userActions.logonPending());
+    }
+
+    authExternalProvider(provider) {
+
+        var externalProviderUrl = membership.externalProviderUrl(provider);
+        window.open(externalProviderUrl, "Authenticate Account", "location=0,status=0,width=600,height=750");
     }
 
     render() {
@@ -44,11 +50,17 @@ class LogonPage extends Component {
                                 placeholder="Password"
                                 hasFeedback
                                 ref="passwordInput"/>
-                            <Button bsStyle="success" onClick={this.onClick.bind(this)} >
+                            <Button bsStyle="success" bzSize="large" className="btn-block" onClick={this.onClick.bind(this)} >
                                 Log On
                             </Button>
-                            {loader}
-                            {this.props.message}
+                                {loader}
+                            <div>{this.props.message}</div>
+                            <Button bsStyle="facebook" bsSize="large" className="btn-block">
+                                <i className="fa fa-facebook"></i> | Connect with Facebook
+                            </Button>
+                            <Button bsStyle="google-plus" bsSize="large" className="btn-block">
+                                <i className="fa fa-google-plus"></i> | Connect with Google+
+                            </Button>
                         </Panel>
                     </Col>
                 </Row>
