@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Provides ambient current scope and optionally scope storage for container, 
     /// examples are HttpContext storage, Execution context, Thread local.</summary>

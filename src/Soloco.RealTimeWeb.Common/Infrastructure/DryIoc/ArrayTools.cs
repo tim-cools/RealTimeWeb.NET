@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Methods to work with immutable arrays, and general array sugar.</summary>
     public static class ArrayTools

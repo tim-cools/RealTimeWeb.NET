@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>This factory is the thin wrapper for user provided delegate 
     /// and where possible it uses delegate directly: without converting it to expression.</summary>

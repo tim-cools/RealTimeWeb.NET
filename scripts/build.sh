@@ -1,1 +1,1 @@
-xbuild /p:Configuration=Release src/Soloco.ReactiveStarterKit.sln /p:TargetFrameworkVersion="v4.5" /p:DebugSymbols=False
+xbuild /p:Configuration=Release src/Soloco.RealTimeWeb.sln /p:TargetFrameworkVersion="v4.5" /p:DebugSymbols=False

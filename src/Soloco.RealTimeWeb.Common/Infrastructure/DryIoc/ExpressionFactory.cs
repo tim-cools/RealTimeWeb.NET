@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Creates service expression using client provided expression factory delegate.</summary>
     public sealed class ExpressionFactory : Factory

@@ -4,11 +4,11 @@ using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
 using Remotion.Linq.Parsing.Structure;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Infrastructure.Store;
 
-namespace Soloco.ReactiveStarterKit.Common
+namespace Soloco.RealTimeWeb.Common
 {
     public static class ContainerInitializer
     {

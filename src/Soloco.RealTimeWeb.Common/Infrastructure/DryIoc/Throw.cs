@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Enables more clean error message formatting and a bit of code contracts.</summary>
     public static class Throw

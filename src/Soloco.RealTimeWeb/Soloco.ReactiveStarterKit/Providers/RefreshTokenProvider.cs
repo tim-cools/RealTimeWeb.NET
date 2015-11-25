@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using System.Web.Http.Dependencies;
 using Microsoft.Owin.Security.Infrastructure;
-using Soloco.ReactiveStarterKit.Membership;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
 
-namespace Soloco.ReactiveStarterKit.Providers
+namespace Soloco.RealTimeWeb.Providers
 {
     public class RefreshTokenProvider : IAuthenticationTokenProvider
     {

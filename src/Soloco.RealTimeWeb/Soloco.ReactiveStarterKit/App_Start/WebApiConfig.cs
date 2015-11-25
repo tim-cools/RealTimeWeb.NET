@@ -4,7 +4,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using Newtonsoft.Json.Serialization;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.RealTimeWeb
 {
     public static class WebApiConfig
     {

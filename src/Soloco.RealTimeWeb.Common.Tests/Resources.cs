@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Soloco.ReactiveStarterKit.Common.Tests
+namespace Soloco.RealTimeWeb.Common.Tests
 {
     public static class Resources
     {

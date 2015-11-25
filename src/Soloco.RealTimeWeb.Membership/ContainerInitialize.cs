@@ -1,10 +1,10 @@
 ﻿using System;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
-using Soloco.ReactiveStarterKit.Membership.CommandHandlers;
-using Soloco.ReactiveStarterKit.Membership.QueryHandlers;
-using Soloco.ReactiveStarterKit.Membership.Services;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Membership.CommandHandlers;
+using Soloco.RealTimeWeb.Membership.QueryHandlers;
+using Soloco.RealTimeWeb.Membership.Services;
 
-namespace Soloco.ReactiveStarterKit.Membership
+namespace Soloco.RealTimeWeb.Membership
 {
     public static class ContainerInitialize
     {

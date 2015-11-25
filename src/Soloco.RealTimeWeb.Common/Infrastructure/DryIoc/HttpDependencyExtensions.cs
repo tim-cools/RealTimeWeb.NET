@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     public static class HttpDependencyExtensions
     {

@@ -1,9 +1,9 @@
 using System;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.Domain
+namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public class ExternalLoginData
     {

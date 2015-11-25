@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Type of services supported by Container.</summary>
     public enum FactoryType

@@ -2,13 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Membership.Domain;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
-using Soloco.ReactiveStarterKit.Membership.Services;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Services;
 
-namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
+namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
     public class RegisterUserHandler : CommandHandler<RegisterUserCommand>
     {

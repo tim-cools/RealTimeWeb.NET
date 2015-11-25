@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Marten;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Store
+namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
 {
     public static class SessionExtension
     {

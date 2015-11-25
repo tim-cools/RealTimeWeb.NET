@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Soloco.ReactiveStarterKit.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Soloco.RealTimeWeb.Global" Language="C#" %>

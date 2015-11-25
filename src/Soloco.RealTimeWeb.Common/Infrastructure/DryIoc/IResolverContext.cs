@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Returns reference to actual resolver implementation. 
     /// Minimizes dependency to Factory Delegate on container.</summary>

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Scope implementation which will dispose stored <see cref="IDisposable"/> items on its own dispose.
     /// Locking is used internally to ensure that object factory called only once.</summary>

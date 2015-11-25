@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Called from generated code.</summary>
     public static class ThrowInGeneratedCode

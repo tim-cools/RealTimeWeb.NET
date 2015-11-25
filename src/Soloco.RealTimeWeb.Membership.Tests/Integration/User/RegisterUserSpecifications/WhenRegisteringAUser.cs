@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Common.Tests;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
-using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
 
-namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.User.RegisterUserSpecifications
+namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpecifications
 {
     [TestFixture]
     public class WhenRegisteringAUser : ServiceTestBase<IMessageDispatcher>

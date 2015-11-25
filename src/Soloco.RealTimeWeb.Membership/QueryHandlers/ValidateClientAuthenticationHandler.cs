@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using Marten;
 using Serilog;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
-using Soloco.ReactiveStarterKit.Membership.Domain;
-using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
+namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class ValidateClientAuthenticationHandler : QueryHandler<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
     {

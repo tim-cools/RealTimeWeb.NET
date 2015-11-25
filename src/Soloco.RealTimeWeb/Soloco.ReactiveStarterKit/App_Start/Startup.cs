@@ -2,17 +2,17 @@
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
-using Soloco.ReactiveStarterKit;
-using Soloco.ReactiveStarterKit.Common;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
-using Soloco.ReactiveStarterKit.Membership;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
+using Soloco.RealTimeWeb;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Membership;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
 [assembly: OwinStartup(typeof(Startup))]
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.RealTimeWeb
 {
     public class Startup
     {

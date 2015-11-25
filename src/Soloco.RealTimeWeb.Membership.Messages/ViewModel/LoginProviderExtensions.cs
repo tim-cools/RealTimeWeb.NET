@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Membership.Messages.ViewModel
+namespace Soloco.RealTimeWeb.Membership.Messages.ViewModel
 {
     public static class LoginProviderExtensions
     {

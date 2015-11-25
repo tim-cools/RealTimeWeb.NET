@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 
-namespace Soloco.ReactiveStarterKit.Api
+namespace Soloco.RealTimeWeb.Api
 {
     public class Membership : Hub
     {

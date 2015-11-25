@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Returns container bound scope for storing singleton objects.</summary>
     public sealed class SingletonReuse : IReuse

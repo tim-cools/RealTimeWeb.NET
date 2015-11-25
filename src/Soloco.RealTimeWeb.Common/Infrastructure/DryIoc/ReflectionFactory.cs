@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Reflects on <see cref="ImplementationType"/> constructor parameters and members,
     /// creates expression for each reflected dependency, and composes result service expression.</summary>

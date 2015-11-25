@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Represents custom or resolution root service info, there is separate representation for parameter, 
     /// property and field dependencies.</summary>

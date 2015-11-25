@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Contains resolution stack with information about resolved service and factory for it,
     /// Additionally request contain weak reference to <see cref="IContainer"/>. That the all required information for resolving services.

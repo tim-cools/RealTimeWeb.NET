@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     [Serializable]
     internal sealed class ScopeEntry<T> : MarshalByRefObject

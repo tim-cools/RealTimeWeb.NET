@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Specifies pre-defined reuse behaviors supported by container: 
     /// used when registering services into container with <see cref="Registrator"/> methods.</summary>

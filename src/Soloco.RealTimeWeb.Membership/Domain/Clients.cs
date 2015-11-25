@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Soloco.ReactiveStarterKit.Membership.Domain
+namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public static class Clients
     {

@@ -1,10 +1,10 @@
 using System;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Membership.Domain;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.Services
+namespace Soloco.RealTimeWeb.Membership.Services
 {
     public class GoogleProviderTokenValidator : ProviderTokenValidator
     {

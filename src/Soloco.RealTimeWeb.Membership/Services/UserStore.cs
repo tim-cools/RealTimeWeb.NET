@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
-using Soloco.ReactiveStarterKit.Membership.Domain;
+using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Membership.Domain;
 
-namespace Soloco.ReactiveStarterKit.Membership.Services
+namespace Soloco.RealTimeWeb.Membership.Services
 {
     public class UserStore : IUserStore<User, Guid>, IUserPasswordStore<User, Guid>, IUserLoginStore<User, Guid>
     {

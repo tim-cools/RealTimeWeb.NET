@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Simple immutable AVL tree with integer keys and object values.</summary>
     public sealed class ImTreeMapIntToObj

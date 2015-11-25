@@ -1,4 +1,4 @@
-# ReactiveStarterKit.NET [![Build Status](https://travis-ci.org/tim-cools/ReactiveStarterKit.NET.svg?branch=master)](https://travis-ci.org/tim-cools/ReactiveStarterKit.NET)
+# RealTimeWeb.NET [![Build Status](https://travis-ci.org/tim-cools/RealTimeWeb.NET.svg?branch=master)](https://travis-ci.org/tim-cools/RealTimeWeb.NET)
 A Reactive Starter Kit for the .NET Framework
 
 Used technology

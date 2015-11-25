@@ -8,17 +8,17 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Linq;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Membership.Domain;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
-using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
-using Soloco.ReactiveStarterKit.Membership.Services;
-using Soloco.ReactiveStarterKit.Models;
-using Soloco.ReactiveStarterKit.Results;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Membership.Services;
+using Soloco.RealTimeWeb.Models;
+using Soloco.RealTimeWeb.Results;
 
-namespace Soloco.ReactiveStarterKit.Controllers.Api
+namespace Soloco.RealTimeWeb.Controllers.Api
 {
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController

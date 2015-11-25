@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Soloco.ReactiveStarterKit.Models
+namespace Soloco.RealTimeWeb.Models
 {
     public class UserModel
     {

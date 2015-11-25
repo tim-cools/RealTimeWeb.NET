@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Membership.Domain;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.Services
+namespace Soloco.RealTimeWeb.Membership.Services
 {
     public abstract class ProviderTokenValidator : IProviderTokenValidator
     {

@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Checked error condition, possible error sources.</summary>
     public enum ErrorCheck

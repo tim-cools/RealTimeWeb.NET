@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Soloco.ReactiveStarterKit.Common.Tests
+namespace Soloco.RealTimeWeb.Common.Tests
 {
     [TestFixture]
     public abstract class SpecificationBase

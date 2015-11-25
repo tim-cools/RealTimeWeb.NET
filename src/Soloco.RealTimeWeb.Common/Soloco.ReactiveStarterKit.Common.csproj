@@ -7,8 +7,8 @@
     <ProjectGuid>{64FD3253-191F-47D2-99C9-6CA423EEAD07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Soloco.ReactiveStarterKit.Common</RootNamespace>
-    <AssemblyName>Soloco.ReactiveStarterKit.Common</AssemblyName>
+    <RootNamespace>Soloco.RealTimeWeb.Common</RootNamespace>
+    <AssemblyName>Soloco.RealTimeWeb.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

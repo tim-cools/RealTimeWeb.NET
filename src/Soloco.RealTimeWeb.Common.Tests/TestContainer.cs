@@ -1,7 +1,7 @@
 ﻿using System;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 
-namespace Soloco.ReactiveStarterKit.Common.Tests
+namespace Soloco.RealTimeWeb.Common.Tests
 {
     public static class TestContainer
     {

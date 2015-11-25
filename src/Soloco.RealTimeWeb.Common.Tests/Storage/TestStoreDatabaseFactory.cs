@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Infrastructure.Store;
 
-namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
+namespace Soloco.RealTimeWeb.Common.Tests.Storage
 {
     public static class TestStoreDatabaseFactory
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Provides information required for service resolution: service type, 
     /// and optional <see cref="ServiceDetails"/>: key, what to do if service unresolved, and required service type.</summary>

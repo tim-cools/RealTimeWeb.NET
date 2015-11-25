@@ -2,7 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Returns container bound current scope created by <see cref="Container.OpenScope"/> method.</summary>
     /// <remarks>It is the same as Singleton scope if container was not created by <see cref="Container.OpenScope"/>.</remarks>

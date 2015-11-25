@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure;
 
-namespace Soloco.ReactiveStarterKit.Membership.Domain
+namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public static class IdentityResultExtensions
     {

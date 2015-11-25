@@ -1,4 +1,4 @@
-﻿namespace Soloco.ReactiveStarterKit.Membership.Messages.ViewModel
+﻿namespace Soloco.RealTimeWeb.Membership.Messages.ViewModel
 {
     public class ValidateClientAuthenticationResult
     {

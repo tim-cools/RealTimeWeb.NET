@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Http.Dependencies;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.RealTimeWeb
 {
     internal static class DependencyResolverExtensions
     {

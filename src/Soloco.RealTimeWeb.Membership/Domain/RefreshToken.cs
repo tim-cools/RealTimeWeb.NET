@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Soloco.ReactiveStarterKit.Membership.Domain
+namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public class RefreshToken
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
+namespace Soloco.RealTimeWeb.Common.Tests.Storage
 {
     internal static class Environment
     {

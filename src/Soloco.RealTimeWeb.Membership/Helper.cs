@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Soloco.ReactiveStarterKit.Membership
+namespace Soloco.RealTimeWeb.Membership
 {
     public class Helper
     {

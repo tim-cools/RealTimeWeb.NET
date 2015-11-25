@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure
+namespace Soloco.RealTimeWeb.Common.Infrastructure
 {
     public static class LoggingInitializer
     {

@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit", "Soloco.ReactiveStarterKit\Soloco.ReactiveStarterKit.csproj", "{F359FA14-E07F-42BE-9394-B57E8EDEDCA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb", "Soloco.RealTimeWeb\Soloco.RealTimeWeb.csproj", "{F359FA14-E07F-42BE-9394-B57E8EDEDCA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership", "Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj", "{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Membership", "Soloco.RealTimeWeb.Membership\Soloco.RealTimeWeb.Membership.csproj", "{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership.Tests", "Soloco.ReactiveStarterKit.Membership.Tests\Soloco.ReactiveStarterKit.Membership.Tests.csproj", "{75A85BC6-8378-489A-AE3E-5A83C89564B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Membership.Tests", "Soloco.RealTimeWeb.Membership.Tests\Soloco.RealTimeWeb.Membership.Tests.csproj", "{75A85BC6-8378-489A-AE3E-5A83C89564B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Common", "Soloco.ReactiveStarterKit.Common\Soloco.ReactiveStarterKit.Common.csproj", "{64FD3253-191F-47D2-99C9-6CA423EEAD07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Common", "Soloco.RealTimeWeb.Common\Soloco.RealTimeWeb.Common.csproj", "{64FD3253-191F-47D2-99C9-6CA423EEAD07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Membership.Messages", "Soloco.ReactiveStarterKit.Membership.Messages\Soloco.ReactiveStarterKit.Membership.Messages.csproj", "{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Membership.Messages", "Soloco.RealTimeWeb.Membership.Messages\Soloco.RealTimeWeb.Membership.Messages.csproj", "{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.ReactiveStarterKit.Common.Tests", "Soloco.ReactiveStarterKit.Common.Tests\Soloco.ReactiveStarterKit.Common.Tests.csproj", "{02395C44-A068-40CB-991A-6D35B7AE18DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Common.Tests", "Soloco.RealTimeWeb.Common.Tests\Soloco.RealTimeWeb.Common.Tests.csproj", "{02395C44-A068-40CB-991A-6D35B7AE18DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{26EE359E-2896-4B4F-AF99-828CC927209C}"
 EndProject

@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Data.Common;
 using Npgsql;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Store
+namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
 {
     public class ConnectionString
     {

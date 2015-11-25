@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Common.Tests;
-using Soloco.ReactiveStarterKit.Membership.Messages.Commands;
-using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
-namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.Queries
+namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
     [TestFixture]
     public class WhenQueryingRefreshTokens : ServiceTestBase<IMessageDispatcher>

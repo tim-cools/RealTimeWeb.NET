@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>DSL for specifying <see cref="ParameterSelector"/> injection rules.</summary>
     public static partial class Parameters

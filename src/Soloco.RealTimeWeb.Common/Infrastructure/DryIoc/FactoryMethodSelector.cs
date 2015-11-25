@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Declares delegate to get single factory method or constructor for resolved request.</summary>
     /// <param name="request">Request to resolve.</param>

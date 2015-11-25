@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Owin.Security.Facebook;
 
-namespace Soloco.ReactiveStarterKit.Membership.Services
+namespace Soloco.RealTimeWeb.Membership.Services
 {
     public class FacebookAuthProvider : FacebookAuthenticationProvider
     {

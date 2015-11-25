@@ -1,6 +1,6 @@
 using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>The delegate type which is actually used to create service instance by container.
     /// Delegate instance required to be static with all information supplied by <paramref name="state"/> and <paramref name="scope"/>

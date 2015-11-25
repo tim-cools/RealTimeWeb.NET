@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Messages
+namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
 {
     public interface ICommand : IMessage<CommandResult>
     {

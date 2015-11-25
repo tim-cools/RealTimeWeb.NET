@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     public static class ContainerFactory
     {

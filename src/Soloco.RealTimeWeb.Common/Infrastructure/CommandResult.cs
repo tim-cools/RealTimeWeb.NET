@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure
+namespace Soloco.RealTimeWeb.Common.Infrastructure
 {
     public class CommandResult
     {

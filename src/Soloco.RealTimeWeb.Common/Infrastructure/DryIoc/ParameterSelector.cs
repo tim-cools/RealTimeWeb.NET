@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Specifies how to get parameter info for injected parameter and resolved request</summary>
     /// <remarks>Request is for parameter method owner not for parameter itself.</remarks>

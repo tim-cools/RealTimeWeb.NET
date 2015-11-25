@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure
+namespace Soloco.RealTimeWeb.Common.Infrastructure
 {
     public class BusinessException  : Exception
     {

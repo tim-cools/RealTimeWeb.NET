@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Base class for property and field dependency info.</summary>
     public abstract class PropertyOrFieldServiceInfo : IServiceInfo

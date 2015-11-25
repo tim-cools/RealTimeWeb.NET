@@ -7,8 +7,8 @@
     <ProjectGuid>{75A85BC6-8378-489A-AE3E-5A83C89564B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Soloco.ReactiveStarterKit.Membership.Tests</RootNamespace>
-    <AssemblyName>Soloco.ReactiveStarterKit.Membership.Tests</AssemblyName>
+    <RootNamespace>Soloco.RealTimeWeb.Membership.Tests</RootNamespace>
+    <AssemblyName>Soloco.RealTimeWeb.Membership.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -92,21 +92,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Common.Tests\Soloco.ReactiveStarterKit.Common.Tests.csproj">
+    <ProjectReference Include="..\Soloco.RealTimeWeb.Common.Tests\Soloco.RealTimeWeb.Common.Tests.csproj">
       <Project>{02395C44-A068-40CB-991A-6D35B7AE18DF}</Project>
-      <Name>Soloco.ReactiveStarterKit.Common.Tests</Name>
+      <Name>Soloco.RealTimeWeb.Common.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Common\Soloco.ReactiveStarterKit.Common.csproj">
+    <ProjectReference Include="..\Soloco.RealTimeWeb.Common\Soloco.RealTimeWeb.Common.csproj">
       <Project>{64FD3253-191F-47D2-99C9-6CA423EEAD07}</Project>
-      <Name>Soloco.ReactiveStarterKit.Common</Name>
+      <Name>Soloco.RealTimeWeb.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership.Messages\Soloco.ReactiveStarterKit.Membership.Messages.csproj">
+    <ProjectReference Include="..\Soloco.RealTimeWeb.Membership.Messages\Soloco.RealTimeWeb.Membership.Messages.csproj">
       <Project>{A6DCB22B-7BDA-41A6-9C85-C191153CC26E}</Project>
-      <Name>Soloco.ReactiveStarterKit.Membership.Messages</Name>
+      <Name>Soloco.RealTimeWeb.Membership.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soloco.ReactiveStarterKit.Membership\Soloco.ReactiveStarterKit.Membership.csproj">
+    <ProjectReference Include="..\Soloco.RealTimeWeb.Membership\Soloco.RealTimeWeb.Membership.csproj">
       <Project>{F1371FA8-CCF8-4C55-80A7-0DEA8540477A}</Project>
-      <Name>Soloco.ReactiveStarterKit.Membership</Name>
+      <Name>Soloco.RealTimeWeb.Membership</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

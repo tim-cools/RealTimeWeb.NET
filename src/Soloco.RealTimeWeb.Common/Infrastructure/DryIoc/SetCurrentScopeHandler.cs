@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Delegate to get new scope from old/existing current scope.</summary>
     /// <param name="oldScope">Old/existing scope to change.</param>

@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Membership.Domain
+namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public class ParsedExternalAccessToken
     {

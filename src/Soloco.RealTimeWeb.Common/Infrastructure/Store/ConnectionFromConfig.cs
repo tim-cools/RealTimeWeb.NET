@@ -1,7 +1,7 @@
 using Marten;
 using Npgsql;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Store
+namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
 {
     public class ConnectionFromConfig : IConnectionFactory
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNet.Identity;
 
-namespace Soloco.ReactiveStarterKit.Membership.Domain
+namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public class User : IUser<Guid>
     {

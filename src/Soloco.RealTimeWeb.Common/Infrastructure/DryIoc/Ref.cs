@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Provides optimistic-concurrency consistent <see cref="Swap{T}"/> operation.</summary>
     public static class Ref

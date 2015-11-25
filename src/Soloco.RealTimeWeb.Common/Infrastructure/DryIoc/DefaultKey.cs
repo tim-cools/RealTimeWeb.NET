@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Used to represent multiple default service keys. 
     /// Exposes <see cref="RegistrationOrder"/> to determine order of service added.</summary>

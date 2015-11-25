@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Specifies what to return when <see cref="IResolver"/> unable to resolve service.</summary>
     public enum IfUnresolved

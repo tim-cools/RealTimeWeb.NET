@@ -5,10 +5,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
-using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using IDependencyResolver = System.Web.Http.Dependencies.IDependencyResolver;
 
-namespace Soloco.ReactiveStarterKit.Providers
+namespace Soloco.RealTimeWeb.Providers
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {

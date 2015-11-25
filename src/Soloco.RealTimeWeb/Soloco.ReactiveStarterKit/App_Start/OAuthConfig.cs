@@ -3,10 +3,10 @@ using System.Web.Http;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using Soloco.ReactiveStarterKit.Membership.Services;
-using Soloco.ReactiveStarterKit.Providers;
+using Soloco.RealTimeWeb.Membership.Services;
+using Soloco.RealTimeWeb.Providers;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.RealTimeWeb
 {
     public static class OAuthConfig
     {

@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Delegate for changing value from old one to some new based on provided new value.</summary>
     /// <typeparam name="V">Type of values.</typeparam>

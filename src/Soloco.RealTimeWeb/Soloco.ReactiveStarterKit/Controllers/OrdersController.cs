@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace Soloco.ReactiveStarterKit.Controllers
+namespace Soloco.RealTimeWeb.Controllers
 {
     [RoutePrefix("api/Orders")]
     public class OrdersController : ApiController

@@ -1,4 +1,4 @@
-﻿namespace Soloco.ReactiveStarterKit.Membership.Tests.Integration.Infrastructure
+﻿namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure
 {
     public static class ExternalAccessTokens
     {

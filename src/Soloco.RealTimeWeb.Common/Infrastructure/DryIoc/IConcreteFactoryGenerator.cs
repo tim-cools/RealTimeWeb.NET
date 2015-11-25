@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Facility for creating concrete factories from some template/prototype. Example: 
     /// creating closed-generic type reflection factory from registered open-generic prototype factory.</summary>

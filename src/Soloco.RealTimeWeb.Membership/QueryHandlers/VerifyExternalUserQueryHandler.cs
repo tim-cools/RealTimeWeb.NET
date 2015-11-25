@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
-using Soloco.ReactiveStarterKit.Membership.Messages.Queries;
-using Soloco.ReactiveStarterKit.Membership.Messages.ViewModel;
-using Soloco.ReactiveStarterKit.Membership.Services;
-using User = Soloco.ReactiveStarterKit.Membership.Domain.User;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Membership.Services;
+using User = Soloco.RealTimeWeb.Membership.Domain.User;
 
-namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
+namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class VerifyExternalUserQueryHandler : QueryHandler<VerifyExternalUserQuery, VerifyExternalUserResult>
     {

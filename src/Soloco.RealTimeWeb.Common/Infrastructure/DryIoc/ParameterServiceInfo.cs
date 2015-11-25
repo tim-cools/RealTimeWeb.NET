@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Provides <see cref="IServiceInfo"/> for parameter, 
     /// by default using parameter name as <see cref="IServiceInfo.ServiceType"/>.</summary>

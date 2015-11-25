@@ -1,6 +1,6 @@
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 
-namespace Soloco.ReactiveStarterKit.Membership.Messages.Queries
+namespace Soloco.RealTimeWeb.Membership.Messages.Queries
 {
     public class ValidUserLoginQuery : IMessage<bool>
     {

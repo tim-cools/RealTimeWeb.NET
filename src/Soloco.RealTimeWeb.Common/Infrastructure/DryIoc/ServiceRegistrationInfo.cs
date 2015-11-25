@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Define registered service structure.</summary>
     [DebuggerDisplay("#{FactoryRegistrationOrder}, {ServiceType}, {OptionalServiceKey}, {Factory}")]

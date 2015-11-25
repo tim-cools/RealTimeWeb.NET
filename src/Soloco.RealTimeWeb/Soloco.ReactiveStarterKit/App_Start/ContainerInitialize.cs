@@ -1,8 +1,8 @@
 ﻿using System;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
-using Soloco.ReactiveStarterKit.Controllers;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Controllers;
 
-namespace Soloco.ReactiveStarterKit
+namespace Soloco.RealTimeWeb
 {
     internal static class ContainerInitialize
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Soloco.ReactiveStarterKit.Controllers
+namespace Soloco.RealTimeWeb.Controllers
 {
     public class Order
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Messages
+namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
 {
     public class MessageDispatcher : IMessageDispatcher
     {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Soloco.ReactiveStarterKit.Controllers
+namespace Soloco.RealTimeWeb.Controllers
 {
     public class HomeController : Controller
     {

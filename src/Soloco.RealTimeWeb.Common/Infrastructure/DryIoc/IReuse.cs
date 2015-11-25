@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Reuse goal is to locate or create scope where reused objects will be stored.</summary>
     /// <remarks><see cref="IReuse"/> implementors supposed to be stateless, and provide scope location behavior only.

@@ -2,7 +2,7 @@ language: csharp
 mono:
   - latest
 env: VERSION=0.3.10
-solution: src/Soloco.ReactiveStarterKit.sln
+solution: src/Soloco.RealTimeWeb.sln
 addons:
   postgresql: "9.4"
 

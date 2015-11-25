@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Specifies options to handle situation when registering some service already present in the registry.</summary>
     public enum IfAlreadyRegistered

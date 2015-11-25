@@ -1,8 +1,8 @@
 using System;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 
-namespace Soloco.ReactiveStarterKit.Membership.Messages.Commands
+namespace Soloco.RealTimeWeb.Membership.Messages.Commands
 {
     public class CreateRefreshTokenCommand : IMessage<CommandResult>
     {

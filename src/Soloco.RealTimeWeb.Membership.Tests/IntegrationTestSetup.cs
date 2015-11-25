@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
-using Soloco.ReactiveStarterKit.Common;
-using Soloco.ReactiveStarterKit.Common.Infrastructure;
-using Soloco.ReactiveStarterKit.Common.Tests;
-using Soloco.ReactiveStarterKit.Common.Tests.Storage;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Common.Tests.Storage;
 
-namespace Soloco.ReactiveStarterKit.Membership.Tests
+namespace Soloco.RealTimeWeb.Membership.Tests
 {
     [SetUpFixture]
     public class IntegrationTestSetup

@@ -1,7 +1,7 @@
 ﻿using Marten;
 using Marten.Schema;
 
-namespace Soloco.ReactiveStarterKit.Common.Tests
+namespace Soloco.RealTimeWeb.Common.Tests
 {
     public abstract class ServiceTestBase<T> : SpecificationBase
     {

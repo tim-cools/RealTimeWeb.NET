@@ -1,4 +1,4 @@
-namespace Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc
+namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
     /// <summary>Wrapper type to box service with associated arbitrary metadata object.</summary>
     /// <typeparam name="T">Service type.</typeparam>
