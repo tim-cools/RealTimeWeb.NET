@@ -2,14 +2,16 @@ export const userStatus = {
     notAuthenticated: 'notAuthenticated',
     authenticated: 'authenticated',
     logonPending: 'logonPending',
-    values: ['notAuthenticated', 'authenticated', 'logonPending']
+    associateExternal: 'associateExternal',
+    values: ['notAuthenticated', 'authenticated', 'logonPending', 'associateExternal']
 };
 
 export const actionsDefinitions = {
     LOG_OFF: 'LOG_OFF',
     LOG_ON: 'LOG_ON',
     LOG_ON_PENDING: 'LOG_ON_PENDING',
-    LOG_ON_FAILED: 'LOG_ON_FAILED'
+    LOG_ON_FAILED: 'LOG_ON_FAILED',
+    ASSOCIATE_EXTERNAL: 'ASSOCIATE_EXTERNAL'
 };
 
 export const actions = {
@@ -38,6 +40,15 @@ export const actions = {
         return {
             type: actionsDefinitions.LOG_OFF
         };
+    },
+
+    associateExternal: function(provider, externalAccessToken, externalUserName) {
+        return {
+            type: actionsDefinitions.ASSOCIATE_EXTERNAL, 
+            provider: provider, 
+            externalAccessToken: externalAccessToken, 
+            externalUserName: externalUserName
+        };
     }
 };
 
@@ -64,7 +75,15 @@ export function reducer(state = notAuthenticated, action) {
 
         case actionsDefinitions.LOG_OFF:
             return {
-                 status: userStatus.notAuthenticated
+                status: userStatus.notAuthenticated
+            };
+
+        case actionsDefinitions.ASSOCIATE_EXTERNAL:
+            return {
+                status: userStatus.associateExternal,
+                provider: action.provider,
+                externalAccessToken: action.externalAccessToken,
+                externalUserName: action.externalUserName
             };
 
         default:

@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS test_store;
-DROP USER IF EXISTS test_store_user;
+DROP DATABASE IF EXISTS {database};
+DROP USER IF EXISTS {userId};
 
-CREATE USER test_store_user with PASSWORD 'testStoreUserPassword';
-CREATE DATABASE test_store;
-GRANT ALL PRIVILEGES ON DATABASE test_store to test_store_user;
+CREATE USER {userId} with PASSWORD '{password}';
+CREATE DATABASE {database};
+GRANT ALL PRIVILEGES ON DATABASE {database} to {userId};

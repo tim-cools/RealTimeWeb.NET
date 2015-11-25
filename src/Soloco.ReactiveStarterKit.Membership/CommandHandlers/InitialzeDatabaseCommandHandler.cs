@@ -11,7 +11,7 @@ namespace Soloco.ReactiveStarterKit.Membership.CommandHandlers
 {
     public class InitializeDatabaseCommandHandler : CommandHandler<InitializeDatabaseCommand>
     {
-        public InitializeDatabaseCommandHandler(ITrackingSession session, IDisposable scope)
+        public InitializeDatabaseCommandHandler(IDocumentSession session, IDisposable scope)
              : base(session, scope)
         {
         }

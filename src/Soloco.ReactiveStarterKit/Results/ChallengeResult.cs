@@ -7,9 +7,9 @@ using System.Web.Http;
 namespace Soloco.ReactiveStarterKit.Results
 {
     public class ChallengeResult : IHttpActionResult
-    {        
-        public string LoginProvider { get; set; }
-        public HttpRequestMessage Request { get; set; }
+    {
+        public string LoginProvider { get; }
+        public HttpRequestMessage Request { get; }
 
         public ChallengeResult(string loginProvider, ApiController controller)
         {
@@ -21,8 +21,7 @@ namespace Soloco.ReactiveStarterKit.Results
         {
             Request.GetOwinContext().Authentication.Challenge(LoginProvider);
 
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
-            response.RequestMessage = Request;
+            var response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = Request };
             return Task.FromResult(response);
         }
     }

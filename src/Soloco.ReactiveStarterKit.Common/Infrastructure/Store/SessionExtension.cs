@@ -7,9 +7,12 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Store
 {
     public static class SessionExtension
     {
-        public static T GetFirst<T>(this IDocumentSession session, Expression<Func<T, bool>> predicate)
+        public static T GetFirst<T>(this IQuerySession session, Expression<Func<T, bool>> predicate)
             where T : class
         {
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
             try
             {
                 return session.Query<T>()

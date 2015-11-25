@@ -233,6 +233,7 @@
     <Content Include="Client\Source\state\actions.js" />
     <Content Include="Client\Source\state\reducers.js" />
     <Content Include="Client\Source\state\user.js" />
+    <Content Include="Client\Statics\authenticationComplete.js" />
     <Content Include="Client\Statics\bootstrap-3.3.5-dist\css\bootstrap-theme.css" />
     <Content Include="Client\Statics\bootstrap-3.3.5-dist\css\bootstrap-theme.min.css" />
     <Content Include="Client\Statics\bootstrap-3.3.5-dist\css\bootstrap.css" />
@@ -286,6 +287,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
+    <None Include="Views\Account\Complete.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -296,6 +298,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\OAuthConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Api\AccountController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Order.cs" />

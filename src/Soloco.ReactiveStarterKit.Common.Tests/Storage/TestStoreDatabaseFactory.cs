@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using Soloco.ReactiveStarterKit.Common.Infrastructure.Store;
 
 namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
 {
     public static class TestStoreDatabaseFactory
     {
         //todo add alternative paths or move to config if necessary
-        private static readonly string[] _versions = { "9.5", "9.4" };
+        private static readonly string[] _versions = { "9.4", "9.5" };
         private const string _psqlPath = @"C:\Program Files\PostgreSQL\{version}\bin\psql.exe";
         private const string _psqlPathLinux = "psql";
 
@@ -15,8 +16,11 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
         {
             Debug.WriteLine("Test Store Database Creating");
 
-            var tempScriptFileName = WriteTempSqlScript();
-            var command = $"-f {tempScriptFileName} -U postgres -v ON_ERROR_STOP=1";
+            var connectionString = ConnectionString.Parse();
+            VerifyIsLocalHost(connectionString);
+
+            var tempScriptFileName = WriteTempSqlScript(connectionString.Database, connectionString.UserId, connectionString.Password);
+            var command = $"-f {tempScriptFileName} -U postgres -w -v ON_ERROR_STOP=1 -p {connectionString.Port}";
 
             var path = Environment.IsRunningOnMono && Environment.IsLinux ? _psqlPathLinux : GetWindowsPath();
 
@@ -27,6 +31,15 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
             Debug.WriteLine("Test Store Database Created");
 
             File.Delete(tempScriptFileName);
+        }
+
+        private static void VerifyIsLocalHost(ConnectionString connectionString)
+        {
+            if (connectionString.Server != "127.0.0.1")
+            {
+                throw new InvalidOperationException("Only localhost is now supported because psql asks for a password otherwised. " +
+                                                    "If you want to solve this you should make user the password of postgres user. (Not really safe)");
+            }
         }
 
         private static string GetWindowsPath()
@@ -83,9 +96,12 @@ namespace Soloco.ReactiveStarterKit.Common.Tests.Storage
             };
         }
 
-        private static string WriteTempSqlScript()
+        private static string WriteTempSqlScript(string database, string userId, string password)
         {
-            var script = typeof(TestStoreDatabaseFactory).ReadResourceString("CreateStore.sql");
+            var script = typeof(TestStoreDatabaseFactory).ReadResourceString("CreateStore.sql")
+                .Replace("{database}", database)
+                .Replace("{userId}", userId)
+                .Replace("{password}", password);
 
             var tempScriptFileName = Path.GetTempFileName();
             File.WriteAllText(tempScriptFileName, script);

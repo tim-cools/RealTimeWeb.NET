@@ -9,9 +9,9 @@ namespace Soloco.ReactiveStarterKit.Common.Infrastructure.Messages
     {
         private readonly IDisposable _scope;
 
-        protected IDocumentSession Session { get; }
+        protected IQuerySession Session { get; }
 
-        protected QueryHandler(ISession session, IDisposable scope)
+        protected QueryHandler(IQuerySession session, IDisposable scope)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (scope == null) throw new ArgumentNullException(nameof(scope));

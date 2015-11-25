@@ -10,7 +10,7 @@ namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
     public class ClientByKeyQueryHandler : QueryHandler<ClientByKeyQuery, Client>
     {
-        public ClientByKeyQueryHandler(ISession session, IDisposable scope)
+        public ClientByKeyQueryHandler(IQuerySession session, IDisposable scope)
               : base(session, scope)
         {
         }

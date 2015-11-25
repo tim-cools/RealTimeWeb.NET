@@ -15,7 +15,7 @@ namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
         private readonly UserManager<User, Guid> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
-        public VerifyExternalUserQueryHandler(ISession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
+        public VerifyExternalUserQueryHandler(IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
             : base(session, scope)
         {
             _providerTokenValidatorFactory = providerTokenValidatorFactory;

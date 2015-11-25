@@ -18,9 +18,9 @@ namespace Soloco.ReactiveStarterKit
             //use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
 
-            var OAuthServerOptions = CreateOptions(httpConfiguration);
+            var serverOptions = CreateOptions(httpConfiguration);
             app
-                .UseOAuthAuthorizationServer(OAuthServerOptions)
+                .UseOAuthAuthorizationServer(serverOptions)
                 .UseOAuthBearerAuthentication(options.Bearer)
                 .UseFacebookAuthentication(options.Facebook)
                 .UseGoogleAuthentication(options.Google);
@@ -30,7 +30,7 @@ namespace Soloco.ReactiveStarterKit
 
         private static OAuthAuthorizationServerOptions CreateOptions(HttpConfiguration httpConfiguration)
         {
-            var OAuthServerOptions = new OAuthAuthorizationServerOptions
+            return new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
@@ -38,7 +38,6 @@ namespace Soloco.ReactiveStarterKit
                 Provider = new AuthorizationServerProvider(httpConfiguration.DependencyResolver),
                 RefreshTokenProvider = new RefreshTokenProvider(httpConfiguration.DependencyResolver)
             };
-            return OAuthServerOptions;
         }        
     }
 }

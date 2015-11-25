@@ -2,6 +2,7 @@
 using Marten;
 using Marten.Linq;
 using Marten.Schema;
+using Marten.Services;
 using Remotion.Linq.Parsing.Structure;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.DryIoc;
 using Soloco.ReactiveStarterKit.Common.Infrastructure.Messages;
@@ -28,10 +29,11 @@ namespace Soloco.ReactiveStarterKit.Common
 
             container.Register<IQueryParser, MartenQueryParser>(Reuse.Singleton);
             container.Register<IDocumentSchema, DocumentSchema>(Reuse.Singleton);
+            container.Register<IDocumentStore, DocumentStore>(Reuse.Singleton);
 
             container.Register<IConnectionFactory, ConnectionFromConfig>();
-            container.Register<ITrackingSession, TrackingSession>();
-            container.Register<ISession, Session>();
+            container.RegisterDelegate<IQuerySession>(resolver => resolver.Resolve<IDocumentStore>().QuerySession());
+            container.RegisterDelegate<IDocumentSession>(resolver => resolver.Resolve<IDocumentStore>().DirtyTrackedSession());
 
             container.Register<ISerializer, JsonNetSerializer>();
             container.Register<IDocumentSchemaCreation, DevelopmentSchemaCreation>();

@@ -13,7 +13,7 @@ namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
     {
         private readonly UserManager<Domain.User, Guid> _userManager;
 
-        public UserByNameQueryHandler(ISession session, IDisposable scope)
+        public UserByNameQueryHandler(IDocumentSession session, IDisposable scope)
               : base(session, scope)
         {
             var userStore = new UserStore(session);

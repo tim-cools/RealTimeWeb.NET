@@ -43,6 +43,8 @@ function login(userName, password, useRefreshTokens) {
         data = data + '&client_id=' + api.clientId;
     }
 
+    dispatch(userActions.logonPending());
+
     reqwest({
         url: api.serviceBase + 'token',
         method: 'post',
@@ -72,13 +74,35 @@ function loggedOn(userName, useRefreshTokens) {
 }
 
 function externalProviderUrl(provider) {
-    var redirectUri = location.protocol + '//' + location.host + '/authcomplete.html';
+    var redirectUri = location.protocol + '//' + location.host + '/Account/Complete';
 
-    return ngAuthSettings.apiServiceBaseUri + "api/Account/ExternalLogin?provider=" + provider
-        + "&response_type=token&client_id=" + ngAuthSettings.clientId
+    return api.serviceBase + "api/Account/ExternalLogin?provider=" + provider
+        + "&response_type=token&client_id=" + api.clientId
         + "&redirect_uri=" + redirectUri;
 }
 
+function externalProviderCompleted(fragment) {
+
+    if (fragment.haslocalaccount == 'False') {
+
+        const action = userActions.associateExternal(fragment.provider, fragment.external_access_token, fragment.external_user_name);
+        dispatcher.dispatch(action);
+    }
+    else {
+        throw "not yet implemented";
+
+        //Obtain access token and redirect to orders
+        var externalData = { provider: fragment.provider, externalAccessToken: fragment.external_access_token };
+        authService.obtainAccessToken(externalData).then(function (response) {
+
+            navigate.path('/orders');
+
+        },
+        function (err) {
+            $scope.message = err.error_description;
+        });
+    }
+};
 
 function initialize() {
     const data = store.get(storageKey);
@@ -95,5 +119,6 @@ export default {
     login: login,
     logOff: logOff,
     initialize: initialize,
-    externalProviderUrl: externalProviderUrl
+    externalProviderUrl: externalProviderUrl,
+    externalProviderCompleted: externalProviderCompleted
 }

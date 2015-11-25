@@ -9,11 +9,8 @@ namespace Soloco.ReactiveStarterKit
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "Default",
-                url: "",
-                defaults: new { controller = "Home", action = "Index" }
-            );
+            routes.MapRoute(name: "Default", url: "", defaults: new { controller = "Home", action = "Index" });
+            routes.MapRoute(name: "Account", url: "Account/{action}", defaults: new { controller = "Account" });
         }
     }
 }

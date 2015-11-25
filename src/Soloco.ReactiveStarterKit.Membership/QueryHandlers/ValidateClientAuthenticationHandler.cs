@@ -12,7 +12,7 @@ namespace Soloco.ReactiveStarterKit.Membership.QueryHandlers
 {
     public class ValidateClientAuthenticationHandler : QueryHandler<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
     {
-        public ValidateClientAuthenticationHandler(ISession session, IDisposable scope)
+        public ValidateClientAuthenticationHandler(IQuerySession session, IDisposable scope)
               : base(session, scope)
         {
         }
