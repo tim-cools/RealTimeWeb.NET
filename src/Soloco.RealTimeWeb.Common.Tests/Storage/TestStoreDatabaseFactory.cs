@@ -117,6 +117,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
 
             var tempScriptFileName = Path.GetTempFileName();
             File.WriteAllText(tempScriptFileName, script);
+            Log.Information($"Script {tempScriptFileName}: {script}");
             return tempScriptFileName;
         }
     }
