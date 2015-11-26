@@ -21,7 +21,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
             VerifyIsLocalHost(connectionString);
 
             var tempScriptFileName = WriteTempSqlScript(connectionString.Database, connectionString.UserId, connectionString.Password);
-            var command = $"-f {tempScriptFileName} -U postgres -w -v ON_ERROR_STOP=1 -p {connectionString.Port}";
+            var command = $"-f {tempScriptFileName} -U postgres -v ON_ERROR_STOP=1 -p {connectionString.Port}";
 
             var path = Environment.IsRunningOnMono && Environment.IsLinux ? _psqlPathLinux : GetWindowsPath();
 
