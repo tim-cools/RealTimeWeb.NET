@@ -64,35 +64,31 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
             using (var process = new Process { StartInfo = ProcessInfo(path, command) })
             {
                 process.Start();
-                var output = WriteOutputToDebug(process);
+
                 process.WaitForExit(20000);
+                process.OutputDataReceived += (s, e) => { Log.Information("StandardOutput: " + e.Data); };
+                process.ErrorDataReceived += (s, e) => { Log.Error("StandardError: " + e.Data); };
+
+                process.BeginOutputReadLine();
+
+                if (!process.WaitForExit(60000))
+                {
+                    process.Kill();
+                    throw new InvalidOperationException(
+                        $"Could not initilaize database.{System.Environment.NewLine}" +
+                        $"Process: {path} {command}{System.Environment.NewLine}" +
+                        $"Exit code: {process.ExitCode}{System.Environment.NewLine}" +
+                        $"The database will be dropped. Ensure you are noy connected to the database.");
+                }
 
                 if (process.ExitCode != 0)
                 {
                     throw new InvalidOperationException(
                         $"Could not initilaize database.{System.Environment.NewLine}" + 
                         $"Process: {path} {command}{System.Environment.NewLine}" +
-                        $"Exit code: {process.ExitCode}{System.Environment.NewLine}" +
-                        $"The database will be dropped. Ensure you are noy connected to the database.{System.Environment.NewLine}" +
-                        $"{output}");
+                        $"Exit code: {process.ExitCode}{System.Environment.NewLine}");
                 }
             }
-        }
-
-        private static string WriteOutputToDebug(Process process)
-        {
-            var result = new StringBuilder();
-            AddOutput(process.StandardOutput, result, "StandardOutput");
-            AddOutput(process.StandardError, result, "StandardError");
-            return result.ToString();
-        }
-
-        private static void AddOutput(StreamReader streamReader, StringBuilder result, string title)
-        {
-            var data = streamReader.ReadToEnd();
-            Debug.WriteLine(title);
-            Debug.WriteLine(data);
-            result.AppendLine($"{title}: {data}");
         }
 
         private static ProcessStartInfo ProcessInfo(string path, string command)
