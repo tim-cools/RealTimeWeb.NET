@@ -69,8 +69,10 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
                 if (process.ExitCode != 0)
                 {
                     throw new InvalidOperationException(
-                        $"{$"Could not initilaize database. exit code: {process.ExitCode}"}{System.Environment.NewLine}" +
-                        $"The database will be dropped. Are you connected you the database?{System.Environment.NewLine}" +
+                        $"Could not initilaize database.{System.Environment.NewLine}" + 
+                        $"Process: {path} {command}{System.Environment.NewLine}" +
+                        $"Exit code: {process.ExitCode}{System.Environment.NewLine}" +
+                        $"The database will be dropped. Ensure you are noy connected to the database.{System.Environment.NewLine}" +
                         $"{output}");
                 }
             }
