@@ -70,11 +70,13 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
 
-                if (!process.WaitForExit(60000))
+                const int timeoutInSeconds = 10 * 60;
+                if (!process.WaitForExit(timeoutInSeconds * 1000))
                 {
                     process.Kill();
+
                     throw new InvalidOperationException(
-                        $"Could not initilaize database (Timeout after 1 minute).{System.Environment.NewLine}" +
+                        $"Could not initilaize database (Timeout after {timeoutInSeconds} seconds).{System.Environment.NewLine}" +
                         $"Process: {path} {command}{System.Environment.NewLine}" +
                         $"Exit code: {process.ExitCode}{System.Environment.NewLine}" +
                         $"The database will be dropped. Ensure you are noy connected to the database.");
