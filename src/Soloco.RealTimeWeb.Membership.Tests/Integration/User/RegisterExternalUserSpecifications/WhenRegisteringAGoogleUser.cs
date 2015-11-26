@@ -12,6 +12,7 @@ using Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure;
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalUserSpecifications
 {
     [TestFixture]
+    [Ignore("The google access tokens expire really fast. We need a way to automate the retrieval of the token. (Selenium)")]
     public class WhenRegisteringAGoogleUser : ServiceTestBase<IMessageDispatcher>
     {
         private CommandResult _result;
