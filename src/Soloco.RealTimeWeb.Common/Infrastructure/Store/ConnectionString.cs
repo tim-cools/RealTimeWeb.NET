@@ -13,7 +13,7 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
         public string Password { get; }
         public string UserId { get; }
 
-        private ConnectionString(string server, string port, string database, string password, string userId)
+        private ConnectionString(string server, string port, string database, string userId, string password)
         {
             Port = port;
             Database = database;
@@ -43,9 +43,9 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
                 return new ConnectionString(
                     GetPart(builder, "Server"),
                     GetPart(builder, "Port"),
+                    GetPart(builder, "database"),
                     GetPart(builder, "User Id"),
-                    GetPart(builder, "password"),
-                    GetPart(builder, "database")
+                    GetPart(builder, "password")
                     );
             }
         }
