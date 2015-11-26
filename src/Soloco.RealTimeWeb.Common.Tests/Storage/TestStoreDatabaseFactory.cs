@@ -63,19 +63,18 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
         {
             using (var process = new Process { StartInfo = ProcessInfo(path, command) })
             {
-                process.Start();
-
-                process.WaitForExit(20000);
                 process.OutputDataReceived += (s, e) => { Log.Information("StandardOutput: " + e.Data); };
-                process.ErrorDataReceived += (s, e) => { Log.Error("StandardError: " + e.Data); };
+                process.ErrorDataReceived += (s, e) => { Log.Error("ErrorDataReceived: " + e.Data); };
 
+                process.Start();
                 process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 if (!process.WaitForExit(60000))
                 {
                     process.Kill();
                     throw new InvalidOperationException(
-                        $"Could not initilaize database.{System.Environment.NewLine}" +
+                        $"Could not initilaize database (Timeout after 1 minute).{System.Environment.NewLine}" +
                         $"Process: {path} {command}{System.Environment.NewLine}" +
                         $"Exit code: {process.ExitCode}{System.Environment.NewLine}" +
                         $"The database will be dropped. Ensure you are noy connected to the database.");
@@ -86,7 +85,8 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
                     throw new InvalidOperationException(
                         $"Could not initilaize database.{System.Environment.NewLine}" + 
                         $"Process: {path} {command}{System.Environment.NewLine}" +
-                        $"Exit code: {process.ExitCode}{System.Environment.NewLine}");
+                        $"Exit code: {process.ExitCode}{System.Environment.NewLine}" +
+                        $"The database will be dropped. Ensure you are noy connected to the database.");
                 }
             }
         }
@@ -100,6 +100,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
+                RedirectStandardInput = true,
                 CreateNoWindow = true
             };
         }
