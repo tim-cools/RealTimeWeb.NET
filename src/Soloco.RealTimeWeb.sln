@@ -16,6 +16,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Common.Tests", "Soloco.RealTimeWeb.Common.Tests\Soloco.RealTimeWeb.Common.Tests.csproj", "{02395C44-A068-40CB-991A-6D35B7AE18DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{26EE359E-2896-4B4F-AF99-828CC927209C}"
+	ProjectSection(SolutionItems) = preProject
+		Soloco.RealTimeWeb.config = Soloco.RealTimeWeb.config
+		Soloco.RealTimeWeb.nunit = Soloco.RealTimeWeb.nunit
+		..\config\tests-appveyor.transform.config = ..\config\tests-appveyor.transform.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

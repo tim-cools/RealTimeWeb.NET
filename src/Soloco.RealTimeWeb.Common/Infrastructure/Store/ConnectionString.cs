@@ -22,23 +22,23 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
             Server = server;
         }
 
-        public static string GetString()
+        public static string GetString(string name = "documentStore")
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["documentStore"];
+            var connectionString = ConfigurationManager.ConnectionStrings[name];
             if (string.IsNullOrWhiteSpace(connectionString?.ConnectionString))
             {
-                throw new InvalidOperationException("ConnectionString 'documentStore' not found in app.config");
+                throw new InvalidOperationException($"ConnectionString '{name}' not found in app.config");
             }
             return connectionString.ConnectionString;
         }
         
-        public static ConnectionString Parse()
+        public static ConnectionString Parse(string name = "documentStore")
         {
             using (var connection = new NpgsqlConnection())
             {
                 var factory = DbProviderFactories.GetFactory(connection);
                 var builder = factory.CreateConnectionStringBuilder();
-                builder.ConnectionString = GetString();
+                builder.ConnectionString = GetString(name);
 
                 return new ConnectionString(
                     GetPart(builder, "Server"),

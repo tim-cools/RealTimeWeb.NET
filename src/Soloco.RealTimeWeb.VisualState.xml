@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1000]C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb.nunit</TopNode>
+  <SelectedNode>[0-1000]C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb.nunit</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb.nunit" Expanded="true" />
+    <Node UniqueName="[0-1030]C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb.Membership.Tests\bin\Debug\Soloco.RealTimeWeb.Membership.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1031]Soloco" Expanded="true" />
+    <Node UniqueName="[0-1032]Soloco.RealTimeWeb" Expanded="true" />
+    <Node UniqueName="[0-1033]Soloco.RealTimeWeb.Membership" Expanded="true" />
+    <Node UniqueName="[0-1001]Soloco.RealTimeWeb.Membership.Tests.IntegrationTestSetup" Expanded="true" />
+    <Node UniqueName="[0-1035]Soloco.RealTimeWeb.Membership.Tests.Integration" Expanded="true" />
+    <Node UniqueName="[0-1039]Soloco.RealTimeWeb.Membership.Tests.Integration.Queries" Expanded="true" />
+    <Node UniqueName="[0-1036]Soloco.RealTimeWeb.Membership.Tests.Integration.User" Expanded="true" />
+    <Node UniqueName="[0-1038]Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalUserSpecifications" Expanded="true" />
+    <Node UniqueName="[0-1037]Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpecifications" Expanded="true" />
+  </Nodes>
+</VisualState>
