@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Serilog;
 using Soloco.RealTimeWeb.Common.Infrastructure.Store;
 
 namespace Soloco.RealTimeWeb.Common.Tests.Storage
@@ -15,7 +16,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
 
         public static void CreateCleanStoreDatabase()
         {
-            Debug.WriteLine("Test Store Database Creating");
+            Log.Information("Test Store Database Creating");
 
             var connectionString = ConnectionString.Parse();
             VerifyIsLocalHost(connectionString);
@@ -25,11 +26,11 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
 
             var path = Environment.IsRunningOnMono && Environment.IsLinux ? _psqlPathLinux : GetWindowsPath();
 
-            Debug.WriteLine($"Executing script {tempScriptFileName} with exe {path} and command {command}.");
+            Log.Information($"Executing script {tempScriptFileName} with exe {path} and command {command}.");
 
             StartAndOutputProcess(path, command);
 
-            Debug.WriteLine("Test Store Database Created");
+            Log.Information("Test Store Database Created");
 
             File.Delete(tempScriptFileName);
         }
