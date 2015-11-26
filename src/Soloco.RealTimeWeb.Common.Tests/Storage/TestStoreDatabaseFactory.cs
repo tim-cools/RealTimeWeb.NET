@@ -64,6 +64,8 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
             {
                 process.Start();
                 var output = WriteOutputToDebug(process);
+                process.WaitForExit(20000);
+
                 if (process.ExitCode != 0)
                 {
                     throw new InvalidOperationException(
@@ -77,16 +79,17 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
         private static string WriteOutputToDebug(Process process)
         {
             var result = new StringBuilder();
-            while (!process.StandardOutput.EndOfStream)
-            {
-                var line = process.StandardOutput.ReadLine();
-                if (line != null)
-                {
-                    Debug.WriteLine(line);
-                    result.AppendLine(line);
-                }
-            }
+            AddOutput(process.StandardOutput, result, "StandardOutput");
+            AddOutput(process.StandardError, result, "StandardError");
             return result.ToString();
+        }
+
+        private static void AddOutput(StreamReader streamReader, StringBuilder result, string title)
+        {
+            var data = streamReader.ReadToEnd();
+            Debug.WriteLine(title);
+            Debug.WriteLine(data);
+            result.AppendLine($"{title}: {data}");
         }
 
         private static ProcessStartInfo ProcessInfo(string path, string command)
@@ -97,6 +100,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
                 Arguments = command,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 CreateNoWindow = true
             };
         }
