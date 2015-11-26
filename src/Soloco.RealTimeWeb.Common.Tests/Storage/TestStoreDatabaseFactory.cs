@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using Soloco.RealTimeWeb.Common.Infrastructure.Store;
 
 namespace Soloco.RealTimeWeb.Common.Tests.Storage
@@ -62,26 +63,30 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
             using (var process = new Process { StartInfo = ProcessInfo(path, command) })
             {
                 process.Start();
-                WriteOutputToDebug(process);
+                var output = WriteOutputToDebug(process);
                 if (process.ExitCode != 0)
                 {
                     throw new InvalidOperationException(
                         $"{$"Could not initilaize database. exit code: {process.ExitCode}"}{System.Environment.NewLine}" +
-                        "The database will be dropped. Are you connected you the database?");
+                        $"The database will be dropped. Are you connected you the database?{System.Environment.NewLine}" +
+                        $"{output}");
                 }
             }
         }
 
-        private static void WriteOutputToDebug(Process process)
+        private static string WriteOutputToDebug(Process process)
         {
+            var result = new StringBuilder();
             while (!process.StandardOutput.EndOfStream)
             {
                 var line = process.StandardOutput.ReadLine();
                 if (line != null)
                 {
                     Debug.WriteLine(line);
+                    result.AppendLine(line);
                 }
             }
+            return result.ToString();
         }
 
         private static ProcessStartInfo ProcessInfo(string path, string command)
