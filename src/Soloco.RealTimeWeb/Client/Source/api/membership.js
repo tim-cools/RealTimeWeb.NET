@@ -1,16 +1,13 @@
 import api from './';
 import navigate from './navigate';
-import { actions as userActions } from '../state/user';
-import dispatcher from '../state/dispatcher';
-import reqwest from 'reqwest';
+import { actions as userStateActions } from '../state/user';
 import store from 'store';
 
 const proxy = $.connection.membership;
 const storageKey = 'authorizationData';
 
 proxy.client.LoginSuccessful = function (name) {
-    var action = userActions.logon(name);
-    dispatcher.dispatch(action);
+    userStateActions.logon(name);
 };
 
 //function login(userName, password) {
@@ -20,56 +17,46 @@ proxy.client.LoginSuccessful = function (name) {
 function login(userName, password, useRefreshTokens) {
 
     function handleResponse(response) {
-            
-        const data = {
-            token: response.access_token, 
-            userName: userName,
-            useRefreshTokens: useRefreshTokens ? true : false,
-            refreshToken: useRefreshTokens ? response.refresh_token : null
-        };
-        store.set(storageKey, data);
-        loggedOn(userName, useRefreshTokens);
+        loggedOn(userName, response.access_token, useRefreshTokens);
     }
 
     function handleError(request) {
         const data = JSON.parse(request.response);
-        const action = userActions.logonFailed(data.error_description);
-        dispatcher.dispatch(action);
+        userStateActions.logonFailed(data.error_description);
     }
 
     var data = 'grant_type=password&username=' + userName + '&password=' + password;
-
     if (useRefreshTokens) {
         data = data + '&client_id=' + api.clientId;
     }
 
-    dispatch(userActions.logonPending());
+    userStateActions.logonPending();
 
-    reqwest({
-        url: api.serviceBase + 'token',
-        method: 'post',
-        data: data,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        success: handleResponse,
-        error: handleError
-    });
-};
+    api.post('token', data, handleResponse, handleError);
+}
 
 function logOff() {
 
     store.remove(storageKey);
 
-    const action = userActions.logoff();
-    dispatcher.dispatch(action);
-
+    userStateActions.logoff();
+    
     navigate.to('/');
-};
+}
 
-function loggedOn(userName, useRefreshTokens) {
-            
-    const action = userActions.logon(userName, useRefreshTokens);
-    dispatcher.dispatch(action);
+function loggedOn(userName, token, refreshToken) {
+         
+    const data = {
+        token: token, 
+        userName: userName,
+        useRefreshTokens: refreshToken ? true : false,
+        refreshToken: refreshToken
+    };
 
+    store.set(storageKey, data);
+        
+    userStateActions.logon(userName, refreshToken ? true : false);
+    
     navigate.to('/home');
 }
 
@@ -83,31 +70,50 @@ function externalProviderUrl(provider) {
 
 function externalProviderCompleted(fragment) {
 
-    if (fragment.haslocalaccount == 'False') {
-
-        const action = userActions.associateExternal(fragment.provider, fragment.external_access_token, fragment.external_user_name);
-        dispatcher.dispatch(action);
+    function handleResponse(response) {
+        loggedOn(response.userName, response.access_token, null);
     }
-    else {
-        throw "not yet implemented";
 
-        //Obtain access token and redirect to orders
-        var externalData = { provider: fragment.provider, externalAccessToken: fragment.external_access_token };
-        authService.obtainAccessToken(externalData).then(function (response) {
-
-            navigate.path('/orders');
-
-        },
-        function (err) {
-            $scope.message = err.error_description;
-        });
+    function handleError(request) {
+        const data = JSON.parse(request.response);
+        userStateActions.associateExternalFailed(data.error_description);
     }
-};
+
+    if (fragment.haslocalaccount === 'False') {
+        return userStateActions.associateExternal(fragment.provider, fragment.external_access_token, fragment.external_user_name);        
+    }
+
+    const data = 'provider=' + fragment.provider + '&externalAccessToken=' + fragment.external_access_token;
+
+    api.get('api/account/ObtainLocalAccessToken', data, handleResponse, handleError);
+}
+
+function registerExternal(userName, provider, externalAccessToken) {
+    
+    function handleResponse(response) {
+        loggedOn(response.userName, response.access_token, null);
+    }
+
+    function handleError(request) {
+        const data = JSON.parse(request.response);
+        userStateActions.associateExternalFailed(data.error);
+    }
+
+    const data = {
+        userName: userName,
+        provider: provider,
+        externalAccessToken: externalAccessToken
+    };
+
+    userStateActions.associateExternalPending();
+
+    api.post('api/account/registerexternal', data, handleResponse, handleError());
+}
 
 function initialize() {
     const data = store.get(storageKey);
     if (data) {
-        loggedOn(data.userName, data.useRefreshTokens);
+        loggedOn(data.userName, data.token, data.refreshToken);
     }
 }
 
@@ -116,9 +122,10 @@ $.connection.hub.start()
     .fail(function(){ console.log('Could not Connect!'); });
 
 export default {
-    login: login,
+login: login,
     logOff: logOff,
-    initialize: initialize,
-    externalProviderUrl: externalProviderUrl,
-    externalProviderCompleted: externalProviderCompleted
+initialize: initialize,
+externalProviderUrl: externalProviderUrl,
+externalProviderCompleted: externalProviderCompleted,
+registerExternal: registerExternal
 }

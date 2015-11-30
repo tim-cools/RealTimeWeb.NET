@@ -14,6 +14,8 @@ namespace Soloco.RealTimeWeb
 
             config.MapHttpAttributeRoutes();
 
+            config.EnableSystemDiagnosticsTracing();
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

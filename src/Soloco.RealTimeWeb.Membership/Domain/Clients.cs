@@ -12,7 +12,7 @@ namespace Soloco.RealTimeWeb.Membership.Domain
                 new Client
                 {
                     Id = Guid.NewGuid(),
-                    Key = "ngAuthApp",
+                    Key = "realTimeWebClient",
                     Secret= Helper.GetHash("abc@123"),
                     Name="AngularJS front-end Application",
                     ApplicationType = ApplicationTypes.JavaScript,

@@ -32,12 +32,12 @@ class LogonPage extends Component {
         const userName = this.refs.userNameInput.getValue();
         const { provider, externalAccessToken, externalUserName } = this.props;
 
-        membership.associateExternal(userName, provider, externalAccessToken, externalUserName);
+        membership.registerExternal(userName, provider, externalAccessToken, externalUserName);
     }
     
     render() {
         var title = ( <h2>Log On</h2> );
-        var loader = this.props.loading
+        var loader = this.props.processing
             ? ( <div>Loading</div> )
             : null;
 
@@ -105,14 +105,17 @@ class LogonPage extends Component {
 
 LogonPage.propTypes = {
     associateExternal: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired,
-    message: PropTypes.string
+    processing: PropTypes.bool.isRequired,
+    message: PropTypes.string,
+    provider: PropTypes.string,
+    externalAccessToken: PropTypes.string,
+    externalUserName: PropTypes.string
 };
 
 function select(state) {
     return {
-        loading: state.user.status === userStatus.logonPending,
-        associateExternal: state.user.status === userStatus.associateExternal,
+        processing: state.user.processing,
+        associateExternal: state.user.status === userStatus.associateExternal || state.user.status === userStatus.accociateExternalPending,
         message: state.user.message,
         provider: state.user.provider,
         externalAccessToken: state.user.externalAccessToken,
