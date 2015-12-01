@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Soloco.RealTimeWeb.Common.Infrastructure
 {
@@ -10,7 +12,7 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure
         public bool Succeeded { get; }
         public IEnumerable<string> Errors { get; }
 
-        private CommandResult(params string[] errors) : this((IEnumerable<string>)errors)
+        private CommandResult(params string[] errors) : this((IEnumerable<string>) errors)
         {
         }
 
@@ -25,7 +27,7 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure
             Errors = errors;
         }
 
-        protected CommandResult(bool success)
+        private CommandResult(bool success)
         {
             Succeeded = success;
             Errors = new string[0];
@@ -34,6 +36,19 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure
         public static CommandResult Failed(params string[] errors)
         {
             return new CommandResult(errors);
+        }
+
+        public CommandResult Merge(CommandResult second)
+        {
+            if (second == null) throw new ArgumentNullException(nameof(second));
+
+            if (second.Succeeded && Succeeded)
+            {
+                return Success;
+            }
+
+            var combinedErrors = Errors.Union(second.Errors).ToArray();
+            return Failed(combinedErrors);
         }
     }
 }

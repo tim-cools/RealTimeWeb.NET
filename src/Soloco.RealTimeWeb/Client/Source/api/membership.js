@@ -94,7 +94,7 @@ function registerExternal(userName, provider, externalAccessToken) {
         loggedOn(response.userName, response.access_token, null);
     }
 
-    function handleError(request) {
+    function handleError(request, a, b,c ) {
         const data = JSON.parse(request.response);
         userStateActions.associateExternalFailed(data.error);
     }
@@ -107,7 +107,7 @@ function registerExternal(userName, provider, externalAccessToken) {
 
     userStateActions.associateExternalPending();
 
-    api.post('api/account/registerexternal', data, handleResponse, handleError());
+    api.post('api/account/registerexternal', data, handleResponse, handleError);
 }
 
 function initialize() {

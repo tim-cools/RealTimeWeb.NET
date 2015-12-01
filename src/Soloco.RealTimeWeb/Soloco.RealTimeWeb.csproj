@@ -318,8 +318,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AuthorizationServerProvider.cs" />
     <Compile Include="Providers\RefreshTokenProvider.cs" />
+    <Compile Include="Results\ApiControllerDependencyProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Results\CommandResultActionResult.cs" />
+    <Compile Include="Results\IDependencyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

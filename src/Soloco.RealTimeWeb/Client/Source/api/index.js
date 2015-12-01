@@ -1,28 +1,28 @@
 import reqwest from 'reqwest';
 
+const jsonHeaders = { 'Accept': 'application/json' };
 const serviceBase = 'http://localhost:12777/';
-//var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 const clientId = 'realTimeWebClient';
 
-function get(url, data, responseHandler, errorHandler) {
+function call(verb, contentType, url, data, responseHandler, errorHandler) {
     reqwest({
         url: serviceBase + url,
-        method: 'get',
+        method: verb,
+        //type: 'json',
+        contentType: contentType,
         data: data,
+        headers: jsonHeaders,
         success: responseHandler,
         error: errorHandler
     });
 }
 
+function get(url, data, responseHandler, errorHandler) {
+    call('get', 'application/json', url, data, responseHandler, errorHandler);
+}
+
 function post(url, data, responseHandler, errorHandler) {
-    reqwest({
-        url: serviceBase + url,
-        method: 'post',
-        data: data,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        success: responseHandler,
-        error: errorHandler
-    });
+    call('post', 'application/x-www-form-urlencoded', url, data, responseHandler, errorHandler);
 }
 
 export default {

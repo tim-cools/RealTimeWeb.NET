@@ -31,8 +31,7 @@ export const actions = {
 
     logonPending: function() {
         return dispatch({
-            type: actionsDefinitions.LOG_ON,
-            processing: true
+            type: actionsDefinitions.LOG_ON_PENDING
         });
     },
 
@@ -60,14 +59,13 @@ export const actions = {
     
     associateExternalPending: function () {
         return dispatch({
-            type: actionsDefinitions.ASSOCIATE_EXTERNAL,
-            processing: true
+            type: actionsDefinitions.ASSOCIATE_EXTERNAL_PENDING
         });
     },
 
     associateExternalFailed: function (message) {
         return dispatch({
-            type: actionsDefinitions.ASSOCIATE_FAILED, 
+            type: actionsDefinitions.ASSOCIATE_EXTERNAL_FAILED, 
             message: message
         });
     }
@@ -81,7 +79,14 @@ export function reducer(state = notAuthenticated, action) {
             return {
                 status: userStatus.authenticated,
                 name: action.name,
-                processing: action.processing
+                processing: false
+            };
+
+        case actionsDefinitions.LOG_ON_PENDIG:
+            return {
+                status: userStatus.notAuthenticated,
+                name: state.name,
+                processing: true
             };
 
         case actionsDefinitions.LOG_ON_FAILED:
@@ -101,16 +106,28 @@ export function reducer(state = notAuthenticated, action) {
                 provider: action.provider,
                 externalAccessToken: action.externalAccessToken,
                 externalUserName: action.externalUserName,
-                processing: action.processing
+                processing: false
+            };
+
+        case actionsDefinitions.ASSOCIATE_EXTERNAL_PENDING:
+            return {
+                status: userStatus.associateExternal,
+                provider: state.provider,
+                externalAccessToken: state.externalAccessToken,
+                externalUserName: state.externalUserName,
+                processing: true
             };
 
         case actionsDefinitions.ASSOCIATE_EXTERNAL_FAILED:
             return {
                 status: userStatus.associateExternal, 
-                message: action.message
+                message: action.message,
+                provider: state.provider,
+                externalAccessToken: state.externalAccessToken,
+                externalUserName: state.externalUserName
             };
 
         default:
             return state;
     }
-}
+};

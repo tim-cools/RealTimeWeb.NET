@@ -147,25 +147,16 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
         private IHttpActionResult GetErrorResult(CommandResult result)
         {
-            if (result == null)
-            {
-                return InternalServerError();
-            }
+            var errors = ModelState
+                    .SelectMany(value => value.Value.Errors)
+                    .Select(error => error.ErrorMessage)
+                    .ToArray();
 
-            if (result.Succeeded)
-            {
-                return null;
-            }
+            var merged = result == null 
+                ? new CommandResult(errors) 
+                : result.Merge(CommandResult.Failed(errors));
 
-            if (result.Errors != null)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error);
-                }
-            }
-
-            return ModelState.IsValid ? (IHttpActionResult) BadRequest() : BadRequest(ModelState);
+            return merged.Succeeded ? null : new CommandResultActionResult(merged, this);
         }
 
         private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequestMessage request)
