@@ -1,5 +1,9 @@
-# RealTimeWeb.NET [![Build Status](https://travis-ci.org/tim-cools/RealTimeWeb.NET.svg?branch=master)](https://travis-ci.org/tim-cools/RealTimeWeb.NET)
-A Reactive Starter Kit for the .NET Framework
+# RealTimeWeb.NET 
+
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/9fu8q1fsxa66vkqs?svg=true)](https://ci.appveyor.com/project/tim-cools/realtimewebstarterkit-net)
+Mono: [![Build Status](https://travis-ci.org/tim-cools/RealTimeWebStarterKit.NET.svg)](https://travis-ci.org/tim-cools/RealTimeWebStarterKit.NET)
+
+A Real Time Web Starter Kit for the .NET Framework
 
 Used technology
 
