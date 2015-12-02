@@ -44,13 +44,13 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResult();
             }
 
             var command = new RegisterUserCommand(userModel.UserName, userModel.Password);
             var result = await _messageDispatcher.Execute(command);
 
-            return GetErrorResult(result) ?? Ok();
+            return ErrorResult(result) ?? Ok();
         }
 
         // GET api/Account/ExternalLogin
@@ -62,7 +62,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         {
             if (error != null)
             {
-                return BadRequest(Uri.EscapeDataString(error));
+                return ErrorResult(Uri.EscapeDataString(error));
             }
 
             if (!User.Identity.IsAuthenticated)
@@ -74,7 +74,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
             if (!string.IsNullOrWhiteSpace(result.Error))
             {
-                return BadRequest(result.Error);
+                return ErrorResult(result.Error);
             }
 
             var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
@@ -109,14 +109,14 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResult();
             }
 
             var command = new RegisterExternalUserCommand(model.UserName, model.Provider.AsLoginProvider(), model.ExternalAccessToken);
             var result = await _messageDispatcher.Execute(command);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResult(result);
             }
 
             var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
@@ -131,21 +131,21 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         {
             if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
             {
-                return BadRequest("Provider or external access token is not sent");
+                return ErrorResult("Provider or external access token is not sent");
             }
 
             var command = new VerifyExternalUserQuery(provider.AsLoginProvider(), externalAccessToken);
             var result = await _messageDispatcher.Execute(command);
             if (!result.Registered)
             {
-                return BadRequest("External user is not registered");
+                return ErrorResult("External user is not registered");
             }
 
             var accessTokenResponse = GenerateLocalAccessTokenResponse(result.UserName);
             return Ok(accessTokenResponse);
         }
 
-        private IHttpActionResult GetErrorResult(CommandResult result)
+        private IHttpActionResult ErrorResult(CommandResult result = null)
         {
             var errors = ModelState
                     .SelectMany(value => value.Value.Errors)
@@ -157,6 +157,12 @@ namespace Soloco.RealTimeWeb.Controllers.Api
                 : result.Merge(CommandResult.Failed(errors));
 
             return merged.Succeeded ? null : new CommandResultActionResult(merged, this);
+        }
+
+        private IHttpActionResult ErrorResult(string error)
+        {
+            var result = CommandResult.Failed(error);
+            return ErrorResult(result);
         }
 
         private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequestMessage request)

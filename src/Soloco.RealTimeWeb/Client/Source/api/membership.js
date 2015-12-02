@@ -94,9 +94,8 @@ function registerExternal(userName, provider, externalAccessToken) {
         loggedOn(response.userName, response.access_token, null);
     }
 
-    function handleError(request, a, b,c ) {
-        const data = JSON.parse(request.response);
-        userStateActions.associateExternalFailed(data.error);
+    function handleError(errors, request) {
+        userStateActions.associateExternalFailed(errors[0]);
     }
 
     const data = {

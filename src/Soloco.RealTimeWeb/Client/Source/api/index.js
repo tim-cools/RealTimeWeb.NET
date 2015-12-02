@@ -5,6 +5,14 @@ const serviceBase = 'http://localhost:12777/';
 const clientId = 'realTimeWebClient';
 
 function call(verb, contentType, url, data, responseHandler, errorHandler) {
+    
+    function parseErrors(handler) {
+        return function(request) {
+            const data = JSON.parse(request.response);
+            return handler(data.errors, request);
+        }
+    }
+
     reqwest({
         url: serviceBase + url,
         method: verb,
@@ -13,7 +21,7 @@ function call(verb, contentType, url, data, responseHandler, errorHandler) {
         data: data,
         headers: jsonHeaders,
         success: responseHandler,
-        error: errorHandler
+        error: parseErrors(errorHandler)
     });
 }
 

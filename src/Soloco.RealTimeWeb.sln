@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{26EE35
 		..\config\tests-appveyor.transform.config = ..\config\tests-appveyor.transform.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soloco.RealTimeWeb.Environment", "Soloco.RealTimeWeb.Environment\Soloco.RealTimeWeb.Environment.csproj", "{CBBEED56-01BE-44EB-8CCC-59C80530EBF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02395C44-A068-40CB-991A-6D35B7AE18DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBBEED56-01BE-44EB-8CCC-59C80530EBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBEED56-01BE-44EB-8CCC-59C80530EBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBEED56-01BE-44EB-8CCC-59C80530EBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBEED56-01BE-44EB-8CCC-59C80530EBF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
