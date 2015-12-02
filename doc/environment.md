@@ -1,0 +1,4 @@
+- Log in Aws console
+  - Security credentioals
+  - Create user (user accesskey and secret key)
+  - Assign rights: AdministratorAccess (TODO: assign more specific roles)
