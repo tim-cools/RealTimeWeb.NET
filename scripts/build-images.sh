@@ -1,1 +1,1 @@
-docker build -t soloco/realtimeweb-monitoring /src/Soloco.RealTimeWeb.Monitoring
+docker build -t soloco/realtimeweb-monitoring ./src/Soloco.RealTimeWeb.Monitoring
