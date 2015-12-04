@@ -13,16 +13,33 @@
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final"
+    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "Npgsql": "3.1.0-alpha5"
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:80"
+    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:5800"
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "dnx451": {
+      "dependencies": {
+        "DryIoc.Dnx.DependencyInjection": "1.0.0-rc1"
+      },
+      "frameworkAssemblies": {
+        "System.Data": "4.0.0.0"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-*",
+        "System.Collections": "4.0.11-*",
+        "System.Console": "4.0.0-*",
+        "System.Linq": "4.0.1-*",
+        "System.Threading": "4.0.11-*",
+        "System.Data.Common": "4.0.1-*"
+      }
+    }
   },
 
   "exclude": [
