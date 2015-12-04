@@ -61,7 +61,7 @@
     <Compile Include="Migrations\M201512021606_CreatePostgreSQLDatabase.cs" />
     <Compile Include="Core\Runner.cs" />
     <Compile Include="Core\Settings.cs" />
-    <Compile Include="Migrations\MigrationContext.cs" />
+    <Compile Include="Core\MigrationContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

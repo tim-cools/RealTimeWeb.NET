@@ -260,6 +260,7 @@
     <Content Include="content\fonts\fontawesome-webfont.svg" />
     <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <None Include="Dockerfile" />
     <Content Include="gulpfile.js" />
     <Content Include="Client\Source\components\AboutView\package.json" />
     <Content Include="Client\Source\components\LogonView\package.json" />
@@ -283,6 +284,7 @@
     <Content Include="Client\Statics\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Client\Statics\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Client\Statics\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="supervisord.conf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="index.html" />
     <Content Include="Scripts\angular-local-storage.min.js" />
