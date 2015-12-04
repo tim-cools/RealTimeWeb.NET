@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Soloco.RealTimeWeb.Environment.Core;
+using Soloco.RealTimeWeb.Environment.Migrations;
 
 namespace Soloco.RealTimeWeb.Environment
 {
@@ -11,15 +12,16 @@ namespace Soloco.RealTimeWeb.Environment
             var argument = ArgumentParser.Parse(args);
             var setting = new Settings(argument.Settings);
             var logger = new Logger();
+            var context = new MigrationContext(logger, setting);
             var runner = new Runner(logger);
 
             if (argument.Command == MigrationCommand.Up)
             {
-                runner.Up(setting);
+                runner.Up(context);
             }
-            else if (argument.Command == MigrationCommand.Up)
+            else if (argument.Command == MigrationCommand.Down)
             {
-                runner.Down(setting);
+                runner.Down(context);
             }
 
             WaitForUserIfDebuggerAttached();

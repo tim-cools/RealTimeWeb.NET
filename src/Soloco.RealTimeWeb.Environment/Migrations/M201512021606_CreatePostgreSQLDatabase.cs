@@ -10,100 +10,109 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
 {
     public class M201512021606_CreatePostgreSQLDatabase : IMigration
     {
-        public void Up(Settings settings)
+        private readonly MigrationContext _context;
+
+        public M201512021606_CreatePostgreSQLDatabase(MigrationContext context)
         {
-            using (var client = CreateClient(settings))
+            if (context == null) throw new ArgumentNullException(nameof(context));
+
+            _context = context;
+        }
+
+        public void Up()
+        {
+            using (var client = CreateClient())
             {
-                if (!DatabaseExists(client, settings))
+                if (!DatabaseExists(client))
                 {
-                    CreateDatabase(client, settings);
-                    WaitUntilInitialized(client, settings);
+                    CreateDatabase(client);
+                    WaitUntilInitialized(client);
                 }
             }
         }
 
-        public void Down(Settings settings)
+        public void Down()
         {
-            using (var client = CreateClient(settings))
+            using (var client = CreateClient())
             {
-                if (DatabaseExists(client, settings))
+                if (DatabaseExists(client))
                 {
-                    DeleteDatabase(client, settings);
-                    WaitUntilDatabaseDoesNotExists(client, settings);
+                    DeleteDatabase(client);
+                    WaitUntilDatabaseDoesNotExists(client);
                 }
             }
         }
 
-        private void WaitUntilDatabaseDoesNotExists(IAmazonRDS client, Settings settings)
+        private void WaitUntilDatabaseDoesNotExists(IAmazonRDS client)
         {
-            while (GetDatabaseInstance(client, settings) != null)
+            while (GetDatabaseInstance(client) != null)
             {
                 Thread.Sleep(1000);
             }
         }
 
-        private void DeleteDatabase(IAmazonRDS client, Settings settings)
+        private void DeleteDatabase(IAmazonRDS client)
         {
-            var request = new DeleteDBInstanceRequest { DBInstanceIdentifier = settings.DatabaseName, SkipFinalSnapshot = true };
+            var request = new DeleteDBInstanceRequest { DBInstanceIdentifier = _context.Settings.DatabaseName, SkipFinalSnapshot = true };
             client.DeleteDBInstance(request);
         }
 
-        private void WaitUntilInitialized(IAmazonRDS client, Settings settings)
+        private void WaitUntilInitialized(IAmazonRDS client)
         {
-            var instance = GetDatabaseInstance(client, settings);
+            var instance = GetDatabaseInstance(client);
             while (NotInitialized(instance))
             {
                 Thread.Sleep(1000);
-                instance = GetDatabaseInstance(client, settings);
+                instance = GetDatabaseInstance(client);
             }
         }
 
-        private static bool NotInitialized(DBInstance instance)
+        private bool NotInitialized(DBInstance instance)
         {
-            Console.WriteLine("New database instance status: " + instance.DBInstanceStatus);
+            _context.Logger.WriteLine("New database instance status: " + instance.DBInstanceStatus);
             return instance.DBInstanceStatus == "creating";
         }
 
-        private bool DatabaseExists(IAmazonRDS client, Settings settings)
+        private bool DatabaseExists(IAmazonRDS client)
         {
-            var instance = GetDatabaseInstance(client, settings);
+            var instance = GetDatabaseInstance(client);
             var databaseExists = instance != null;
-            Console.WriteLine("DatabaseExists: " + databaseExists);
+            _context.Logger.WriteLine("DatabaseExists: " + databaseExists);
             return databaseExists;
         }
 
-        private static DBInstance GetDatabaseInstance(IAmazonRDS client, Settings settings)
+        private DBInstance GetDatabaseInstance(IAmazonRDS client)
         {
             var request = new DescribeDBInstancesRequest();
             var instances = client.DescribeDBInstances(request);
 
             return instances.DBInstances
-                .FirstOrDefault(instance => string.Equals(instance.DBInstanceIdentifier, settings.DatabaseName, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(instance => string.Equals(instance.DBInstanceIdentifier, _context.Settings.DatabaseName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static void CreateDatabase(IAmazonRDS client, Settings settings)
+        private void CreateDatabase(IAmazonRDS client)
         {
             var request = new CreateDBInstanceRequest
             {
                 Engine = "postgres",
                 EngineVersion = "9.4.5",
-                DBInstanceClass = settings.DatabaseInstanceClass,
+                DBInstanceClass = _context.Settings.DatabaseInstanceClass,
                 AllocatedStorage = 5,
                 PubliclyAccessible = true,
-                BackupRetentionPeriod = settings.DatabaseBackupRetentionPeriod,
-                MasterUsername = settings.DatabaseMasterUsername,
-                MasterUserPassword = settings.DatabaseMasterPassword,
-                DBName = settings.DatabaseName,
-                DBInstanceIdentifier = settings.DatabaseName
+                BackupRetentionPeriod = _context.Settings.DatabaseBackupRetentionPeriod,
+                MasterUsername = _context.Settings.DatabaseMasterUsername,
+                MasterUserPassword = _context.Settings.DatabaseMasterPassword,
+                DBName = _context.Settings.DatabaseName,
+                DBInstanceIdentifier = _context.Settings.DatabaseName
             };
 
             client.CreateDBInstance(request);
         }
 
-        private static IAmazonRDS CreateClient(Settings settings)
+        private IAmazonRDS CreateClient()
         {
-            var credentials = new BasicAWSCredentials(settings.AmazonAccessKey, settings.AmazonSecretKey);
-            return new AmazonRDSClient(credentials, settings.AmazonRegion);
+            var credentials = new BasicAWSCredentials(_context.Settings.AmazonAccessKey, _context.Settings.AmazonSecretKey);
+            return new AmazonRDSClient(credentials, _context.Settings.AmazonRegion);
         }
     }
 }

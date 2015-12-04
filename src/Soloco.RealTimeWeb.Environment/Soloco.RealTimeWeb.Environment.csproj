@@ -56,12 +56,12 @@
     <Compile Include="Core\Arguments.cs" />
     <Compile Include="Core\ILogger.cs" />
     <Compile Include="Core\IMigration.cs" />
-    <Compile Include="Core\Log.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\MigrationCommand.cs" />
     <Compile Include="Migrations\M201512021606_CreatePostgreSQLDatabase.cs" />
     <Compile Include="Core\Runner.cs" />
     <Compile Include="Core\Settings.cs" />
+    <Compile Include="Migrations\MigrationContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
