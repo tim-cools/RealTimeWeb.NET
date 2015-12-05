@@ -58,6 +58,7 @@
     <Compile Include="Core\IMigration.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\MigrationCommand.cs" />
+    <Compile Include="Migrations\M201512051749_CreateTwoEC2Instances.cs" />
     <Compile Include="Migrations\M201512021606_CreatePostgreSQLDatabase.cs" />
     <Compile Include="Core\Runner.cs" />
     <Compile Include="Core\Settings.cs" />
