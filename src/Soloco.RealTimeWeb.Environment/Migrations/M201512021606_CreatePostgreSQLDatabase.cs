@@ -53,7 +53,11 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
 
         private void DeleteDatabase(IAmazonRDS client)
         {
-            var request = new DeleteDBInstanceRequest { DBInstanceIdentifier = _context.Settings.DatabaseName, SkipFinalSnapshot = true };
+            var request = new DeleteDBInstanceRequest
+            {
+                DBInstanceIdentifier = _context.Settings.DatabaseName,
+                SkipFinalSnapshot = true
+            };
             client.DeleteDBInstance(request);
         }
 
@@ -87,7 +91,10 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             var instances = client.DescribeDBInstances(request);
 
             return instances.DBInstances
-                .FirstOrDefault(instance => string.Equals(instance.DBInstanceIdentifier, _context.Settings.DatabaseName, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(
+                    instance =>
+                        string.Equals(instance.DBInstanceIdentifier, _context.Settings.DatabaseName,
+                            StringComparison.InvariantCultureIgnoreCase));
         }
 
         private void CreateDatabase(IAmazonRDS client)
