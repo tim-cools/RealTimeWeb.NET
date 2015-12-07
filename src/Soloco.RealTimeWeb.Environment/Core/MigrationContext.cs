@@ -1,6 +1,6 @@
-﻿using Soloco.RealTimeWeb.Environment.Core;
+﻿using Soloco.RealTimeWeb.Environment.Core.Configuration;
 
-namespace Soloco.RealTimeWeb.Environment.Migrations
+namespace Soloco.RealTimeWeb.Environment.Core
 {
     public class MigrationContext
     {

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Diagnostics;
+using System.Linq;
 using Soloco.RealTimeWeb.Environment.Core;
-using Soloco.RealTimeWeb.Environment.Migrations;
+using Soloco.RealTimeWeb.Environment.Core.Configuration;
 
 namespace Soloco.RealTimeWeb.Environment
 {
@@ -10,7 +11,7 @@ namespace Soloco.RealTimeWeb.Environment
         static void Main(string[] args)
         {
             var argument = ArgumentParser.Parse(args);
-            var setting = new Settings(argument.Settings);
+            var setting = new Settings(args.Where(value => !value.StartsWith("--")).ToArray());
             var logger = new Logger();
             var context = new MigrationContext(logger, setting);
             var runner = new Runner(logger);

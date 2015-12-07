@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Soloco.RealTimeWeb.Environment.Migrations;
@@ -39,7 +38,8 @@ namespace Soloco.RealTimeWeb.Environment.Core
 
         private IMigration[] GetMigrations(MigrationContext context)
         {
-            var types = Assembly.GetEntryAssembly()
+            var types = typeof(Runner)
+                .Assembly
                 .GetTypes()
                 .Where(type => typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract);
 

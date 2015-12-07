@@ -170,3 +170,6 @@ tmp
 [Bb]ower_modules/
 _remove*
 results
+
+# aspnet 5 config files
+appsettings.private.json

@@ -55,7 +55,7 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
         {
             var request = new DeleteDBInstanceRequest
             {
-                DBInstanceIdentifier = _context.Settings.DatabaseName,
+                DBInstanceIdentifier = _context.Settings.Database.Name,
                 SkipFinalSnapshot = true
             };
             client.DeleteDBInstance(request);
@@ -93,7 +93,7 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             return instances.DBInstances
                 .FirstOrDefault(
                     instance =>
-                        string.Equals(instance.DBInstanceIdentifier, _context.Settings.DatabaseName,
+                        string.Equals(instance.DBInstanceIdentifier, _context.Settings.Database.Name,
                             StringComparison.InvariantCultureIgnoreCase));
         }
 
@@ -103,14 +103,14 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             {
                 Engine = "postgres",
                 EngineVersion = "9.4.5",
-                DBInstanceClass = _context.Settings.DatabaseInstanceClass,
+                DBInstanceClass = _context.Settings.Database.InstanceClass,
                 AllocatedStorage = 5,
                 PubliclyAccessible = true,
-                BackupRetentionPeriod = _context.Settings.DatabaseBackupRetentionPeriod,
-                MasterUsername = _context.Settings.DatabaseMasterUsername,
-                MasterUserPassword = _context.Settings.DatabaseMasterPassword,
-                DBName = _context.Settings.DatabaseName,
-                DBInstanceIdentifier = _context.Settings.DatabaseName
+                BackupRetentionPeriod = _context.Settings.Database.BackupRetentionPeriod,
+                MasterUsername = _context.Settings.Database.MasterUserName,
+                MasterUserPassword = _context.Settings.Database.MasterUserPassword,
+                DBName = _context.Settings.Database.Name,
+                DBInstanceIdentifier = _context.Settings.Database.Name
             };
 
             client.CreateDBInstance(request);
@@ -118,8 +118,8 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
 
         private IAmazonRDS CreateClient()
         {
-            var credentials = new BasicAWSCredentials(_context.Settings.AmazonAccessKey, _context.Settings.AmazonSecretKey);
-            return new AmazonRDSClient(credentials, _context.Settings.AmazonRegion);
+            var credentials = new BasicAWSCredentials(_context.Settings.Amazon.AccessKey, _context.Settings.Amazon.SecretKey);
+            return new AmazonRDSClient(credentials, _context.Settings.Amazon.Region);
         }
     }
 }
