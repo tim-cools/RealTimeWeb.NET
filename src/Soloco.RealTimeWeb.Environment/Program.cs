@@ -11,7 +11,7 @@ namespace Soloco.RealTimeWeb.Environment
         static void Main(string[] args)
         {
             var argument = ArgumentParser.Parse(args);
-            var setting = new Settings(args.Where(value => !value.StartsWith("--")).ToArray());
+            var setting = new Settings(argument.Settings);
             var logger = new Logger();
             var context = new MigrationContext(logger, setting);
             var runner = new Runner(logger);

@@ -1,4 +1,7 @@
 
+using System;
+using System.Collections.Generic;
+
 namespace Soloco.RealTimeWeb.Environment.Core
 {
     internal static class ArgumentParser
@@ -6,6 +9,7 @@ namespace Soloco.RealTimeWeb.Environment.Core
         public static Arguments Parse(string[] args)
         {
             var command = MigrationCommand.Up;
+            var settings = new List<string>();
 
             foreach (var arg in args)
             {
@@ -18,10 +22,18 @@ namespace Soloco.RealTimeWeb.Environment.Core
                     case "--down":
                         command = MigrationCommand.Down;
                         break;
+
+                    default:
+                        if (arg.StartsWith("--"))
+                        {
+                            throw new InvalidOperationException("Invalid command: " + arg);
+                        }
+                        settings.Add(arg);
+                        break;
                 }
             }
 
-            return new Arguments(command);
+            return new Arguments(command, settings.ToArray());
         }
     }
 }
