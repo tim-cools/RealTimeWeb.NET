@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OAuth;
+using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Http.Authentication;
+using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json.Linq;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
@@ -20,13 +22,11 @@ using Soloco.RealTimeWeb.Results;
 
 namespace Soloco.RealTimeWeb.Controllers.Api
 {
-    [RoutePrefix("api/Account")]
-    public class AccountController : ApiController
+    [Route("api/Account")]
+    public class AccountController : Controller
     {
         private readonly IMessageDispatcher _messageDispatcher;
         private readonly IOAuthConfiguration _ioAuthConfiguration;
-
-        private IAuthenticationManager Authentication => Request.GetOwinContext().Authentication;
 
         public AccountController(IMessageDispatcher messageDispatcher, IOAuthConfiguration ioAuthConfiguration)
         {
@@ -40,7 +40,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(UserModel userModel)
+        public async Task<IActionResult> Register(UserModel userModel)
         {
             if (!ModelState.IsValid)
             {
@@ -54,11 +54,11 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         }
 
         // GET api/Account/ExternalLogin
-        [OverrideAuthentication]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        //[OverrideAuthentication]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
         [AllowAnonymous]
-        [Route("ExternalLogin", Name = "ExternalLogin")]
-        public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
+        [HttpGet("ExternalLogin")]
+        public async Task<IActionResult> GetExternalLogin(string provider, string error = null)
         {
             if (error != null)
             {
@@ -67,7 +67,8 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
             if (!User.Identity.IsAuthenticated)
             {
-                return new ChallengeResult(provider, this);
+                return new ChallengeResult(new List<string>  { provider });
+                //was return new ChallengeResult(provider, this);
             }
 
             var result = await ValidateClientAndRedirectUri(Request);
@@ -80,13 +81,14 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
             if (externalLogin == null)
             {
-                return InternalServerError();
+                return ErrorResult();
             }
 
             if (externalLogin.LoginProvider != provider.AsLoginProvider())
             {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                return new ChallengeResult(provider, this);
+                //await Authentication.SignOutAsync(DefaultAuthenticationTypes.ExternalCookie);
+                //await Authentication.SignOutAsync("Todo"); //Todo sign out
+                return new ChallengeResult(new List<string> { provider });
             }
 
             var query = new UserLoginQuery(externalLogin.LoginProvider, externalLogin.ProviderKey);
@@ -104,8 +106,8 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
         // POST api/Account/RegisterExternal
         [AllowAnonymous]
-        [Route("RegisterExternal")]
-        public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
+        [System.Web.Http.Route("RegisterExternal")]
+        public async Task<IActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -125,9 +127,9 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        [Route("ObtainLocalAccessToken")]
-        public async Task<IHttpActionResult> ObtainLocalAccessToken(string provider, string externalAccessToken)
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("ObtainLocalAccessToken")]
+        public async Task<IActionResult> ObtainLocalAccessToken(string provider, string externalAccessToken)
         {
             if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
             {
@@ -145,7 +147,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             return Ok(accessTokenResponse);
         }
 
-        private IHttpActionResult ErrorResult(CommandResult result = null)
+        private IActionResult ErrorResult(CommandResult result = null)
         {
             var errors = ModelState
                     .SelectMany(value => value.Value.Errors)
@@ -156,16 +158,16 @@ namespace Soloco.RealTimeWeb.Controllers.Api
                 ? new CommandResult(errors) 
                 : result.Merge(CommandResult.Failed(errors));
 
-            return merged.Succeeded ? null : new CommandResultActionResult(merged, this);
+            return merged.Succeeded ? null : new ObjectResult(merged);
         }
 
-        private IHttpActionResult ErrorResult(string error)
+        private IActionResult ErrorResult(string error)
         {
             var result = CommandResult.Failed(error);
             return ErrorResult(result);
         }
 
-        private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequestMessage request)
+        private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequest request)
         {
             Uri redirectUri;
 
@@ -203,36 +205,36 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             return new ValidatClientResult(null, redirectUri.AbsoluteUri);
         }
 
-        private static string GetQueryString(HttpRequestMessage request, string key)
+        private static string GetQueryString(HttpRequest request, string key)
         {
-            var queryStrings = request.GetQueryNameValuePairs();
+            var queryStrings = request.Query;
 
             if (queryStrings == null) return null;
 
-            var match = queryStrings
-                .FirstOrDefault(keyValue => string.Compare(keyValue.Key, key, StringComparison.OrdinalIgnoreCase) == 0);
-
-            return string.IsNullOrEmpty(match.Value) ? null : match.Value;
+            return queryStrings.ContainsKey(key) ? queryStrings[key].FirstOrDefault() : null;
         }
 
         private JObject GenerateLocalAccessTokenResponse(string userName)
         {
             var tokenExpiration = TimeSpan.FromDays(1);
 
-            var identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
+            var identity = new ClaimsIdentity();
 
             identity.AddClaim(new Claim(ClaimTypes.Name, userName));
             identity.AddClaim(new Claim("role", "user"));
 
-            var props = new AuthenticationProperties
+            var props = new AuthenticationProperties()
             {
                 IssuedUtc = DateTime.UtcNow,
                 ExpiresUtc = DateTime.UtcNow.Add(tokenExpiration),
             };
 
-            var ticket = new AuthenticationTicket(identity, props);
+            var principal = new ClaimsPrincipal(identity);
+            var ticket = new AuthenticationTicket(principal, props, "Schema"); //todo get schema from config
 
-            var accessToken = _ioAuthConfiguration.Bearer.AccessTokenFormat.Protect(ticket);
+            //var accessToken = _ioAuthConfiguration.Bearer.AccessTokenFormat.Protect(ticket);
+            //todo get access_token schema from somewhere
+            var accessToken = "this";
 
             var tokenResponse = new JObject(
                 new JProperty("userName", userName),

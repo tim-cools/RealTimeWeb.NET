@@ -1,4 +1,4 @@
-﻿namespace Soloco.RealTimeWeb.Monitoring.Controllers
+﻿namespace Soloco.RealTimeWeb.Monitoring.Infrastructure
 {
     public class ServiceStatus
     {

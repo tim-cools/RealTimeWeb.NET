@@ -12,16 +12,15 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class VerifyExternalUserQueryHandler : QueryHandler<VerifyExternalUserQuery, VerifyExternalUserResult>
     {
-        private readonly UserManager<User, Guid> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
-        public VerifyExternalUserQueryHandler(IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
+        public VerifyExternalUserQueryHandler(UserManager<User> userManager ,IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
             : base(session, scope)
         {
             _providerTokenValidatorFactory = providerTokenValidatorFactory;
 
-            var userStore = new UserStore(session);
-            _userManager = new UserManager<User, Guid>(userStore);
+            _userManager = userManager;
         }
 
         protected override async Task<VerifyExternalUserResult> Execute(VerifyExternalUserQuery query)
@@ -33,8 +32,7 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
                 return new VerifyExternalUserResult(false);
             }
 
-            var login = new UserLoginInfo(query.Provider.ToString(), verifiedAccessToken.UserId);
-            var user = await _userManager.FindAsync(login);
+            var user = await _userManager.FindByLoginAsync(query.Provider.ToString(), verifiedAccessToken.UserId);
 
             return user == null
                 ? new VerifyExternalUserResult(false)

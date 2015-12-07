@@ -5,19 +5,17 @@ using Microsoft.AspNet.Identity;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
-using Soloco.RealTimeWeb.Membership.Services;
 
 namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class UserByNameQueryHandler : QueryHandler<UserByNameQuery, User>
     {
-        private readonly UserManager<Domain.User, Guid> _userManager;
+        private readonly UserManager<Domain.User> _userManager;
 
-        public UserByNameQueryHandler(IDocumentSession session, IDisposable scope)
+        public UserByNameQueryHandler(UserManager<Domain.User> userManager, IDocumentSession session, IDisposable scope)
               : base(session, scope)
         {
-            var userStore = new UserStore(session);
-            _userManager = new UserManager<Domain.User, Guid>(userStore);
+            _userManager = userManager;
         }
 
         protected override async Task<User> Execute(UserByNameQuery query)

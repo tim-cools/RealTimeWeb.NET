@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Soloco.RealTimeWeb.Monitoring.Controllers;
+using Soloco.RealTimeWeb.Monitoring.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Monitoring
 {

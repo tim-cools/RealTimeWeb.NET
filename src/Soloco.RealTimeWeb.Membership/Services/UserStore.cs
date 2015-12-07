@@ -1,5 +1,10 @@
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
@@ -8,7 +13,12 @@ using Soloco.RealTimeWeb.Membership.Domain;
 
 namespace Soloco.RealTimeWeb.Membership.Services
 {
-    public class UserStore : IUserStore<User, Guid>, IUserPasswordStore<User, Guid>, IUserLoginStore<User, Guid>
+    public class UserStore : IUserLoginStore<User>,
+        IUserRoleStore<User>,
+        IUserClaimStore<User>,
+        IUserPasswordStore<User>,
+        IUserSecurityStampStore<User>,
+        IUserEmailStore<User>
     {
         private readonly IDocumentSession _session;
 
@@ -23,94 +33,91 @@ namespace Soloco.RealTimeWeb.Membership.Services
         {
         }
 
-        public async Task CreateAsync(User user)
-        {            
-            _session.Store(user);
+        public async Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            return user.Id.ToString();
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken)
         {
-            _session.Store(user);
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            return user.UserName;
         }
 
-        public async Task DeleteAsync(User user)
+        public async Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken)
         {
-            //_users.Remove(user.Id);
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            user.UserName = userName;
+        }
+
+        public async Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            return user.NormalizedUserName;
+        }
+
+        public async Task SetNormalizedUserNameAsync(User user, string normalizedName,
+            CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            user.NormalizedUserName = normalizedName;
+        }
+
+        public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            _session.Store(user);
+
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            _session.Store(user);
+
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
         }
 
-        public async Task<User> FindByIdAsync(Guid userId)
+        public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return _session.Load<User>(userId);
         }
 
-        public async Task<User> FindByNameAsync(string userName)
+        public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var identityUser = _session.GetFirst<User>(user => user.UserName == userName);
-            return identityUser;
+            cancellationToken.ThrowIfCancellationRequested();
+            return _session.GetFirst<User>(user => user.NormalizedUserName == normalizedUserName);
         }
 
-        public Client FindClientByKey(string clientKey)
+        public async Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            //return _clients.Values.SingleOrDefault(client => client.Key == clientKey);
-            throw new NotImplementedException();
-        }
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (login == null) throw new ArgumentNullException(nameof(login));
 
-        public RefreshToken RefreshTokensBySubjectAndClient(string subject, string clientKey)
-        {
-            //return _refreshTokens.Values.SingleOrDefault(where => where.ClientKey == clientKey && where.Subject == subject);
-            throw new NotImplementedException();
-        }
+            cancellationToken.ThrowIfCancellationRequested();
 
-        public async Task<bool> RefreshTokensAdd(RefreshToken token)
-        {
-            //_refreshTokens.Add(token.Id, token);
-            //return true;
-            throw new NotImplementedException();
-        }
-
-        public async Task<RefreshToken> RefreshTokensFindAsync(string refreshTokenHash)
-        {
-            //return _refreshTokens.Values.SingleOrDefault(where => where.Hash == refreshTokenHash);
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> RefreshTokenRemove(Guid refreshTokenId)
-        {
-            //if (!_refreshTokens.ContainsKey(refreshTokenId))
-            //{
-            //    return false;
-            //}
-
-            //_refreshTokens.Remove(refreshTokenId);
-            //return true;
-            throw new NotImplementedException();
-        }
-
-        public List<RefreshToken> RefreshTokensToList()
-        {
-            //return _refreshTokens.Values.ToList();
-            throw new NotImplementedException();
-        }
-
-        public async Task SetPasswordHashAsync(User user, string passwordHash)
-        {
-            user.PasswordHash = passwordHash;
-        }
-
-        public async Task<string> GetPasswordHashAsync(User user)
-        {
-            return user.PasswordHash;
-        }
-
-        public async Task<bool> HasPasswordAsync(User user)
-        {
-            return user.PasswordHash != null;
-        }
-
-        public async Task AddLoginAsync(User user, UserLoginInfo login)
-        {
-            var entity = new Domain.UserLogin
+            var entity = new UserLogin
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
@@ -121,25 +128,200 @@ namespace Soloco.RealTimeWeb.Membership.Services
             _session.Store(entity);
         }
 
-        public async Task RemoveLoginAsync(User user, UserLoginInfo login)
+        public async Task RemoveLoginAsync(User user, string loginProvider, string providerKey,
+            CancellationToken cancellationToken)
         {
-            //var entry =
-            //    _usersLogin.SingleOrDefault(
-            //        where => user.Id == where.User.Id && where.Info.ProviderKey == login.ProviderKey);
-            //_usersLogin.Remove(entry);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var login = _session.Query<UserLogin>()
+                .FirstOrDefault(criteria => criteria.UserId == user.Id 
+                    && criteria.LoginProvider == loginProvider 
+                    && criteria.ProviderKey == providerKey);
+
+            if (login != null)
+            {
+                throw new InvalidOperationException("Could not find the login: '" + loginProvider + "' key:' " + providerKey);
+            }
+            _session.Delete(login);
+        }
+
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return _session.Query<UserLogin>()
+                .Where(criteria => criteria.UserId == user.Id)
+                .Select(login => new UserLoginInfo(login.LoginProvider, login.ProviderKey, login.UserName))
+                .ToList();
+        }
+
+        public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var login = _session.Query<UserLogin>()
+                .FirstOrDefault(criteria => criteria.LoginProvider == loginProvider && criteria.ProviderKey == providerKey);
+
+            return login != null ? _session.Load<User>(login.UserId) : null;
+        }
+
+        public async Task AddToRoleAsync(User   user, string roleName, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            user.Roles.Add(roleName);
+        }
+
+        public async Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            user.Roles.Remove(roleName);
+        }
+
+        public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return user.Roles;
+        }
+
+        public async Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return user.Roles.Contains(roleName);
+        }
+
+        public async Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
         }
 
-        public async Task<IList<UserLoginInfo>> GetLoginsAsync(User user)
+        public async Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
         {
-            //return _usersLogin.Where(@where => user.Id == @where.User.Id).Select(entry => entry.Info).ToList();
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new NotImplementedException();
+
+        }
+
+        public async Task AddClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
         }
 
-        public async Task<User> FindAsync(UserLoginInfo login)
+        public async Task ReplaceClaimAsync(User user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
         {
-            var userLogin = _session.GetFirst<UserLogin>(criteria => criteria.ProviderKey == login.ProviderKey);
-            return userLogin != null ? await FindByIdAsync(userLogin.UserId) : null;
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new NotImplementedException();
+        }
+
+        public async Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<User>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new NotImplementedException();
+        }
+
+        public async Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            user.PasswordHash = passwordHash;
+        }
+
+        public async Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            return user.PasswordHash;
+        }
+
+        public async Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            return !string.IsNullOrEmpty(user.PasswordHash);
+        }
+
+        public async Task SetSecurityStampAsync(User user, string stamp, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new NotImplementedException();
+        }
+
+        public async Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new NotImplementedException();
+        }
+
+        public async Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            user.Email = email;
+        }
+
+        public async Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            return user.Email;
+        }
+
+        public async Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            return user.EmailConfirmed;
+        }
+
+        public async Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            user.EmailConfirmed = confirmed;
+        }
+
+        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return _session.Query<User>()
+                .FirstOrDefault(criteria => criteria.NormalizedEmail == normalizedEmail);
+        }
+
+        public async Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            return user.NormalizedEmail;
+        }
+
+        public async Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            cancellationToken.ThrowIfCancellationRequested();
+            user.NormalizedEmail = normalizedEmail;
         }
     }
 }
+
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously

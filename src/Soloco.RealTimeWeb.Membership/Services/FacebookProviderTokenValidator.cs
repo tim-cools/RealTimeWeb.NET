@@ -1,7 +1,6 @@
 using System;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Membership.Domain;
-using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Services

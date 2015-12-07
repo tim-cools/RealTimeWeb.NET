@@ -1,30 +1,14 @@
-﻿using NUnit.Framework;
+﻿using System;
+// ReSharper disable DoNotCallOverridableMethodsInConstructor
 
 namespace Soloco.RealTimeWeb.Common.Tests
 {
-    [TestFixture]
-    public abstract class SpecificationBase
+    public abstract class SpecificationBase : IDisposable
     {
-        [SetUp]
-        public virtual void Initialize()
+        protected SpecificationBase()
         {
             Given();
-
-            try
-            {
-                When();
-            }
-            catch
-            {
-                CleanUp();
-                throw;
-            }
-        }
-
-        [TearDown]
-        public void InternCleanup()
-        {
-            CleanUp();
+            When();
         }
 
         protected virtual void Given()
@@ -35,7 +19,7 @@ namespace Soloco.RealTimeWeb.Common.Tests
         {
         }
 
-        protected virtual void CleanUp()
+        public virtual void Dispose()
         {
         }
     }

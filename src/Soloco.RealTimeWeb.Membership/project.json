@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0-*",
+  "description": "Soloco.RealTimeWeb.Membership Class Library",
+  "authors": [ "Class Library template" ],
+  "tags": [""],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Soloco.RealTimeWeb.Membership"
+  },
+
+  "frameworks": {
+    "dnx46": { }
+  },
+  "dependencies": {
+    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-beta7",
+    "Soloco.RealTimeWeb.Common": "1.0.0-*",
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-*"
+  }
+}

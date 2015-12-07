@@ -1,22 +1,30 @@
 ﻿using Marten;
 using Marten.Schema;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 
 namespace Soloco.RealTimeWeb.Common.Tests
 {
     public abstract class ServiceTestBase<T> : SpecificationBase
     {
+        protected IntegrationTestFixture Fixture { get; set; }
+
         protected IDocumentSession Session { get; private set; }
 
         protected T Service { get; private set; }
+
+        protected ServiceTestBase(IntegrationTestFixture fixture)
+        {
+            Fixture = fixture;
+        }
 
         protected override void Given()
         {
             base.Given();
 
-            Service = TestContainer.Resolve<T>();
-            Session = TestContainer.Resolve<IDocumentSession>();
+            Service = Fixture.Container.Resolve<T>();
+            Session = Fixture.Container.Resolve<IDocumentSession>();
 
-            var cleaner = TestContainer.Resolve<IDocumentCleaner>();
+            var cleaner = Fixture.Container.Resolve<IDocumentCleaner>();
             cleaner.DeleteAllDocuments();
         }
 
@@ -25,12 +33,12 @@ namespace Soloco.RealTimeWeb.Common.Tests
             base.When();
             Session.Dispose();
 
-            Session = TestContainer.Resolve<IDocumentSession>();
+            Session = Fixture.Container.Resolve<IDocumentSession>();
         }
 
-        protected override void CleanUp()
+        public override void Dispose()
         {
-            base.CleanUp();
+            base.Dispose();
 
             DisposeSession();
         }

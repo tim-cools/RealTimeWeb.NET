@@ -1,5 +1,5 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
 using Shouldly;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -9,11 +9,14 @@ using Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
-    [TestFixture]
-    public class WhenVerifyingExternalUser : ServiceTestBase<IMessageDispatcher>
+    public class WhenVerifyingExternalUser : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private VerifyExternalUserResult _result;
         private VerifyExternalUserQuery _query;
+
+        public WhenVerifyingExternalUser(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void When()
         {
@@ -24,7 +27,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _result = Service.ExecuteNowWithTimeout(_query);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheRefreshTokensShouldBeReturned()
         {
             _result.ShouldNotBeNull();

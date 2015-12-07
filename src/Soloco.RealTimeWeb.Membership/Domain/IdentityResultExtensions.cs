@@ -13,7 +13,7 @@ namespace Soloco.RealTimeWeb.Membership.Domain
 
             return result.Succeeded 
                 ? CommandResult.Success 
-                : CommandResult.Failed(result.Errors.ToArray());
+                : CommandResult.Failed(result.Errors.Select(error => error.Code).ToArray());
         }
 
         public static void ThrowWhenFailed(this IdentityResult result, string message)
@@ -22,7 +22,7 @@ namespace Soloco.RealTimeWeb.Membership.Domain
 
             if (!result.Succeeded)
             {
-                throw new BusinessException(message, result.Errors);
+                throw new BusinessException(message, result.Errors.Select(error => error.Code));
             }            
         }
     }

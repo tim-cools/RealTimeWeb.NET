@@ -29,10 +29,9 @@ namespace Soloco.RealTimeWeb.Membership.Domain
             {
                 LoginProvider = providerKeyClaim.Issuer.AsLoginProvider(),
                 ProviderKey = providerKeyClaim.Value,
-                UserName = identity.FindFirstValue(ClaimTypes.Name),
-                ExternalAccessToken = identity.FindFirstValue("ExternalAccessToken"),
+                UserName = identity.Name, //was FindFirstValue
+                ExternalAccessToken = identity.FindFirst("ExternalAccessToken").Value // was FindFirstValue("ExternalAccessToken"),
             };
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
+using Shouldly;
+using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -11,13 +12,15 @@ using Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalUserSpecifications
 {
-    [TestFixture]
-    [Ignore("The google access tokens expire really fast. We need a way to automate the retrieval of the token. (Selenium)")]
-    public class WhenRegisteringAGoogleUser : ServiceTestBase<IMessageDispatcher>
+    public class WhenRegisteringAGoogleUser : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private CommandResult _result;
         private RegisterExternalUserCommand _command;
         private string _name;
+
+        public WhenRegisteringAGoogleUser(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void When()
         {
@@ -29,48 +32,30 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalU
             _result = Service.ExecuteNowWithTimeout(_command);
         }
 
-        [Test]
+        [Fact(Skip = "The google access tokens expire really fast. We need a way to automate the retrieval of the token. (Selenium)")]
         public void ThenTheResultShouldSucceed()
         {
-            Assert.That(_result.Succeeded, Is.True);
+            _result.Succeeded.ShouldBeTrue();
         }
 
-        [Test]
+        [Fact(Skip = "The google access tokens expire really fast. We need a way to automate the retrieval of the token. (Selenium)")]
         public void ThenTheResultShouldHaveNoErrors()
         {
             if (_result.Errors.Any())
             {
                 var errors = _result.Errors.Aggregate(string.Empty, (value, result) => $"{result}, {value}");
-                throw new AssertionException(errors);
+                throw new InvalidOperationException(errors);
             }
         }
 
-        //[Test]
-        //public void ThenAUserShouldBeStored()
-        //{
-        //    var userByNameQuery = new UserByNameQuery(_command.UserName);
-        //    var user = Service.ExecuteNowWithTimeout(userByNameQuery);
-
-        //    Assert.IsNotNull(user);
-        //}
-
-        [Test]
+        [Fact]
         public void ThenAUserShouldBeAbleToLogin()
         {
             var query = new VerifyExternalUserQuery(LoginProvider.Google, ExternalAccessTokens.Google);
             var result = Service.ExecuteNowWithTimeout(query);
 
-            Assert.That(result.Registered, Is.True);
-            Assert.That(result.UserName, Is.EqualTo(_name));
+            result.Registered.ShouldBeTrue();
+            result.UserName.ShouldBe(_name);
         }
-
-        //[Test]
-        //public void ThenADifferentPasswordShouldFailToLogin()
-        //{
-        //    var query = new ValidUserLoginQuery(_command.UserName, "wrong password");
-        //    var valid = Service.ExecuteNowWithTimeout(query);
-
-        //    Assert.That(valid, Is.False);
-        //}
     }
 }

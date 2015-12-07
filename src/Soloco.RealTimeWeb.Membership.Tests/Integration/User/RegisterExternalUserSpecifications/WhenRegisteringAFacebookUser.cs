@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
+using Shouldly;
+using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -11,12 +12,15 @@ using Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalUserSpecifications
 {
-    [TestFixture]
-    public class WhenRegisteringAFacebookUser : ServiceTestBase<IMessageDispatcher>
+    public class WhenRegisteringAFacebookUser : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private CommandResult _result;
         private RegisterExternalUserCommand _command;
         private string _name;
+
+        public WhenRegisteringAFacebookUser(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void When()
         {
@@ -28,23 +32,23 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalU
             _result = Service.ExecuteNowWithTimeout(_command);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheResultShouldSucceed()
         {
-            Assert.That(_result.Succeeded, Is.True);
+            _result.Succeeded.ShouldBeTrue();
         }
 
-        [Test]
+        [Fact]
         public void ThenTheResultShouldHaveNoErrors()
         {
             if (_result.Errors.Any())
             {
                 var errors = _result.Errors.Aggregate(string.Empty, (value, result) => $"{result}, {value}");
-                throw new AssertionException(errors);
+                throw new InvalidOperationException(errors);
             }
         }
 
-        //[Test]
+        //[Fact]
         //public void ThenAUserShouldBeStored()
         //{
         //    var userByNameQuery = new UserByNameQuery(_command.UserName);
@@ -53,17 +57,17 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalU
         //    Assert.IsNotNull(user);
         //}
 
-        [Test]
+        [Fact]
         public void ThenAUserShouldBeAbleToLogin()
         {
             var query = new VerifyExternalUserQuery(LoginProvider.Facebook, ExternalAccessTokens.Facebook);
             var result = Service.ExecuteNowWithTimeout(query);
 
-            Assert.That(result.Registered, Is.True);
-            Assert.That(result.UserName, Is.EqualTo(_name));
+            result.Registered.ShouldBeTrue();
+            result.UserName.ShouldBe(_name);
         }
 
-        //[Test]
+        //[Fact]
         //public void ThenADifferentPasswordShouldFailToLogin()
         //{
         //    var query = new ValidUserLoginQuery(_command.UserName, "wrong password");

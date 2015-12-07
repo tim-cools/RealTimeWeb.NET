@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-*",
+  "description": "Soloco.RealTimeWeb.Membership.Messages Class Library",
+  "authors": [ "Class Library template" ],
+  "tags": [""],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Soloco.RealTimeWeb.Membership.Messages"
+  },
+
+  "frameworks": {
+    "dnx46": { }
+  },
+  "dependencies": {
+    "Soloco.RealTimeWeb.Common": "1.0.0-*"
+  }
+}

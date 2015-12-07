@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 
 namespace Soloco.RealTimeWeb.Controllers
 {
-    [RoutePrefix("api/RefreshTokens")]
-    public class RefreshTokensController : ApiController
+    [Route("api/RefreshTokens")]
+    public class RefreshTokensController : Controller
     {
         private readonly IMessageDispatcher _messageDispatcher;
 
@@ -19,9 +20,9 @@ namespace Soloco.RealTimeWeb.Controllers
             _messageDispatcher = messageDispatcher;
         }
 
-        [Authorize(Users="Admin")]
-        [Route("")]
-        public async Task<IHttpActionResult> Get()
+        [Authorize(Roles = "Admin")]
+        [Microsoft.AspNet.Mvc.Route("")]
+        public async Task<IActionResult> Get()
         {
             var query = new RefreshTokensQuery();
             var tokens = await _messageDispatcher.Execute(query);
@@ -29,14 +30,14 @@ namespace Soloco.RealTimeWeb.Controllers
             return Ok(tokens);
         }
 
-        [Authorize(Users = "Admin")]
-        [Route("")]
-        public async Task<IHttpActionResult> Delete(Guid tokenId)
+        [Authorize(Roles = "Admin")]
+        [Microsoft.AspNet.Mvc.Route("")]
+        public async Task<IActionResult> Delete(Guid tokenId)
         {
             var command = new DeleteRefreshTokenCommand(tokenId);
             var result = await _messageDispatcher.Execute(command);
 
-            return result.Succeeded ? (IHttpActionResult) Ok() : BadRequest("Token Id does not exist");
+            return result.Succeeded ? (IActionResult) Ok() : HttpBadRequest("Token Id does not exist");
         }
     }
 }

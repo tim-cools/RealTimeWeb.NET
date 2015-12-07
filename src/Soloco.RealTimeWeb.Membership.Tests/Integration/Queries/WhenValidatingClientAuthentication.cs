@@ -1,5 +1,6 @@
 ﻿using System;
-using NUnit.Framework;
+using Shouldly;
+using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
@@ -7,11 +8,15 @@ using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
-    [TestFixture]
-    public class WhenValidatingClientAuthentication : ServiceTestBase<IMessageDispatcher>
+    public class WhenValidatingClientAuthentication : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private ValidateClientAuthenticationResult _result;
         private ValidateClientAuthenticationQuery _query;
+
+
+        public WhenValidatingClientAuthentication(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void When()
         {
@@ -24,10 +29,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _result = Service.ExecuteNowWithTimeout(_query);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheRefreshTokensShouldBeReturned()
         {
-            Assert.That(_result, Is.Not.Null);
+            _result.ShouldNotBeNull();
         }
     }
 }

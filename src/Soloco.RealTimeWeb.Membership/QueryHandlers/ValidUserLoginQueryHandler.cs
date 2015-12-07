@@ -11,20 +11,18 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class ValidUserLoginQueryHandler : QueryHandler<ValidUserLoginQuery, bool>
     {
-        private readonly UserManager<User, Guid> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public ValidUserLoginQueryHandler(IDocumentSession session, IDisposable scope)
+        public ValidUserLoginQueryHandler(UserManager<User> userManager, IDocumentSession session, IDisposable scope)
               : base(session, scope)
         {
-            var userStore = new UserStore(session);
-            _userManager = new UserManager<User, Guid>(userStore);
+            _userManager = userManager;
         }
 
         protected override async Task<bool> Execute(ValidUserLoginQuery query)
         {
-            var result = await _userManager.FindAsync(query.UserName, query.Password);
-
-            return result != null;
+            var user = await _userManager.FindByNameAsync(query.UserName);
+            return await _userManager.CheckPasswordAsync(user, query.Password);
         }
     }
 }

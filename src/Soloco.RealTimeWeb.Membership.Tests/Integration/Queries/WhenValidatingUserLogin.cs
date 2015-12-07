@@ -1,16 +1,20 @@
 using System;
-using NUnit.Framework;
+using Shouldly;
+using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
-    [TestFixture]
-    public class WhenValidatingUserLogin : ServiceTestBase<IMessageDispatcher>
+    public class WhenValidatingUserLogin : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private bool _result;
         private ValidUserLoginQuery _query;
+
+        public WhenValidatingUserLogin(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void When()
         {
@@ -23,10 +27,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _result = Service.ExecuteNowWithTimeout(_query);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheRefreshTokensShouldBeReturned()
         {
-            Assert.That(_result, Is.False);
+            _result.ShouldBeFalse();
         }
     }
 }

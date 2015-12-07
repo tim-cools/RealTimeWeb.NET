@@ -1,4 +1,5 @@
 {
+  "name": "Soloco.RealTimeWeb",
   "private": true,
   "engines": {
     "node": ">= 0.12",

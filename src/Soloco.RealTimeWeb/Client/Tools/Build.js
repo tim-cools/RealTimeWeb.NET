@@ -16,7 +16,7 @@ var babelify = require('babelify');
 console.log('building');
 
 var config = {
-    target: './Client/Build/',
+    target: './wwwroot/',
     app: 'Client/Source/app.js',
     appWatch: 'Client/Source/**/*.*',
     appTarget: 'app.js',

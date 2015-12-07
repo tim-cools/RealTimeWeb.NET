@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using Shouldly;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -11,11 +11,14 @@ using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
-    [TestFixture]
-    public class WhenQueryingRefreshTokens : ServiceTestBase<IMessageDispatcher>
+    public class WhenQueryingRefreshTokens : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private IEnumerable<RefreshToken> _result;
         private RefreshTokensQuery _query;
+
+        public WhenQueryingRefreshTokens(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void Given()
         {
@@ -40,13 +43,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _result = Service.ExecuteNowWithTimeout(_query);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheRefreshTokensShouldBeReturned()
         {
-            Assert.That(_result, Is.Not.Null);
+            _result.ShouldNotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void ThenAsLeastOnRefreshTokenShouldBeReturned()
         {
             _result.Count().ShouldBeGreaterThanOrEqualTo(1);

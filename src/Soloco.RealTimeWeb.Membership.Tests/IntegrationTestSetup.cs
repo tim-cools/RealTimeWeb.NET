@@ -1,29 +1,12 @@
-﻿using NUnit.Framework;
-using Soloco.RealTimeWeb.Common;
-using Soloco.RealTimeWeb.Common.Infrastructure;
-using Soloco.RealTimeWeb.Common.Tests;
-using Soloco.RealTimeWeb.Common.Tests.Storage;
+﻿using Soloco.RealTimeWeb.Common.Tests;
 
 namespace Soloco.RealTimeWeb.Membership.Tests
 {
-    [SetUpFixture]
-    public class IntegrationTestSetup
+    public class MembershipIntegrationTestFixture : IntegrationTestFixture
     {
-        [SetUp]
-        public void Setup()
+        public MembershipIntegrationTestFixture()
         {
-            LoggingInitializer.Initialize();
-            TestStoreDatabaseFactory.CreateCleanStoreDatabase();
-
-            TestContainer.Initialize(container => container
-                .RegisterCommon()
-                .RegisterMembership());
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            TestContainer.Dispose();
+            Container.RegisterMembership();
         }
     }
 }

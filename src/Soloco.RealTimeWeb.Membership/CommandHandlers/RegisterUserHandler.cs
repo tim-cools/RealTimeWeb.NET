@@ -6,18 +6,16 @@ using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
-using Soloco.RealTimeWeb.Membership.Services;
 
 namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
     public class RegisterUserHandler : CommandHandler<RegisterUserCommand>
     {
-        private readonly UserManager<User, Guid> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public RegisterUserHandler(IDocumentSession session, IDisposable scope) : base(session, scope)
+        public RegisterUserHandler(UserManager<User> userManager, DocumentSession session, IDisposable scope) : base(session, scope)
         {
-            var userStore = new UserStore(session);
-            _userManager = new UserManager<User, Guid>(userStore);            
+            _userManager = userManager;
         }
 
         protected override async Task<CommandResult> Execute(RegisterUserCommand command)

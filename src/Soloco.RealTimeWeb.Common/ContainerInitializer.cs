@@ -27,7 +27,6 @@ namespace Soloco.RealTimeWeb.Common
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
 
-            container.Register<IQueryParser, MartenQueryParser>(Reuse.Singleton);
             container.Register<IDocumentSchema, DocumentSchema>(Reuse.Singleton);
             container.Register<IDocumentStore, DocumentStore>(Reuse.Singleton);
 

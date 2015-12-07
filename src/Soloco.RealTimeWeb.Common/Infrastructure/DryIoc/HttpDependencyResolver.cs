@@ -1,43 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Http.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
-    public class HttpDependencyResolver : IDependencyResolver
+    public static class ContainerExetensions
     {
-        private readonly IContainer _container;
-
-        public HttpDependencyResolver(Action<IContainer> initializer)
+        private class ContainerServiceProvider : IServiceProvider
         {
-            _container = ContainerFactory.Create(initializer);
+            private readonly IContainer _container;
+
+            public ContainerServiceProvider(IContainer container)
+            {
+                if (container == null) throw new ArgumentNullException(nameof(container));
+
+                _container = container;
+            }
+
+            public object GetService(Type serviceType)
+            {
+                return _container.Resolve(serviceType, IfUnresolved.ReturnDefault);
+            }
         }
 
-        private HttpDependencyResolver(IContainer container)
+        private class ContainerServiceScopeFactory : IServiceScopeFactory
         {
-            _container = container;
+            private readonly IContainer _container;
+
+            public ContainerServiceScopeFactory(IContainer container)
+            {
+                if (container == null) throw new ArgumentNullException(nameof(container));
+
+                _container = container;
+            }
+
+            public IServiceScope CreateScope()
+            {
+                return new ContainerServiceScope(_container.OpenScope());
+            }
         }
 
-        public object GetService(Type serviceType)
+        private class ContainerServiceScope : IServiceScope
         {
-            return _container.Resolve(serviceType, IfUnresolved.ReturnDefault);
+            private readonly IContainer _container;
+            private readonly ContainerServiceProvider _serviceProvider;
+
+            public IServiceProvider ServiceProvider => _serviceProvider;
+
+            public ContainerServiceScope(IContainer container)
+            {
+                _container = container;
+                container.RegisterInstance(typeof(IServiceProvider), _serviceProvider);
+                _serviceProvider = new ContainerServiceProvider(container);
+            }
+
+            public void Dispose()
+            {
+                _container.Dispose();
+            }
         }
 
-        public IEnumerable<object> GetServices(Type serviceType)
+        public static IServiceProvider CreateServiceProvider(this Container container, IEnumerable<ServiceDescriptor> descriptors)
         {
-            var enumerableType = typeof(IEnumerable<>).MakeGenericType(serviceType);
+            if (container == null) throw new ArgumentNullException(nameof(container));
+            if (descriptors == null) throw new ArgumentNullException(nameof(descriptors));
 
-            return (IEnumerable<object>)_container.Resolve(enumerableType, IfUnresolved.ReturnDefault);
+            var provider = new ContainerServiceProvider(container);
+
+            container.RegisterInstance(typeof(IServiceProvider), provider);
+            container.RegisterInstance(typeof(IServiceScopeFactory), new ContainerServiceScopeFactory(container));
+            container.RegisterServices(descriptors);
+
+            return provider;
         }
 
-        public IDependencyScope BeginScope()
+        private static void RegisterServices(this Container container, IEnumerable<ServiceDescriptor> descriptors)
         {
-            return new HttpDependencyResolver(_container.OpenScope());
+            foreach (var descriptor in descriptors)
+            {
+                container.RegisterService(descriptor);
+            }
         }
 
-        public void Dispose()
+        private static void RegisterService(this Container container, ServiceDescriptor descriptor)
         {
-            _container.Dispose();
+            var reuse = GetReuse(descriptor.Lifetime);
+            if (descriptor.ImplementationType != null)
+            {
+                container.Register(descriptor.ServiceType, descriptor.ImplementationType, reuse);
+            }
+            else if (descriptor.ImplementationFactory != null)
+            {
+                container.RegisterDelegate(descriptor.ServiceType, resolver =>
+                {
+                    var serviceProvider = (IServiceProvider)resolver.Resolve(typeof(IServiceProvider));
+                    return descriptor.ImplementationFactory(serviceProvider);
+                }, reuse);
+            }
+            else
+            {
+                container.RegisterInstance(descriptor.ServiceType, descriptor.ImplementationInstance, reuse);
+            }
+        }
+
+        private static IReuse GetReuse(ServiceLifetime lifetime)
+        {
+            switch (lifetime)
+            {
+                case ServiceLifetime.Scoped:
+                    return Reuse.InResolutionScope;
+                case ServiceLifetime.Singleton:
+                    return Reuse.Singleton;
+                case ServiceLifetime.Transient:
+                    return Reuse.Transient;
+                default:
+                    throw new InvalidOperationException("Invalid ServiceLifetime: " + lifetime);
+            }
         }
     }
 }

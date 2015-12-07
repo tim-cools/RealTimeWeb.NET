@@ -1,5 +1,5 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration
@@ -14,7 +14,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration
             var task = messageDispatcher.Execute(message);
             if (!task.Wait(300000))
             {
-                throw new AssertionException("Timeout on executing message.");
+                throw new InvalidOperationException("Timeout on executing message.");
             }
             return task.Result;
         }

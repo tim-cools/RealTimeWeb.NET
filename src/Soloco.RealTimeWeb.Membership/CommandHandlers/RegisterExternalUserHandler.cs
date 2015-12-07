@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Membership.Domain;
@@ -14,7 +13,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
     public class RegisterExternalUserHandler : CommandHandler<RegisterExternalUserCommand>
     {
-        private readonly UserManager<User, Guid> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
         public RegisterExternalUserHandler(IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory) : base(session, scope)
@@ -22,7 +21,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
             _providerTokenValidatorFactory = providerTokenValidatorFactory;
 
             var userStore = new UserStore(session);
-            _userManager = new UserManager<User, Guid>(userStore);
+            _userManager = new UserManager<User>(userStore, null,null, null, null, null, null, null, null, null);
         }
 
         protected override async Task<CommandResult> Execute(RegisterExternalUserCommand command)
@@ -34,14 +33,13 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 
             var user = await CreateUser(command);
 
-            return await CreateLogin(command, user, verifiedAccessToken.UserId);
+            return await CreateLogin(command, user, verifiedAccessToken.UserId, command.UserName);
         }
 
         private async Task VerifyNotRegistered(RegisterExternalUserCommand command, ParsedExternalAccessToken verifiedAccessToken)
         {
             var query = new UserLoginQuery(command.Provider, verifiedAccessToken.UserId);
-            var loginInfo = new UserLoginInfo(query.LoginProvider.ToString(), query.ProviderKey);
-            var userLogin = await _userManager.FindAsync(loginInfo);
+            var userLogin = await _userManager.FindByLoginAsync(query.LoginProvider.ToString(), query.ProviderKey);
 
             if (userLogin != null)
             {
@@ -59,15 +57,11 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
             return user;
         }
 
-        private async Task<CommandResult> CreateLogin(RegisterExternalUserCommand command, User user, string verifiedAccessTokenuser_id)
+        private async Task<CommandResult> CreateLogin(RegisterExternalUserCommand command, User user, string verifiedAccessTokenuser_id, string displayName)
         {
-            var info = new ExternalLoginInfo
-            {
-                DefaultUserName = command.UserName,
-                Login = new UserLoginInfo(command.Provider.ToString(), verifiedAccessTokenuser_id)
-            };
+            var login = new UserLoginInfo(command.Provider.ToString(), verifiedAccessTokenuser_id, displayName);
 
-            var result = await _userManager.AddLoginAsync(user.Id, info.Login);
+            var result = await _userManager.AddLoginAsync(user, login);
             return result.ToCommandResult();
         }
     }

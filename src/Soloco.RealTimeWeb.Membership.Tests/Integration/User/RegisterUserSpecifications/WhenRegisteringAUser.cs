@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
+using Shouldly;
+using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -9,11 +10,13 @@ using Soloco.RealTimeWeb.Membership.Messages.Queries;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpecifications
 {
-    [TestFixture]
-    public class WhenRegisteringAUser : ServiceTestBase<IMessageDispatcher>
+    public class WhenRegisteringAUser : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private CommandResult _result;
         private RegisterUserCommand _command;
+        public WhenRegisteringAUser(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void When()
         {
@@ -25,47 +28,47 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
             _result = Service.ExecuteNowWithTimeout(_command);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheResultShouldSucceed()
         {
-            Assert.That(_result.Succeeded, Is.True);
+            _result.Succeeded.ShouldBeTrue();
         }
 
-        [Test]
+        [Fact]
         public void ThenTheResultShouldHaveNoErrors()
         {
             if (_result.Errors.Any())
             {
                 var errors = _result.Errors.Aggregate(string.Empty, (value, result) => $"{result}, {value}");
-                throw new AssertionException(errors);
+                throw new InvalidOperationException(errors);
             }
         }
 
-        [Test]
+        [Fact]
         public void ThenAUserShouldBeStored()
         {
             var userByNameQuery = new UserByNameQuery(_command.UserName);
             var user = Service.ExecuteNowWithTimeout(userByNameQuery);
 
-            Assert.IsNotNull(user);
+            user.ShouldNotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void ThenAUserShouldBeAbleToLogin()
         {
             var validUserLoginQuery = new ValidUserLoginQuery(_command.UserName, _command.Password);
             var valid = Service.ExecuteNowWithTimeout(validUserLoginQuery);
 
-            Assert.That(valid, Is.True);
+            valid.ShouldBeTrue();
         }
 
-        [Test]
+        [Fact]
         public void ThenADifferentPasswordShouldFailToLogin()
         {
             var query = new ValidUserLoginQuery(_command.UserName, "wrong password");
             var valid = Service.ExecuteNowWithTimeout(query);
 
-            Assert.That(valid, Is.False);
+            valid.ShouldBeFalse();
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using NUnit.Framework;
+using Xunit;
 using Shouldly;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -8,12 +8,15 @@ using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
-    [TestFixture]
-    public class WhenQueryingClientByKey : ServiceTestBase<IMessageDispatcher>
+    public class WhenQueryingClientByKey : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private Client _result;
         private ClientByKeyQuery _query;
         private Domain.Client _client;
+
+        public WhenQueryingClientByKey(MembershipIntegrationTestFixture fixture) : base(fixture)
+        {
+        }
 
         protected override void Given()
         {
@@ -37,13 +40,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _result = Service.ExecuteNowWithTimeout(_query);
         }
 
-        [Test]
+        [Fact]
         public void ThenTheClientShouldBeReturned()
         {
             _result.ShouldNotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void ThenTheAllowedOriginShouldBeReturned()
         {
             _result.AllowedOrigin.ShouldBe(_client.AllowedOrigin);
