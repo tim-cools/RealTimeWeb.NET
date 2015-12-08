@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 {
-    public static class ContainerExetensions
+    public static class DependencyInjectionContainerExtensions
     {
         private class ContainerServiceProvider : IServiceProvider
         {
