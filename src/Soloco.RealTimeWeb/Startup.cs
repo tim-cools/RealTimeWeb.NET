@@ -37,7 +37,7 @@ namespace Soloco.RealTimeWeb
         public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SharedAuthenticationOptions>(options => {
                 options.SignInScheme = "ServerCookie";
@@ -47,7 +47,7 @@ namespace Soloco.RealTimeWeb
             services.AddAuthentication();
             services.AddMvc();
 
-            ReplaceRazorServiceDescription(services);
+        //    ReplaceRazorServiceDescription(services);
 
             var container = new Container();
 
@@ -55,7 +55,7 @@ namespace Soloco.RealTimeWeb
                 .RegisterCommon()
                 .RegisterMembership();
 
-            return container.CreateServiceProvider(services);
+            ///return container.CreateServiceProvider(services);
         }
 
         private static void ReplaceRazorServiceDescription(IServiceCollection services)
