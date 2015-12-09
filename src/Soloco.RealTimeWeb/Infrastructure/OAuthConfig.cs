@@ -13,8 +13,8 @@ namespace Soloco.RealTimeWeb
         public static IApplicationBuilder ConfigureOAuth(this IApplicationBuilder app)
         {
             var applicationServices = app.ApplicationServices;
-            var oauthCOnfiguration =
-                (IOAuthConfiguration)applicationServices.GetService(typeof(IOAuthConfiguration));
+            var oauthCOnfiguration = new OAuthConfiguration();
+            // (IOAuthConfiguration)applicationServices.GetService(typeof(IOAuthConfiguration));
 
             //use a cookie to temporarily store information about a user logging in with a third party login provider
             //app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
