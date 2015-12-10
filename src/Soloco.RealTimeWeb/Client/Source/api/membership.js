@@ -3,12 +3,12 @@ import navigate from './navigate';
 import { actions as userStateActions } from '../state/user';
 import store from 'store';
 
-const proxy = $.connection.membership;
+//const proxy = $.connection.membership;
 const storageKey = 'authorizationData';
 
-proxy.client.LoginSuccessful = function (name) {
-    userStateActions.logon(name);
-};
+//proxy.client.LoginSuccessful = function (name) {
+//    userStateActions.logon(name);
+//};
 
 //function login(userName, password) {
 //    proxy.server.login(userName, password);
@@ -116,15 +116,15 @@ function initialize() {
     }
 }
 
-$.connection.hub.start()
-    .done(function(){ console.log('Now connected, connection ID=' + $.connection.hub.id); })
-    .fail(function(){ console.log('Could not Connect!'); });
+//$.connection.hub.start()
+//    .done(function(){ console.log('Now connected, connection ID=' + $.connection.hub.id); })
+//    .fail(function(){ console.log('Could not Connect!'); });
 
 export default {
-login: login,
+    login: login,
     logOff: logOff,
-initialize: initialize,
-externalProviderUrl: externalProviderUrl,
-externalProviderCompleted: externalProviderCompleted,
-registerExternal: registerExternal
+    initialize: initialize,
+    externalProviderUrl: externalProviderUrl,
+    externalProviderCompleted: externalProviderCompleted,
+    registerExternal: registerExternal
 }

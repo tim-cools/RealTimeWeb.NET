@@ -1,7 +1,7 @@
 import reqwest from 'reqwest';
 
 const jsonHeaders = { 'Accept': 'application/json' };
-const serviceBase = 'http://localhost:12777/';
+const serviceBase = 'http://localhost:5010/';
 const clientId = 'realTimeWebClient';
 
 function call(verb, contentType, url, data, responseHandler, errorHandler) {

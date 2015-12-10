@@ -15,7 +15,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         {
         }
 
-        protected override async Task<CommandResult> Execute(CreateRefreshTokenCommand command)
+        protected override Task<CommandResult> Execute(CreateRefreshTokenCommand command)
         {
             var existing = Session.GetFirst<RefreshToken>(criteria => criteria.Subject == command.Name && criteria.ClientKey == command.Clientid);
 
@@ -43,7 +43,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
                 Session.Store(token);
             }
 
-            return CommandResult.Success;
+            return Task.FromResult(CommandResult.Success);
         }
     }
 }

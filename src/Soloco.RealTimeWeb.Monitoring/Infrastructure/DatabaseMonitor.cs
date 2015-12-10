@@ -41,7 +41,7 @@ namespace Soloco.RealTimeWeb.Monitoring.Infrastructure
                 }
                 return "Available";
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return "Unavailable";
             }

@@ -17,7 +17,12 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
         {
         }
 
-        protected override async Task<ValidateClientAuthenticationResult> Execute(ValidateClientAuthenticationQuery query)
+        protected override Task<ValidateClientAuthenticationResult> Execute(ValidateClientAuthenticationQuery query)
+        {
+            return Task.FromResult(GetResult(query));
+        }
+
+        private ValidateClientAuthenticationResult GetResult(ValidateClientAuthenticationQuery query)
         {
             var client = Session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
             if (client == null)

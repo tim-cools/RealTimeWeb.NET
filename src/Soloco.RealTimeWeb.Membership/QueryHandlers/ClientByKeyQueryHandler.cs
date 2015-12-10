@@ -15,10 +15,10 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
         {
         }
 
-        protected override async Task<Client> Execute(ClientByKeyQuery query)
+        protected override Task<Client> Execute(ClientByKeyQuery query)
         { 
             var result = Session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
-            return result != null ? Map(result) : null;
+            return Task.FromResult(result != null ? Map(result) : null);
         }
 
         private static Client Map(Domain.Client result)

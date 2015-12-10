@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Infrastructure;
 using Soloco.RealTimeWeb.Membership;
 
 namespace Soloco.RealTimeWeb
@@ -37,7 +38,7 @@ namespace Soloco.RealTimeWeb
         public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<SharedAuthenticationOptions>(options => {
                 options.SignInScheme = "ServerCookie";
@@ -47,15 +48,14 @@ namespace Soloco.RealTimeWeb
             services.AddAuthentication();
             services.AddMvc();
 
-        //    ReplaceRazorServiceDescription(services);
+            ReplaceRazorServiceDescription(services);
 
             var container = new Container();
-
             container
                 .RegisterCommon()
                 .RegisterMembership();
 
-            ///return container.CreateServiceProvider(services);
+            return container.CreateServiceProvider(services);
         }
 
         private static void ReplaceRazorServiceDescription(IServiceCollection services)
@@ -89,13 +89,10 @@ namespace Soloco.RealTimeWeb
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
-        // Entry point for the application.
-        public static void Main(string[] args) => Microsoft.AspNet.Hosting.WebApplication.Run<Startup>(args);
+        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

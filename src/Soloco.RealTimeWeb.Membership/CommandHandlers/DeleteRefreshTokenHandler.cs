@@ -14,7 +14,12 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         {
         }
 
-        protected override async Task<CommandResult> Execute(DeleteRefreshTokenCommand command)
+        protected override Task<CommandResult> Execute(DeleteRefreshTokenCommand command)
+        {
+            return Task.FromResult(GetResult(command));
+        }
+
+        private CommandResult GetResult(DeleteRefreshTokenCommand command)
         {
             var token = Session.Load<RefreshToken>(command.TokenId);
             if (token == null)

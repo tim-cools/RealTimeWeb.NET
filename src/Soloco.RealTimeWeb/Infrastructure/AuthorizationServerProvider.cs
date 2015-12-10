@@ -93,7 +93,7 @@ namespace Soloco.RealTimeWeb.Providers
 
         }
 
-        public override async Task GrantRefreshToken(GrantRefreshTokenContext context)
+        public override Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
             var originalClient = context.AuthenticationTicket.Properties.Items["as:client_id"];
             var currentClient = context.ClientId;
@@ -101,7 +101,7 @@ namespace Soloco.RealTimeWeb.Providers
             if (originalClient != currentClient)
             {
                 context.Rejected("invalid_clientId", "Refresh token is issued to a different clientId.");
-                return;
+                return Task.FromResult(true);
             }
 
             // Change auth ticket for refresh token requests
@@ -112,13 +112,12 @@ namespace Soloco.RealTimeWeb.Providers
             if (claimsIdentity == null)
             {
                 context.Rejected("invalid_principal", "ClaimPrincipal is invalid.");
-                return;
+                return Task.FromResult(true);
             }
 
             var newClaim = newPrincipal.Claims.FirstOrDefault(c => c.Type == "newClaim");
             if (newClaim != null)
             {
-              
                 claimsIdentity.RemoveClaim(newClaim);
             }
             claimsIdentity.AddClaim(new Claim("newClaim", "newValue"));
@@ -126,14 +125,17 @@ namespace Soloco.RealTimeWeb.Providers
             var newTicket = new AuthenticationTicket(newPrincipal, context.AuthenticationTicket.Properties, context.Options.AuthenticationScheme);
 
             context.Validated(newTicket);
+
+            return Task.FromResult(true);
         }
 
-        public override async Task TokenEndpointResponse(TokenEndpointResponseContext context)
+        public override Task TokenEndpointResponse(TokenEndpointResponseContext context)
         {
             foreach (var property in context.HttpContext.Items)
             {
                 context.Payload.Add(property.Key as string, new JValue(property.Value));
             }
+            return Task.FromResult(true);
         }
 
         //override Gran

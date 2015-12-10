@@ -16,10 +16,10 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         {
         }
 
-        protected override async Task<CommandResult> Execute(InitializeDatabaseCommand command)
+        protected override Task<CommandResult> Execute(InitializeDatabaseCommand command)
         {
             UpdateClients(Session);
-            return CommandResult.Success;
+            return Task.FromResult(CommandResult.Success);
         }
 
         private static void UpdateClients(IDocumentSession session)
