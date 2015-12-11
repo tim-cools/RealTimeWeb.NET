@@ -54,7 +54,8 @@ namespace Soloco.RealTimeWeb.Membership
             var store = new UserStore(documentSession);
             var passwordHasher = new PasswordHasher<User>();
             var logger = new DummyLogger(); // get the real deal
-            return new UserManager<User>(store, null, passwordHasher, null, null, null, null, null, logger, null);
+            var manager = new UserManager<User>(store, null, passwordHasher, null, null, null, null, null, logger, null);
+            return manager;
         }
     }
 }

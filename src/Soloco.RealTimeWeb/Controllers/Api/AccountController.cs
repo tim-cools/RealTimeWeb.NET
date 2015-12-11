@@ -47,10 +47,10 @@ namespace Soloco.RealTimeWeb.Controllers.Api
                 return ErrorResult();
             }
 
-            var command = new RegisterUserCommand(userModel.UserName, userModel.Password);
+            var command = new RegisterUserCommand(userModel.UserName, userModel.EMail, userModel.Password);
             var result = await _messageDispatcher.Execute(command);
 
-            return ErrorResult(result) ?? Ok();
+            return ErrorResult(result);
         }
 
         // GET api/Account/ExternalLogin
@@ -158,7 +158,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
                 ? new CommandResult(errors) 
                 : result.Merge(CommandResult.Failed(errors));
 
-            return merged.Succeeded ? null : new ObjectResult(merged);
+            return merged.Succeeded ? (IActionResult) Ok() : new ObjectResult(merged) { StatusCode = StatusCodes.Status400BadRequest };
         }
 
         private IActionResult ErrorResult(string error)

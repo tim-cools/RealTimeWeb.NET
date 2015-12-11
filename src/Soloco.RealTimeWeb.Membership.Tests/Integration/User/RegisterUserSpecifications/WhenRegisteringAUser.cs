@@ -24,7 +24,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
         protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
             var name = Guid.NewGuid().ToString("n");
-            _command = new RegisterUserCommand(name, "password");
+            _command = new RegisterUserCommand(name, "eMail@future.now", "password");
 
             _result = dispatcher.ExecuteNowWithTimeout(_command);
         }

@@ -25,6 +25,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _userName = Guid.NewGuid().ToString("n");
             var command = new RegisterUserCommand(
                 _userName,
+                "tim@future.now",
                 Guid.NewGuid().ToString("n")
                 );
 

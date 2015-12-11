@@ -19,7 +19,7 @@ class Header extends Component {
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
-                <Nav right={true} onSelect={(key, href) =>navigate.to(href)}>
+                <Nav pullRight={true} onSelect={(key, href) =>navigate.to(href)}>
                     <NavItem href='/profile'>{ userName }</NavItem>
                     <NavItem onSelect={() => membership.logOff()}>
                         Log Off
@@ -27,11 +27,14 @@ class Header extends Component {
                 </Nav>
                 ) ]
             :  [ (
-                <Nav onSelect={(key, href) =>navigate.to(href)}>
+                <Nav onSelect={(key, href) => navigate.to(href)}>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
-                <Nav right={true}>
+                <Nav pullRight={true}>
+                    <NavItem onSelect={() => navigate.to('/register')}>
+                    Join
+                    </NavItem>
                     <NavItem onSelect={() => navigate.to('/logon')}>
                     Log On
                     </NavItem>

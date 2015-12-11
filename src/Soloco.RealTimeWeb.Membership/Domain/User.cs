@@ -29,10 +29,10 @@ namespace Soloco.RealTimeWeb.Membership.Domain
             Roles = new List<string>();
         }
 
-        public User(string userName)
+        public User(string userName, string eMail)
         {
-            Id = Guid.NewGuid();
             UserName = userName;
+            Email = eMail;
         }
     }
 }

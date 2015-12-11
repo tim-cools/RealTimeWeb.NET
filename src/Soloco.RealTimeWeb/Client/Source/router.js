@@ -18,7 +18,7 @@ class ApplicationRouter extends Component {
                     <IndexRoute component={LogonView}/>.
                     <Route path="home" component={HomeView} />
                     <Route path="about" component={AboutView} />
-                    <Route path="logon" component={RegisterView} />
+                    <Route path="register" component={RegisterView} />
                     <Route path="logon" component={LogonView} />
                 </Route>
                 <Route path="*" component={NotFoundPage}/>

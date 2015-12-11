@@ -6,9 +6,9 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
 {
     public class MessageDispatcher : IMessageDispatcher
     {
-        private readonly IContainer _container;
+        private readonly IResolver _container;
 
-        public MessageDispatcher(IContainer container)
+        public MessageDispatcher(IResolver container)
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
 

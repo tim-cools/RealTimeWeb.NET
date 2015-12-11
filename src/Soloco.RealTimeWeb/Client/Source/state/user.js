@@ -15,6 +15,9 @@ export const actionsDefinitions = {
     LOG_ON_PENDING: 'LOG_ON_PENDING',
     LOG_ON_FAILED: 'LOG_ON_FAILED',
 
+    REGISTER: 'REGISTER',
+    REGISTER_PENDING: 'REGISTER_PENDING',
+    
     ASSOCIATE_EXTERNAL: 'ASSOCIATE_EXTERNAL',
     ASSOCIATE_EXTERNAL_PENDING: 'ASSOCIATE_EXTERNAL_PENDING',
     ASSOCIATE_EXTERNAL_FAILED: 'ASSOCIATE_EXTERNAL_FAILED'
@@ -45,6 +48,18 @@ export const actions = {
     logoff: function() {
         return dispatch({
             type: actionsDefinitions.LOG_OFF
+        });
+    },
+
+    register: function() {
+        return dispatch({
+            type: actionsDefinitions.REGISTER
+        });
+    },
+
+    registerPending: function() {
+        return dispatch({
+            type: actionsDefinitions.REGISTER_PENDING
         });
     },
 
@@ -98,6 +113,18 @@ export function reducer(state = notAuthenticated, action) {
         case actionsDefinitions.LOG_OFF:
             return {
                 status: userStatus.notAuthenticated
+            };
+
+        case actionsDefinitions.REGISTER:
+            return {
+                status: userStatus.notAuthenticated,
+                processing: false
+            };
+
+        case actionsDefinitions.REGISTER_PENDING:
+            return {
+                status: userStatus.notAuthenticated,
+                processing: true
             };
 
         case actionsDefinitions.ASSOCIATE_EXTERNAL:

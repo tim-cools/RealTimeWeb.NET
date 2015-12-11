@@ -60,6 +60,28 @@ function loggedOn(userName, token, refreshToken) {
     navigate.to('/home');
 }
 
+function register(userName, eMail, password) {
+
+    function handleResponse(response) {
+        login(userName, password);
+    }
+
+    function handleError(request) {
+        const data = JSON.parse(request.response);
+        userStateActions.registrationFailed(data.error_description);
+    }
+
+    var data = {
+        userName: userName,
+        eMail: eMail,
+        password: password
+    };
+
+    userStateActions.registerPending();
+    
+    api.post('api/account/register', data, handleResponse, handleError);
+}
+
 function externalProviderUrl(provider) {
     var redirectUri = location.protocol + '//' + location.host + '/Account/Complete';
 
@@ -121,9 +143,10 @@ function initialize() {
 //    .fail(function(){ console.log('Could not Connect!'); });
 
 export default {
+    initialize: initialize,
     login: login,
     logOff: logOff,
-    initialize: initialize,
+    register: register,
     externalProviderUrl: externalProviderUrl,
     externalProviderCompleted: externalProviderCompleted,
     registerExternal: registerExternal

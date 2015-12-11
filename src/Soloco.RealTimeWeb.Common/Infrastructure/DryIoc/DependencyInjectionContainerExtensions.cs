@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.AspNet.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
@@ -11,9 +12,9 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
     {
         private class ContainerServiceProvider : IServiceProvider
         {
-            private readonly IContainer _container;
+            private readonly IResolver _container;
 
-            public ContainerServiceProvider(IContainer container)
+            public ContainerServiceProvider(IResolver container)
             {
                 if (container == null) throw new ArgumentNullException(nameof(container));
 
@@ -66,12 +67,6 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
                 _container = container;
 
                 ServiceProvider = new ContainerServiceProvider(_container);
-
-                _container.Unregister<IServiceProvider>();
-                _container.Unregister<IContainer>();
-
-                _container.RegisterInstance<IServiceProvider>(ServiceProvider);
-                _container.RegisterInstance(typeof(IContainer), container);
             }
 
             public void Dispose()
@@ -87,17 +82,11 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 
             var provider = new ContainerServiceProvider(container);
 
-            container.RegisterInstance(typeof(IContainer), container);
-            container.RegisterInstance(typeof(IServiceProvider), provider);
+            container.RegisterDelegate(typeof(IResolver), resolver => resolver);
+            container.RegisterDelegate(typeof(IServiceProvider), resolver => new ContainerServiceProvider(resolver));
             container.RegisterInstance(typeof(IServiceScopeFactory), new ContainerServiceScopeFactory(container));
             container.RegisterServices(descriptors);
-            //var resolve = container.Resolve(typeof(IOptions<Microsoft.AspNet.Mvc.MvcOptions>));
-            var res1olve = container.Resolve(typeof(ViewResultExecutor));
-
-            foreach (var registration in container.GetServiceRegistrations())
-            {
-                Debug.WriteLine($"Registration: {registration.ServiceType}");
-            }
+           
             return provider;
         }
 
@@ -111,22 +100,44 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 
         private static void RegisterService(this Container container, ServiceDescriptor descriptor)
         {
-            var serviceType = descriptor.ServiceType;
-            var name = serviceType.Name;
+            VerifyNotRegistered(container, descriptor);
+
+            var name = descriptor.ServiceType.Name;
+            Debug.WriteLine($"Register: {descriptor.ServiceType}");
+
             if (descriptor.ImplementationType != null)
             {
-                container.Register(serviceType, descriptor.ImplementationType, GetReuse(descriptor.Lifetime));
+                container.Register(descriptor.ServiceType, descriptor.ImplementationType, GetReuse(descriptor.Lifetime));
             }
             else if (descriptor.ImplementationFactory != null)
             {
-                container.RegisterDelegate(serviceType, resolver => descriptor.ImplementationFactory(resolver.Resolve< IServiceProvider>()), GetReuse(descriptor.Lifetime));
+                container.RegisterDelegate(descriptor.ServiceType, resolver => descriptor.ImplementationFactory(resolver.Resolve< IServiceProvider>()), GetReuse(descriptor.Lifetime));
             }
             else
             {
-                container.RegisterInstance(serviceType, descriptor.ImplementationInstance, GetReuse(descriptor.Lifetime));
+                container.RegisterInstance(descriptor.ServiceType, descriptor.ImplementationInstance, GetReuse(descriptor.Lifetime));
             }
+            LogRegistations(container);
         }
 
+        private static void VerifyNotRegistered(Container container, ServiceDescriptor descriptor)
+        {
+            var registrations = container.GetServiceRegistrations();
+            var registrationInfo = registrations.FirstOrDefault(registration => registration.ServiceType == descriptor.ServiceType);
+            if (registrationInfo.ServiceType != null)
+            {
+                //container.Unregister(descriptor.ServiceType);
+                Debug.WriteLine($"Duplicate (Registration: {descriptor.ServiceType}");
+            }
+        }
+        private static void LogRegistations(Container container)
+        {
+            var registrations = container.GetServiceRegistrations();
+            foreach (var registration in registrations)
+            {
+                Debug.WriteLine($"Log (Registration: {registration.ServiceType}");
+            }
+        }
         private static IReuse GetReuse(ServiceLifetime lifetime)
         {
             switch (lifetime)

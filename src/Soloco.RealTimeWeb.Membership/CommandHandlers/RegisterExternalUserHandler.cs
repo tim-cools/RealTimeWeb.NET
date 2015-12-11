@@ -31,7 +31,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 
             await VerifyNotRegistered(command, verifiedAccessToken);
 
-            var user = await CreateUser(command);
+            var user = await CreateUser(command, verifiedAccessToken);
 
             return await CreateLogin(command, user, verifiedAccessToken.UserId, command.UserName);
         }
@@ -47,9 +47,9 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
             }
         }
 
-        private async Task<User> CreateUser(RegisterExternalUserCommand command)
+        private async Task<User> CreateUser(RegisterExternalUserCommand command, ParsedExternalAccessToken verifiedAccessToken)
         {
-            var user = new User(command.UserName);
+            var user = new User(command.UserName, verifiedAccessToken.Email);
             var result = await _userManager.CreateAsync(user);
 
             result.ThrowWhenFailed("Could not create user");
