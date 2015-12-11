@@ -19,7 +19,16 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 
         protected override Task<IEnumerable<RefreshToken>> Execute(RefreshTokensQuery query)
         {
-            IEnumerable<RefreshToken> tokens = Session.Query<RefreshToken>().ToArray();
+            IEnumerable<RefreshToken> tokens = Session.Query<Domain.RefreshToken>()
+                .Select(token => new RefreshToken
+                {
+                    ClientKey = token.ClientKey,
+                    ExpiresUtc = token.ExpiresUtc,
+                    Id = token.Id,
+                    IssuedUtc = token.IssuedUtc,
+                    Subject = token.Subject
+                })
+                .ToArray();
             return Task.FromResult(tokens);
         }
     }

@@ -1,12 +1,13 @@
-﻿using Soloco.RealTimeWeb.Common.Tests;
+﻿using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Common.Tests;
 
 namespace Soloco.RealTimeWeb.Membership.Tests
 {
     public class MembershipIntegrationTestFixture : IntegrationTestFixture
     {
-        public MembershipIntegrationTestFixture()
+        protected override void InitializeContainer(Container configuration)
         {
-            Container.RegisterMembership();
+            configuration.RegisterMembership();
         }
     }
 }

@@ -16,13 +16,18 @@
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Newtonsoft.Json": "3.5.8",
     "Serilog": "2.0.0-beta-403",
-    "Marten": "0.5.0.9"
+    "Npgsql": "3.0.3"
   },
 
   "frameworks": {
     "dnx46": {
       "frameworkAssemblies": {
         "System.Data": "4.0.0.0",
+      },
+      "dependencies": {
+        "Baseline": "1.0.0-*",
+        "Marten": "1.0.0-*",
+        "Remotion.Linq": "1.0.0-*"
       }
     }
   }

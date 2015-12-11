@@ -111,18 +111,19 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.DryIoc
 
         private static void RegisterService(this Container container, ServiceDescriptor descriptor)
         {
-            var reuse = GetReuse(descriptor.Lifetime);
+            var serviceType = descriptor.ServiceType;
+            var name = serviceType.Name;
             if (descriptor.ImplementationType != null)
             {
-                container.Register(descriptor.ServiceType, descriptor.ImplementationType, reuse);
+                container.Register(serviceType, descriptor.ImplementationType, GetReuse(descriptor.Lifetime));
             }
             else if (descriptor.ImplementationFactory != null)
             {
-                container.RegisterDelegate(descriptor.ServiceType, resolver => descriptor.ImplementationFactory(resolver.Resolve< IServiceProvider>()), reuse);
+                container.RegisterDelegate(serviceType, resolver => descriptor.ImplementationFactory(resolver.Resolve< IServiceProvider>()), GetReuse(descriptor.Lifetime));
             }
             else
             {
-                container.RegisterInstance(descriptor.ServiceType, descriptor.ImplementationInstance, reuse);
+                container.RegisterInstance(serviceType, descriptor.ImplementationInstance, GetReuse(descriptor.Lifetime));
             }
         }
 

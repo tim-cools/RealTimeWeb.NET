@@ -1,6 +1,8 @@
 ﻿using System;
+using Marten;
 using Xunit;
 using Shouldly;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
@@ -18,13 +20,11 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
         }
 
-        protected override void When()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.When();
-
             _query = new VerifyExternalUserQuery(LoginProvider.Facebook, ExternalAccessTokens.Facebook);
 
-            _result = Service.ExecuteNowWithTimeout(_query);
+            _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
 
         [Fact]

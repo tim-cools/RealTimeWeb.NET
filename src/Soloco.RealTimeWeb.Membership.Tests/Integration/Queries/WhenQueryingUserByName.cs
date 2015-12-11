@@ -1,5 +1,7 @@
 using System;
+using Marten;
 using Shouldly;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -18,26 +20,19 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
         }
 
-        protected override void Given()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.Given();
-
             _userName = Guid.NewGuid().ToString("n");
             var command = new RegisterUserCommand(
                 _userName,
                 Guid.NewGuid().ToString("n")
                 );
 
-            Service.Execute(command);
-        }
-
-        protected override void When()
-        {
-            base.When();
-
+            dispatcher.Execute(command);
+       
             _query = new UserByNameQuery(_userName);
 
-            _result = Service.ExecuteNowWithTimeout(_query);
+            _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
 
         [Fact]

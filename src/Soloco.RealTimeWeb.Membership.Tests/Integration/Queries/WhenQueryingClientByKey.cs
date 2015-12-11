@@ -1,6 +1,8 @@
 using System;
+using Marten;
 using Xunit;
 using Shouldly;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
@@ -18,26 +20,19 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
         }
 
-        protected override void Given()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.Given();
-
             _client = new Domain.Client();
             _client.Id = Guid.NewGuid();
             _client.Key = Guid.NewGuid().ToString("n");
             _client.AllowedOrigin = Guid.NewGuid().ToString("n");
 
-            Session.Store(_client);
-            Session.SaveChanges();
-        }
-
-        protected override void When()
-        {
-            base.When();
+            session.Store(_client);
+            session.SaveChanges();
 
             _query = new ClientByKeyQuery(_client.Key);
 
-            _result = Service.ExecuteNowWithTimeout(_query);
+            _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
 
         [Fact]

@@ -10,7 +10,12 @@
   },
 
   "frameworks": {
-    "dnx46": { }
+    "dnx46": {
+      "dependencies": {
+        "Baseline": "1.0.0-*",
+        "Marten": "1.0.0-*"
+      }
+    }
   },
   "dependencies": {
     "Microsoft.AspNet.Identity": "3.0.0-rc1-final",

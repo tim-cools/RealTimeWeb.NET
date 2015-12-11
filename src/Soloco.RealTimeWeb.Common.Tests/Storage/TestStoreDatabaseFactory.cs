@@ -1,15 +1,22 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using Npgsql;
 using Serilog;
 using Soloco.RealTimeWeb.Common.Infrastructure.Store;
 
 namespace Soloco.RealTimeWeb.Common.Tests.Storage
 {
-    public static class TestStoreDatabaseFactory
+    public class TestStoreDatabaseFactory : ITestStoreDatabaseFactory
     {
-        public static void CreateCleanStoreDatabase()
+        private readonly IConnectionStringParser _connectionStringParser;
+
+        public TestStoreDatabaseFactory(IConnectionStringParser connectionStringParser)
+        {
+            if (connectionStringParser == null) throw new ArgumentNullException(nameof(connectionStringParser));
+
+            _connectionStringParser = connectionStringParser;
+        }
+
+        public void CreateCleanStoreDatabase()
         {
             Log.Information("Test Store Database Creating");
 
@@ -27,15 +34,15 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
             Log.Information("Test Store Database Created");
         }
 
-        private static NpgsqlConnection CreateAdminConnection()
+        private NpgsqlConnection CreateAdminConnection()
         {
-            var adminConnection = ConnectionString.GetString("documentStoreAdmin");
+            var adminConnection = _connectionStringParser.GetString("documentStoreAdmin");
             return new NpgsqlConnection(adminConnection);
         }
 
-        private static string CreateScript()
+        private string CreateScript()
         {
-            var connectionString = ConnectionString.Parse();
+            var connectionString = _connectionStringParser.Parse();
             var script = typeof(TestStoreDatabaseFactory).ReadResourceString("CreateStore.sql")
                 .Replace("{database}", connectionString.Database)
                 .Replace("{userId}", connectionString.UserId)
@@ -45,4 +52,5 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
             return script;
         }
     }
+
 }

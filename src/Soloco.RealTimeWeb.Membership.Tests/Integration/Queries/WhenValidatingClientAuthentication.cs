@@ -1,5 +1,7 @@
 ﻿using System;
+using Marten;
 using Shouldly;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
@@ -18,15 +20,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
         }
 
-        protected override void When()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.When();
-
             var clientId = Guid.NewGuid().ToString("n");
             var clientSecret = Guid.NewGuid().ToString("n");
             _query = new ValidateClientAuthenticationQuery(clientId, clientSecret);
 
-            _result = Service.ExecuteNowWithTimeout(_query);
+            _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
 
         [Fact]

@@ -13,7 +13,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
     {
         private readonly UserManager<User> _userManager;
 
-        public RegisterUserHandler(UserManager<User> userManager, DocumentSession session, IDisposable scope) : base(session, scope)
+        public RegisterUserHandler(UserManager<User> userManager, IDocumentSession session, IDisposable scope) : base(session, scope)
         {
             _userManager = userManager;
         }

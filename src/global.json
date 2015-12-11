@@ -1,7 +1,11 @@
 {
-  "projects": [ "src", "test" ],
+  "projects": [
+    "src",
+    "test",
+    "wrap"
+  ],
   "sdk": {
-        "runtime": "clr",
-        "architecture": "x86"
+    "runtime": "clr",
+    "architecture": "x86"
   }
 }

@@ -15,8 +15,13 @@
     "Microsoft.AspNet.WebApi.Core": "5.2.3",
     "Newtonsoft.Json": "7.0.1",
     "Npgsql": "3.0.3",
-    "Serilog":"2.0.0-beta-403",
-    "Marten": "0.5.0.9",
+    "Serilog": "2.0.0-beta-403",
+    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Soloco.RealTimeWeb.Common": "1.0.0-*"
   },
   "commands": {
@@ -28,5 +33,8 @@
         "System.Data": "4.0.0.0"
       }
     }
-  }
+  },
+  "resource": [
+    "Storage/CreateStore.sql"
+  ]
 }

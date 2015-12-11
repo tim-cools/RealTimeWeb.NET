@@ -1,55 +1,44 @@
-﻿using Marten;
-using Marten.Schema;
+﻿using System;
+using Marten;
 using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 
 namespace Soloco.RealTimeWeb.Common.Tests
 {
-    public abstract class ServiceTestBase<T> : SpecificationBase
+    public abstract class ServiceTestBase<T>
     {
-        protected IntegrationTestFixture Fixture { get; set; }
-
-        protected IDocumentSession Session { get; private set; }
-
-        protected T Service { get; private set; }
+        private readonly IntegrationTestFixture _fixture;
 
         protected ServiceTestBase(IntegrationTestFixture fixture)
         {
-            Fixture = fixture;
+            _fixture = fixture;
+
+            SessionScope<IDocumentStore>(CleanDocuments);
+            SessionScope<T>(Given);
         }
 
-        protected override void Given()
+        protected abstract void Given(T service, IDocumentSession session, IContainer container);
+
+        protected void SessionScope(Action<T, IDocumentSession, IContainer> execute)
         {
-            base.Given();
-
-            Service = Fixture.Container.Resolve<T>();
-            Session = Fixture.Container.Resolve<IDocumentSession>();
-
-            var cleaner = Fixture.Container.Resolve<IDocumentCleaner>();
-            cleaner.DeleteAllDocuments();
+            SessionScope<T>(execute);
         }
 
-        protected override void When()
+        protected void SessionScope<TService>(Action<TService, IDocumentSession, IContainer> execute)
         {
-            base.When();
-            Session.Dispose();
+            if (execute == null) throw new ArgumentNullException(nameof(execute));
 
-            Session = Fixture.Container.Resolve<IDocumentSession>();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            DisposeSession();
-        }
-
-        private void DisposeSession()
-        {
-            if (Session != null)
+            using (var container = _fixture.OpenContainerScope())
             {
-                Session.Dispose();
-                Session = null;
+                var session = container.Resolve<IDocumentSession>();
+                var service = container.Resolve<TService>();
+
+                execute(service, session, container);
             }
+        }
+
+        private void CleanDocuments(IDocumentStore store, IDocumentSession session, IContainer container)
+        {
+            store.Advanced.Clean.DeleteAllDocuments();
         }
     }
 }

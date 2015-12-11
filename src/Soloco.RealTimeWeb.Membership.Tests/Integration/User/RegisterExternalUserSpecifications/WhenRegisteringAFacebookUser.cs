@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Marten;
 using Shouldly;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
@@ -22,14 +24,12 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalU
         {
         }
 
-        protected override void When()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.When();
-
             _name = Guid.NewGuid().ToString("n");
             _command = new RegisterExternalUserCommand(_name, LoginProvider.Facebook, ExternalAccessTokens.Facebook);
 
-            _result = Service.ExecuteNowWithTimeout(_command);
+            _result = dispatcher.ExecuteNowWithTimeout(_command);
         }
 
         [Fact]
@@ -60,11 +60,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalU
         [Fact]
         public void ThenAUserShouldBeAbleToLogin()
         {
-            var query = new VerifyExternalUserQuery(LoginProvider.Facebook, ExternalAccessTokens.Facebook);
-            var result = Service.ExecuteNowWithTimeout(query);
+            SessionScope((dispatcher, session, container) =>
+            {
+                var query = new VerifyExternalUserQuery(LoginProvider.Facebook, ExternalAccessTokens.Facebook);
+                var result = dispatcher.ExecuteNowWithTimeout(query);
 
-            result.Registered.ShouldBeTrue();
-            result.UserName.ShouldBe(_name);
+                result.Registered.ShouldBeTrue();
+                result.UserName.ShouldBe(_name);
+            });
         }
 
         //[Fact]

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Marten;
 using Xunit;
 using Shouldly;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
@@ -20,10 +22,8 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
         }
 
-        protected override void Given()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.Given();
-
             var command = new CreateRefreshTokenCommand(
                 Guid.NewGuid().ToString(),
                 Guid.NewGuid().ToString(),
@@ -32,15 +32,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
                 DateTimeOffset.Now, 
                 DateTimeOffset.Now);
 
-            Service.ExecuteNowWithTimeout(command).Succeeded.ShouldBeTrue();
-        }
-
-        protected override void When()
-        {
-            base.When();
+            dispatcher.ExecuteNowWithTimeout(command).Succeeded.ShouldBeTrue();
 
             _query = new RefreshTokensQuery();
-            _result = Service.ExecuteNowWithTimeout(_query);
+            _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
 
         [Fact]

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Marten;
 using Shouldly;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
@@ -14,18 +16,17 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
     {
         private CommandResult _result;
         private RegisterUserCommand _command;
+
         public WhenRegisteringAUser(MembershipIntegrationTestFixture fixture) : base(fixture)
         {
         }
 
-        protected override void When()
+        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
         {
-            base.When();
-
             var name = Guid.NewGuid().ToString("n");
-            _command  = new RegisterUserCommand(name, "password");
+            _command = new RegisterUserCommand(name, "password");
 
-            _result = Service.ExecuteNowWithTimeout(_command);
+            _result = dispatcher.ExecuteNowWithTimeout(_command);
         }
 
         [Fact]
@@ -47,28 +48,37 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
         [Fact]
         public void ThenAUserShouldBeStored()
         {
-            var userByNameQuery = new UserByNameQuery(_command.UserName);
-            var user = Service.ExecuteNowWithTimeout(userByNameQuery);
+            SessionScope((dispatcher, session, container) =>
+            {
+                var userByNameQuery = new UserByNameQuery(_command.UserName);
+                var user = dispatcher.ExecuteNowWithTimeout(userByNameQuery);
 
-            user.ShouldNotBeNull();
+                user.ShouldNotBeNull();
+            });
         }
 
         [Fact]
         public void ThenAUserShouldBeAbleToLogin()
         {
-            var validUserLoginQuery = new ValidUserLoginQuery(_command.UserName, _command.Password);
-            var valid = Service.ExecuteNowWithTimeout(validUserLoginQuery);
+            SessionScope((dispatcher, session, container) =>
+            {
+                var validUserLoginQuery = new ValidUserLoginQuery(_command.UserName, _command.Password);
+                var valid = dispatcher.ExecuteNowWithTimeout(validUserLoginQuery);
 
-            valid.ShouldBeTrue();
+                valid.ShouldBeTrue();
+            });
         }
 
         [Fact]
         public void ThenADifferentPasswordShouldFailToLogin()
         {
-            var query = new ValidUserLoginQuery(_command.UserName, "wrong password");
-            var valid = Service.ExecuteNowWithTimeout(query);
+            SessionScope((dispatcher, session, container) =>
+            {
+                var query = new ValidUserLoginQuery(_command.UserName, "wrong password");
+                var valid = dispatcher.ExecuteNowWithTimeout(query);
 
-            valid.ShouldBeFalse();
+                valid.ShouldBeFalse();
+            });
         }
     }
 }

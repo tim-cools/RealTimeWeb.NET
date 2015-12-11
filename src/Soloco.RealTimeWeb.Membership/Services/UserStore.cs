@@ -251,6 +251,7 @@ namespace Soloco.RealTimeWeb.Membership.Services
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             cancellationToken.ThrowIfCancellationRequested();
+
             return user.PasswordHash;
         }
 
@@ -258,25 +259,31 @@ namespace Soloco.RealTimeWeb.Membership.Services
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             cancellationToken.ThrowIfCancellationRequested();
+
             return !string.IsNullOrEmpty(user.PasswordHash);
         }
 
         public async Task SetSecurityStampAsync(User user, string stamp, CancellationToken cancellationToken)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             cancellationToken.ThrowIfCancellationRequested();
-            throw new NotImplementedException();
+
+            user.SecurityStamp = stamp;
         }
 
-        public async Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
+        public Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             cancellationToken.ThrowIfCancellationRequested();
-            throw new NotImplementedException();
+
+            return Task.FromResult(user.SecurityStamp);
         }
 
         public async Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             cancellationToken.ThrowIfCancellationRequested();
+
             user.Email = email;
         }
 
@@ -284,6 +291,7 @@ namespace Soloco.RealTimeWeb.Membership.Services
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             cancellationToken.ThrowIfCancellationRequested();
+
             return user.Email;
         }
 

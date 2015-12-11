@@ -51,6 +51,10 @@ namespace Soloco.RealTimeWeb
             ReplaceRazorServiceDescription(services);
 
             var container = new Container();
+
+            container
+                .RegisterInstance<IConfigurationRoot>(Configuration);
+
             container
                 .RegisterCommon()
                 .RegisterMembership();

@@ -29,14 +29,16 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
             var handlerType = typeof (IHandleMessage<,>)
                 .MakeGenericType(message.GetType(), typeof (TResult));
 
-            var handler = _container.Resolve(handlerType, IfUnresolved.ReturnDefault);
-            if (handler == null)
+            try
+            {
+                return _container.Resolve(handlerType, IfUnresolved.Throw);
+            }
+            catch (ContainerException exception)
             {
                 throw new InvalidOperationException(
                     $"Handler {handlerType} for message : {message.GetType()} not found. " +
-                    $"Did you call corresponding ContainerInitializer method while configuring the container?");
+                    $"Did you call corresponding ContainerInitializer method while configuring the container?", exception);
             }
-            return handler;
         }
     }
 }
