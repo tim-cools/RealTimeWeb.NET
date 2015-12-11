@@ -12,8 +12,8 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
     public class RefreshTokensQueryHandler : QueryHandler<RefreshTokensQuery, IEnumerable<RefreshToken>>
     {
 
-        public RefreshTokensQueryHandler(IQuerySession session, IDisposable scope)
-              : base(session, scope)
+        public RefreshTokensQueryHandler(IQuerySession session)
+              : base(session)
         {
         }
 

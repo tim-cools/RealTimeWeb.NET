@@ -12,8 +12,8 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
     {
         private readonly UserManager<Domain.User> _userManager;
 
-        public UserByNameQueryHandler(UserManager<Domain.User> userManager, IDocumentSession session, IDisposable scope)
-              : base(session, scope)
+        public UserByNameQueryHandler(UserManager<Domain.User> userManager, IDocumentSession session)
+              : base(session)
         {
             _userManager = userManager;
         }

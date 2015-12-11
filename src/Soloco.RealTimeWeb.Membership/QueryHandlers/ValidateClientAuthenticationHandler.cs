@@ -12,8 +12,8 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class ValidateClientAuthenticationHandler : QueryHandler<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
     {
-        public ValidateClientAuthenticationHandler(IQuerySession session, IDisposable scope)
-              : base(session, scope)
+        public ValidateClientAuthenticationHandler(IQuerySession session)
+              : base(session)
         {
         }
 

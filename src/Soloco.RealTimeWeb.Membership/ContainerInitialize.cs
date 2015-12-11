@@ -2,15 +2,17 @@
 using Marten;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.Logging;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using Soloco.RealTimeWeb.Common.Tests.Unit;
 using Soloco.RealTimeWeb.Membership.CommandHandlers;
 using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.QueryHandlers;
 using Soloco.RealTimeWeb.Membership.Services;
+using StructureMap;
+using StructureMap.Graph;
 
 namespace Soloco.RealTimeWeb.Membership
 {
-    public static class ContainerInitialize
+    public class MembershipRegistry : Registry
     {
         private class DummyLogger : ILogger<UserManager<User>>, IDisposable
         {
@@ -33,24 +35,23 @@ namespace Soloco.RealTimeWeb.Membership
             }
         }
 
-        public static IContainer RegisterMembership(this IContainer container)
+        public MembershipRegistry()
         {
-            if (container == null) throw new ArgumentNullException(nameof(container));
+            Scan(options => { 
+                options.TheCallingAssembly();
+                options.IncludeNamespaceContainingType<InitializeDatabaseCommandHandler>();
+                options.IncludeNamespaceContainingType<ClientByKeyQueryHandler>();
+                options.IncludeNamespaceContainingType<OAuthConfiguration>();
+                options.Convention<AllInterfacesConvention>();
+            });
 
-            container
-                .RegisterServicesInNamespace(typeof(InitializeDatabaseCommandHandler))
-                .RegisterServicesInNamespace(typeof(ClientByKeyQueryHandler))
-                .RegisterServicesInNamespace(Reuse.Singleton, typeof(OAuthConfiguration));
-
-            container
-                .RegisterDelegate<UserManager<User>>(UserManagerFactory, Reuse.InResolutionScope);
-
-            return container;
+            For<UserManager<User>>().Use("Create UserManagerFactory", UserManagerFactory);
         }
 
-        private static UserManager<User> UserManagerFactory(IResolver resolver)
+        private UserManager<User> UserManagerFactory(IContext resolver)
         {
-            var documentSession = resolver.Resolve<IDocumentSession>();
+            //tod put everything in container
+            var documentSession = resolver.GetInstance<IDocumentSession>();
             var store = new UserStore(documentSession);
             var passwordHasher = new PasswordHasher<User>();
             var logger = new DummyLogger(); // get the real deal

@@ -1,7 +1,7 @@
 ﻿using System;
 using Marten;
 using Shouldly;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using StructureMap;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;

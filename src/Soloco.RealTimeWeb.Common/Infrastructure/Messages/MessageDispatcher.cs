@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using StructureMap;
 
 namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
 {
     public class MessageDispatcher : IMessageDispatcher
     {
-        private readonly IResolver _container;
+        private readonly IContainer _container;
 
-        public MessageDispatcher(IResolver container)
+        public MessageDispatcher(IContainer container)
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
 
@@ -19,21 +19,24 @@ namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
 
-            var handler = GetHandler(message);
+            using (var context = _container.CreateChildContainer())
+            {
+                var handler = GetHandler(context, message);
 
-            return await handler.Handle((dynamic) message);
+                return await handler.Handle((dynamic) message);
+            }
         }
 
-        private dynamic GetHandler<TResult>(IMessage<TResult> message) 
+        private static dynamic GetHandler<TResult>(IContainer container, IMessage<TResult> message) 
         {
             var handlerType = typeof (IHandleMessage<,>)
                 .MakeGenericType(message.GetType(), typeof (TResult));
 
             try
             {
-                return _container.Resolve(handlerType, IfUnresolved.Throw);
+                return container.GetInstance(handlerType);
             }
-            catch (ContainerException exception)
+            catch (Exception exception)
             {
                 throw new InvalidOperationException(
                     $"Handler {handlerType} for message : {message.GetType()} not found. " +

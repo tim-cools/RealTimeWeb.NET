@@ -13,8 +13,8 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
     {
         private readonly UserManager<User> _userManager;
 
-        public UserLoginQueryHandler(UserManager<User> userManager, IDocumentSession session, IDisposable scope)
-              : base(session, scope)
+        public UserLoginQueryHandler(UserManager<User> userManager, IDocumentSession session)
+              : base(session)
         {
             _userManager = userManager;
         }

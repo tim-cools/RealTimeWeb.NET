@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "dnx46": {
+      "bin": {
+        "assembly": "../../lib/dnx46/Marten.dll"
+      }
+    }
+  }
+}

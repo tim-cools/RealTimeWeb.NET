@@ -11,7 +11,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
     public class CreateRefreshTokenHandler : CommandHandler<CreateRefreshTokenCommand>
     {
-        public CreateRefreshTokenHandler(IDocumentSession session, IDisposable scope) : base(session, scope)
+        public CreateRefreshTokenHandler(IDocumentSession session) : base(session)
         {
         }
 

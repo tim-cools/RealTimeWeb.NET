@@ -4,12 +4,12 @@ using System.Linq;
 using Marten;
 using Xunit;
 using Shouldly;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
+using StructureMap;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {

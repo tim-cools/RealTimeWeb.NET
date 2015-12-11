@@ -1,18 +1,19 @@
 ﻿using System;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
 using Soloco.RealTimeWeb.Controllers;
+using StructureMap;
+using StructureMap.Graph;
 
-namespace Soloco.RealTimeWeb
+namespace Soloco.RealTimeWeb.Infrastructure
 {
-    internal static class ContainerInitialize
+    internal class WebRegistry : Registry
     {
-        public static IContainer RegisterApiControllers(this IContainer container)
+        public WebRegistry()
         {
-            if (container == null) throw new ArgumentNullException(nameof(container));
-
-            container.RegisterServicesInNamespace(typeof(AccountController));
-
-            return container;
+            Scan(options =>
+            {
+                options.TheCallingAssembly();
+                options.IncludeNamespaceContainingType<AccountController>();
+            });
         }
     }
 }

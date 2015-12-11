@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;
 using Soloco.RealTimeWeb.Membership;
@@ -48,28 +48,18 @@ namespace Soloco.RealTimeWeb
             services.AddAuthentication();
             services.AddMvc();
 
-            ReplaceRazorServiceDescription(services);
+            var container = new Container(configuration =>
+            {
+                configuration.For<IConfigurationRoot>().Use(Configuration);
+                configuration.AddRegistry<CommonRegistry>();
+                configuration.AddRegistry<MembershipRegistry>();
+            });
 
-            var container = new Container();
+            container.Populate(services);
 
-            container
-                .RegisterInstance<IConfigurationRoot>(Configuration);
-
-            container
-                .RegisterCommon()
-                .RegisterMembership();
-
-            return container.CreateServiceProvider(services);
+            return container.GetInstance<IServiceProvider>(); 
         }
 
-        private static void ReplaceRazorServiceDescription(IServiceCollection services)
-        {
-            var razorHost = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof (IMvcRazorHost));
-            services.Remove(razorHost);
-            services.Add(new ServiceDescriptor(typeof (IMvcRazorHost),
-                provider => new MvcRazorHost((IChunkTreeCache) provider.GetService(typeof (IChunkTreeCache))),
-                razorHost.Lifetime));
-        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

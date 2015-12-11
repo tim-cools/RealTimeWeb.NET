@@ -16,7 +16,9 @@
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Newtonsoft.Json": "3.5.8",
     "Serilog": "2.0.0-beta-403",
-    "Npgsql": "3.0.3"
+    "Npgsql": "3.0.3",
+    "StructureMap.Dnx": "0.4.0-alpha4",
+    "Shouldly": "2.6.0"
   },
 
   "frameworks": {

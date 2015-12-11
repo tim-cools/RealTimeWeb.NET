@@ -4,7 +4,7 @@ using Marten;
 using Shouldly;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Infrastructure;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using StructureMap;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;

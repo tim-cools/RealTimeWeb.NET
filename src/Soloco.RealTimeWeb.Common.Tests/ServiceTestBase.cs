@@ -1,6 +1,6 @@
 ﻿using System;
 using Marten;
-using Soloco.RealTimeWeb.Common.Infrastructure.DryIoc;
+using StructureMap;
 
 namespace Soloco.RealTimeWeb.Common.Tests
 {
@@ -29,8 +29,8 @@ namespace Soloco.RealTimeWeb.Common.Tests
 
             using (var container = _fixture.OpenContainerScope())
             {
-                var session = container.Resolve<IDocumentSession>();
-                var service = container.Resolve<TService>();
+                var session = container.GetInstance<IDocumentSession>();
+                var service = container.GetInstance<TService>();
 
                 execute(service, session, container);
             }

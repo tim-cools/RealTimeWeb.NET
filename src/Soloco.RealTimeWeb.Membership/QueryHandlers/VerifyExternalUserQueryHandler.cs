@@ -15,8 +15,8 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
         private readonly UserManager<User> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
-        public VerifyExternalUserQueryHandler(UserManager<User> userManager ,IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory)
-            : base(session, scope)
+        public VerifyExternalUserQueryHandler(UserManager<User> userManager ,IDocumentSession session, IProviderTokenValidatorFactory providerTokenValidatorFactory)
+            : base(session)
         {
             _providerTokenValidatorFactory = providerTokenValidatorFactory;
 

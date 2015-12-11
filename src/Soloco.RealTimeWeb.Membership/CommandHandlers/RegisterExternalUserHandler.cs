@@ -16,7 +16,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         private readonly UserManager<User> _userManager;
         private readonly IProviderTokenValidatorFactory _providerTokenValidatorFactory;
 
-        public RegisterExternalUserHandler(IDocumentSession session, IDisposable scope, IProviderTokenValidatorFactory providerTokenValidatorFactory) : base(session, scope)
+        public RegisterExternalUserHandler(IDocumentSession session, IProviderTokenValidatorFactory providerTokenValidatorFactory) : base(session)
         {
             _providerTokenValidatorFactory = providerTokenValidatorFactory;
 

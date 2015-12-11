@@ -11,8 +11,8 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
     public class InitializeDatabaseCommandHandler : CommandHandler<InitializeDatabaseCommand>
     {
-        public InitializeDatabaseCommandHandler(IDocumentSession session, IDisposable scope)
-             : base(session, scope)
+        public InitializeDatabaseCommandHandler(IDocumentSession session)
+             : base(session)
         {
         }
 

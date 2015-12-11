@@ -10,8 +10,8 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
     public class ClientByKeyQueryHandler : QueryHandler<ClientByKeyQuery, Client>
     {
-        public ClientByKeyQueryHandler(IQuerySession session, IDisposable scope)
-              : base(session, scope)
+        public ClientByKeyQueryHandler(IQuerySession session)
+              : base(session)
         {
         }
 
