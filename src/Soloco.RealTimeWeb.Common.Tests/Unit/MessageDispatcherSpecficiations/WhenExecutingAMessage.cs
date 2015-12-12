@@ -1,10 +1,10 @@
 ﻿using Shouldly;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
-using Soloco.RealTimeWeb.Common.Tests.Storage;
+using Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications;
 using Xunit;
+using TestMessage = Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications.TestMessage;
 
-namespace Soloco.RealTimeWeb.Common.Tests.Unit.MessageDispatcher
+namespace Soloco.RealTimeWeb.Common.Tests.Unit.MessageDispatcherSpecficiations
 {
     public class WhenExecutingAMessage
     {

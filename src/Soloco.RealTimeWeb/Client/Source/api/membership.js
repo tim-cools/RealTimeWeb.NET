@@ -60,7 +60,7 @@ function loggedOn(userName, token, refreshToken) {
     navigate.to('/home');
 }
 
-function register(userName, eMail, password) {
+function register(userName, eMail, password, confirmPassword) {
 
     function handleResponse(response) {
         login(userName, password);
@@ -74,7 +74,8 @@ function register(userName, eMail, password) {
     var data = {
         userName: userName,
         eMail: eMail,
-        password: password
+        password: password,
+        confirmPassword: confirmPassword
     };
 
     userStateActions.registerPending();

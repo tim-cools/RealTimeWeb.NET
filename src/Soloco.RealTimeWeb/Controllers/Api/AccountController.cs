@@ -154,9 +154,11 @@ namespace Soloco.RealTimeWeb.Controllers.Api
                     .Select(error => error.ErrorMessage)
                     .ToArray();
 
+            var modelValidationResult = errors.Length == 0 ? CommandResult.Success : CommandResult.Failed(errors);
+
             var merged = result == null 
-                ? new CommandResult(errors) 
-                : result.Merge(CommandResult.Failed(errors));
+                ? modelValidationResult
+                : result.Merge(modelValidationResult);
 
             return merged.Succeeded ? (IActionResult) Ok() : new ObjectResult(merged) { StatusCode = StatusCodes.Status400BadRequest };
         }

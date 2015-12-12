@@ -1,9 +1,10 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications;
 using StructureMap;
 
-namespace Soloco.RealTimeWeb.Common.Tests.Unit.MessageDispatcher
+namespace Soloco.RealTimeWeb.Common.Tests.Unit
 {
     public static class TestContainerFactory
     {

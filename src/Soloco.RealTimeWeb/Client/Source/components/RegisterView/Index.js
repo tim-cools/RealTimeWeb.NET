@@ -8,11 +8,12 @@ import membership from '../../api/membership'
 
 class LogonPage extends Component {
     onClick() {
-        const { userNameInput, eMailInput, passwordInput } = this.refs;
+        const { userNameInput, eMailInput, passwordInput,  confirmPasswordInput } = this.refs;
         const userName = userNameInput.getValue();
         const eMail = eMailInput.getValue();
         const password = passwordInput.getValue();
-        membership.register(userName, eMail, password);
+        const confirmPassword = confirmPasswordInput.getValue();
+        membership.register(userName, eMail, password, confirmPassword);
     }
     
     render() {
@@ -40,9 +41,9 @@ class LogonPage extends Component {
                             ref="passwordInput"/>
                         <Input
                             type="password"
-                            placeholder="Repeat Password"
+                            placeholder="Confirm Password"
                             hasFeedback
-                            ref="passwordInput"/>
+                            ref="confirmPasswordInput"/>
                         <Button bsStyle="success" bzSize="large" className="btn-block" onClick={this.onClick.bind(this)} >
                             Register
                         </Button>

@@ -18,7 +18,8 @@
     "Serilog": "2.0.0-beta-403",
     "Npgsql": "3.0.3",
     "StructureMap.Dnx": "0.4.0-alpha4",
-    "Shouldly": "2.6.0"
+    "Shouldly": "2.6.0",
+    "Marten": "0.5.0.9"
   },
 
   "frameworks": {
@@ -26,11 +27,6 @@
       "frameworkAssemblies": {
         "System.Data": "4.0.0.0",
       },
-      "dependencies": {
-        "Baseline": "1.0.0-*",
-        "Marten": "1.0.0-*",
-        "Remotion.Linq": "1.0.0-*"
-      }
     }
   }
 }
