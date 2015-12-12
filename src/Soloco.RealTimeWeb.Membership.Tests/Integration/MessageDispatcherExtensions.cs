@@ -12,7 +12,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration
             if (message == null) throw new ArgumentNullException(nameof(message));
 
             var task = messageDispatcher.Execute(message);
-            if (!task.Wait(300000))
+            if (!task.Wait(30000))
             {
                 throw new InvalidOperationException("Timeout on executing message.");
             }
