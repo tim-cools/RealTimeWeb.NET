@@ -1,5 +1,6 @@
 if not "%1"=="" (
-	..\tools\TransformConfig\TransformConfig.exe ..\src ..\config\%1.transform.config
+	set Hosting:Environment=%1
 )
 
-..\src\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe ..\src\Soloco.RealTimeWeb.nunit
+dnx -p .\src\Soloco.RealTimeWeb.Common.Tests test
+dnx -p .\src\Soloco.RealTimeWeb.Membership.Tests test

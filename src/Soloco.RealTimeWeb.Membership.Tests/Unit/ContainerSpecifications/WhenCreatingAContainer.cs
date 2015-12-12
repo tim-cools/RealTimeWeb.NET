@@ -1,28 +1,21 @@
 ﻿using System.Diagnostics;
 using Shouldly;
-using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Infrastructure;
 using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
-using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Common.Tests.Unit;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
-using StructureMap;
 using Xunit;
 
-namespace Soloco.RealTimeWeb.Membership.Tests.Unit
+namespace Soloco.RealTimeWeb.Membership.Tests.Unit.ContainerSpecifications
 {
-    public class ContainerTest
+    public class WhenCreatingAContainer
     {
         [Fact]
         public void ThenMessageHandlerShouldBeGettable()
         {
-            var container = new Container(config =>
+            var container = TestContainerFactory.CreateContainer(config =>
             {
-                config.AddRegistry<CommonRegistry>();
-                config.AddRegistry<TestRegistry>();
                 config.AddRegistry<MembershipRegistry>();
-                config.For<IContext>().Use("Return context", context => context);
-
-                //config.For<IConfigurationRoot>().Use(configuration);
             });
 
             Debug.WriteLine(container.WhatDidIScan());

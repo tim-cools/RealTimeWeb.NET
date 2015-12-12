@@ -33,8 +33,10 @@ namespace Soloco.RealTimeWeb.Common.Tests
 
         private IConfigurationRoot InitializeConfiguration()
         {
+            var environment = System.Environment.GetEnvironmentVariable("Hosting:Environment") ?? "local"; //todo should be WebHostBuilder.EnvironmentKey instead of hard coded
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("../../config/appsettings.tests.json")
+                .AddJsonFile($"../../config/appsettings.tests.{environment}.json", true);
 
             return builder.Build();
         }
