@@ -27,7 +27,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
             _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
 
-        [Fact]
+        [Fact(Skip = "Disable usage of external api")]
         public void ThenTheRefreshTokensShouldBeReturned()
         {
             _result.ShouldNotBeNull();
