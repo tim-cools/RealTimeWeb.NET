@@ -4,10 +4,10 @@
     "Soloco.RealTimeWeb.Common",
     "Soloco.RealTimeWeb.Common.Tests",
     "Soloco.RealTimeWeb.Environment",
-	"Soloco.RealTimeWeb.Membership",
-	"Soloco.RealTimeWeb.Membership.Messages",
-	"Soloco.RealTimeWeb.Membership.Tests",
-	"Soloco.RealTimeWeb.Monitoring"
+    "Soloco.RealTimeWeb.Membership",
+    "Soloco.RealTimeWeb.Membership.Messages",
+    "Soloco.RealTimeWeb.Membership.Tests",
+    "Soloco.RealTimeWeb.Monitoring"
   ],
   "sdk": {
     "runtime": "clr",

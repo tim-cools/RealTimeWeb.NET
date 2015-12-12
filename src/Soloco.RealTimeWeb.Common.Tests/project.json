@@ -22,7 +22,8 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Soloco.RealTimeWeb.Common": "1.0.0-*"
+    "Soloco.RealTimeWeb.Common": "1.0.0-*",
+    "Marten": "0.5.0.9"
   },
   "commands": {
     "test": "xunit.runner.dnx"

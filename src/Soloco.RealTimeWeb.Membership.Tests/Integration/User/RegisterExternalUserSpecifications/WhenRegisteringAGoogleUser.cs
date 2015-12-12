@@ -48,7 +48,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterExternalU
             }
         }
 
-        [Fact]
+        [Fact(Skip = "The google access tokens expire really fast. We need a way to automate the retrieval of the token. (Selenium)")]
         public void ThenAUserShouldBeAbleToLogin()
         {
             SessionScope((dispatcher, session, container) =>

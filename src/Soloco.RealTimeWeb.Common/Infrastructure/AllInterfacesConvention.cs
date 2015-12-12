@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Baseline;
 using StructureMap;
 using StructureMap.Graph;
@@ -11,14 +12,15 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit
     {
         public void ScanTypes(TypeSet types, Registry registry)
         {
-            types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
-                .Each(service => RegisterInterfaces(registry, service));
+            types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed).ToList()
+                .ForEach(service => RegisterInterfaces(registry, service));
         }
 
         private static IEnumerable<Type> RegisterInterfaces(Registry registry, Type service)
         {
-            return service.GetInterfaces()
-                .Each(@interface => registry.For(@interface).Use(service));
+            var types = service.GetInterfaces().ToList();
+            types.ForEach(@interface => registry.For(@interface).Use(service));
+            return types;
         }
     }
 }
