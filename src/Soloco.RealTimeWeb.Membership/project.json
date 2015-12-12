@@ -21,7 +21,5 @@
     "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
     "Soloco.RealTimeWeb.Common": "1.0.0-*",
-    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-*",
-    "Marten": "0.5.0.9"
-  }
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-*"  }
 }
