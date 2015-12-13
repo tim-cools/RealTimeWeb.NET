@@ -60,5 +60,9 @@
       "gulp clean",
       "gulp min"
     ]
+  },
+  "packInclude": {
+    "wwwroot/": "wwwroot/**/*.**",
+    "/": "../../config/appsettings.web.*.**"
   }
 }
