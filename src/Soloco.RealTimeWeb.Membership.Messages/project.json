@@ -10,7 +10,7 @@
   },
 
   "frameworks": {
-    "dnx46": { }
+    "dnx451": { }
   },
   "dependencies": {
     "Soloco.RealTimeWeb.Common": "1.0.0-*"
