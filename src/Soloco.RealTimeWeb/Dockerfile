@@ -1,4 +1,4 @@
-FROM microsoft/aspnet:1.0.0-rc1
+FROM microsoft/aspnet:1.0.0-rc1-update1
 
 WORKDIR /home
 RUN nuget nuget source add -Name deployment -Source https://ci.appveyor.com/nuget/realtimeweb-net
