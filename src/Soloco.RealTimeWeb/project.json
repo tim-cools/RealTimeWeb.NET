@@ -54,15 +54,14 @@
     "**.vspscc"
   ],
   "scripts": {
-    "prepublish": [
+    "prepack": [
       "npm install",
-      "bower install",
-      "gulp clean",
-      "gulp min"
+      "gulp build"
     ]
   },
   "packInclude": {
     "wwwroot/": "wwwroot/**/*.**",
-    "app/": "../../config/appsettings.web.*.**"
+    "Views/": "Views/**/*.**",
+    "app/": "appsettings*.*"
   }
 }
