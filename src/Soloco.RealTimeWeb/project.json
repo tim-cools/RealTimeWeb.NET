@@ -63,6 +63,11 @@
   },
   "packInclude": {
     "wwwroot/": "wwwroot/**/*.**",
-    "/": "../../config/appsettings.web.*.**"
+    "/": "../../config/appsettings.web.*.**",
+    "lib/dnx46/": [
+      "../artifacts/bin/Soloco.RealTimeWeb.Membership/Debug/dnx46/*.*",
+      "../artifacts/bin/Soloco.RealTimeWeb.Membership.Messages/Debug/dnx46/*.*",
+      "../artifacts/bin/Soloco.RealTimeWeb.Common/Debug/dnx46/*.*"
+    ]
   }
 }
