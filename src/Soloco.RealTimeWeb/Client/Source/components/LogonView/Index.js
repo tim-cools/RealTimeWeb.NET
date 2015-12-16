@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 
 import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
-import { actions as userActions, userStatus } from '../../state/user'
 import membership from '../../api/membership'
 
 class LogonPage extends Component {
+    
+    componentDidMount() {
+        membership.logonInit();
+    }
+    
     onClick() {
         const { userNameInput, passwordInput } = this.refs;
         const userName = userNameInput.getValue();
         const password = passwordInput.getValue();
-        membership.login(userName, password);
+        membership.logon(userName, password);
     }
     
     facebook() {
@@ -37,9 +41,16 @@ class LogonPage extends Component {
     
     render() {
         var title = ( <h2>Log On</h2> );
-        var loader = this.props.processing
+        var loader = this.props.pending
             ? ( <div>Loading</div> )
             : null;
+
+        var errors = [];
+        if (this.props.errors) {
+            this.props.errors.map(message => errors.push(
+                ( <div>{message}</div> )
+                ));
+        }
 
         var content = this.props.associateExternal
             ? (        
@@ -57,7 +68,7 @@ class LogonPage extends Component {
                         Button
                     </Button>
                     {loader}
-                    <div>{this.props.message}</div>
+                    {errors}
                 </Panel>
               )
             : ( 
@@ -75,8 +86,8 @@ class LogonPage extends Component {
                         <Button bsStyle="success" bzSize="large" className="btn-block" onClick={this.onClick.bind(this)} >
                             Log On
                         </Button>
-                            {loader}
-                        <div>{this.props.message}</div>
+                        {loader}
+                        {errors}
                         <Button bsStyle="facebook" bsSize="large" className="btn-block" onClick={this.facebook.bind(this)}>
                             <i className="fa fa-facebook"></i> | Connect with Facebook
                         </Button>
@@ -105,22 +116,33 @@ class LogonPage extends Component {
 
 LogonPage.propTypes = {
     associateExternal: PropTypes.bool.isRequired,
-    processing: PropTypes.bool.isRequired,
-    message: PropTypes.string,
+    pending: PropTypes.bool.isRequired,
+    errors: PropTypes.arrayOf(PropTypes.string),
     provider: PropTypes.string,
     externalAccessToken: PropTypes.string,
     externalUserName: PropTypes.string
 };
 
 function select(state) {
-    return {
-        processing: state.user.processing,
-        associateExternal: state.user.status === userStatus.associateExternal || state.user.status === userStatus.accociateExternalPending,
-        message: state.user.message,
-        provider: state.user.provider,
-        externalAccessToken: state.user.externalAccessToken,
-        externalUserName: state.user.externalUserName
-    };
+    return state.user.logon
+        ? {
+            associateExternal: false,
+            pending: state.user.logon.pending,
+            errors: state.user.logon.errors
+        } 
+        : state.user.associateExternal 
+        ? {
+            associateExternal: true,
+            pending: state.user.associateExternal.pending,
+            errors: state.user.associateExternal.errors,
+            provider: state.user.associateExternal.provider,
+            externalAccessToken: state.user.associateExternal.accessToken,
+            externalUserName: state.user.associateExternal.userName
+        }
+        : {
+            associateExternal: false,
+            pending: false
+        };
 }
 
 export default connect(select)(LogonPage);

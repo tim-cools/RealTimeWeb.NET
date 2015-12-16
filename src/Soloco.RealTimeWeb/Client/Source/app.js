@@ -28,6 +28,19 @@ const store = storeFactory(reducers);
 dispatcher.set(store.dispatch);
 
 let contentElement = document.getElementById('application-content');
+var elements = [ 
+    <Provider store={store}>
+        <Router />
+    </Provider>    
+];
+
+if (window.location.hostname === 'localhost'){
+    elements.push(
+        <DebugPanel top right bottom>
+            <DevTools store={store} monitor={LogMonitor} />
+        </DebugPanel>
+    );
+}
 
 ReactDom.render((
     <div>

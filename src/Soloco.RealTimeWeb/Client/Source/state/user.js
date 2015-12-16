@@ -2,14 +2,16 @@ import dispatcher from './dispatcher';
 var dispatch = dispatcher.dispatch;
 
 export const userStatus = {
-    notAuthenticated: 'notAuthenticated',
     authenticated: 'authenticated',
-    associateExternal: 'associateExternal',
-    values: ['notAuthenticated', 'authenticated', 'associateExternal']
+    notAuthenticated: 'notAuthenticated',
+
+    values: ['authenticated', 'notAuthenticated']
 };
 
 export const actionsDefinitions = {
+
     LOG_OFF: 'LOG_OFF',
+    LOGGED_ON: 'LOGGED_ON',
     
     LOG_ON: 'LOG_ON',
     LOG_ON_PENDING: 'LOG_ON_PENDING',
@@ -17,6 +19,7 @@ export const actionsDefinitions = {
 
     REGISTER: 'REGISTER',
     REGISTER_PENDING: 'REGISTER_PENDING',
+    REGISTER_FAILED: 'REGISTER_FAILED',
     
     ASSOCIATE_EXTERNAL: 'ASSOCIATE_EXTERNAL',
     ASSOCIATE_EXTERNAL_PENDING: 'ASSOCIATE_EXTERNAL_PENDING',
@@ -24,9 +27,15 @@ export const actionsDefinitions = {
 };
 
 export const actions = {
-    logon: function(name, refreshTokens) {
+    logon: function() {
         return dispatch({
-            type: actionsDefinitions.LOG_ON,
+            type: actionsDefinitions.LOG_ON
+        });
+    },
+    
+    loggedOn: function(name, refreshTokens) {
+        return dispatch({
+            type: actionsDefinitions.LOGGED_ON,
             name: name,
             refreshTokens: refreshTokens
         });
@@ -38,10 +47,10 @@ export const actions = {
         });
     },
 
-    logonFailed: function(message) {
+    logonFailed: function(errors) {
         return dispatch({
             type: actionsDefinitions.LOG_ON_FAILED,
-            message: message
+            errors: errors
         });
     },
 
@@ -63,6 +72,13 @@ export const actions = {
         });
     },
 
+    registerFailed: function(errors) {
+        return dispatch({
+            type: actionsDefinitions.REGISTER_FAILED,
+            errors: errors
+        });
+    },
+
     associateExternal: function(provider, externalAccessToken, externalUserName) {
         return dispatch({
             type: actionsDefinitions.ASSOCIATE_EXTERNAL,
@@ -78,10 +94,10 @@ export const actions = {
         });
     },
 
-    associateExternalFailed: function (message) {
+    associateExternalFailed: function (errors) {
         return dispatch({
             type: actionsDefinitions.ASSOCIATE_EXTERNAL_FAILED, 
-            message: message
+            errors: errors
         });
     }
 };
@@ -90,24 +106,34 @@ const notAuthenticated = { status: userStatus.notAuthenticated };
 
 export function reducer(state = notAuthenticated, action) {
     switch (action.type) {
-        case actionsDefinitions.LOG_ON:
+        case actionsDefinitions.LOGGED_ON:
             return {
                 status: userStatus.authenticated,
-                name: action.name,
-                processing: false
+                name: action.name
+            };
+
+        case actionsDefinitions.LOG_ON:
+            return {
+                status: userStatus.notAuthenticated,
+                logon: { }
             };
 
         case actionsDefinitions.LOG_ON_PENDIG:
             return {
                 status: userStatus.notAuthenticated,
                 name: state.name,
-                processing: true
+                logon: {
+                    pending: true
+                }
             };
 
         case actionsDefinitions.LOG_ON_FAILED:
             return {
-                status: userStatus.notAuthenticated, 
-                message: action.message
+                status: userStatus.notAuthenticated,
+                name: state.name,
+                logon: {
+                    errors: action.errors
+                }
             };
 
         case actionsDefinitions.LOG_OFF:
@@ -115,43 +141,58 @@ export function reducer(state = notAuthenticated, action) {
                 status: userStatus.notAuthenticated
             };
 
-        case actionsDefinitions.REGISTER:
-            return {
-                status: userStatus.notAuthenticated,
-                processing: false
-            };
-
-        case actionsDefinitions.REGISTER_PENDING:
-            return {
-                status: userStatus.notAuthenticated,
-                processing: true
-            };
-
         case actionsDefinitions.ASSOCIATE_EXTERNAL:
             return {
-                status: userStatus.associateExternal,
-                provider: action.provider,
-                externalAccessToken: action.externalAccessToken,
-                externalUserName: action.externalUserName,
-                processing: false
+                status: userStatus.notAuthenticated,
+                associateExternal: {
+                    provider: action.provider,
+                    accessToken: action.externalAccessToken,
+                    userName: action.externalUserName
+                }
             };
 
         case actionsDefinitions.ASSOCIATE_EXTERNAL_PENDING:
             return {
-                status: userStatus.associateExternal,
-                provider: state.provider,
-                externalAccessToken: state.externalAccessToken,
-                externalUserName: state.externalUserName,
-                processing: true
+                status: userStatus.notAuthenticated,
+                associateExternal: {
+                    pending: true,
+                    provider: state.associateExternal.provider,
+                    token: state.associateExternal.token,
+                    userName: state.associateExternal.userName
+                }
             };
 
         case actionsDefinitions.ASSOCIATE_EXTERNAL_FAILED:
             return {
-                status: userStatus.associateExternal, 
-                message: action.message,
-                provider: state.provider,
-                externalAccessToken: state.externalAccessToken,
-                externalUserName: state.externalUserName
+                status: userStatus.notAuthenticated, 
+                associateExternal: {
+                    errors: action.errors,
+                    provider: state.associateExternal.provider,
+                    token: state.associateExternal.token,
+                    userName: state.associateExternal.userName
+                }
+            };
+            
+        case actionsDefinitions.REGISTER:
+            return {
+                status: userStatus.notAuthenticated, 
+                register: { }
+            };
+            
+        case actionsDefinitions.REGISTER_PENDING:
+            return {
+                status: userStatus.notAuthenticated, 
+                register: {
+                    pending: true
+                }
+            };
+
+        case actionsDefinitions.REGISTER_FAILED:
+            return {
+                status: userStatus.notAuthenticated,
+                register: {
+                    errors: action.errors
+                }
             };
 
         default:

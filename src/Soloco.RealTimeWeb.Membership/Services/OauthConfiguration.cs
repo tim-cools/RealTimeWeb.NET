@@ -20,6 +20,7 @@ namespace Soloco.RealTimeWeb.Membership.Services
             {
                 AppId = "1648062998809846",
                 AppSecret = "c0401541376309eba60190b8999ed048",
+                
             };
         }
     }

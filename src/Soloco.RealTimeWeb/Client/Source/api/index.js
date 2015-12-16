@@ -1,16 +1,27 @@
 import reqwest from 'reqwest';
 
 const jsonHeaders = { 'Accept': 'application/json' };
-const serviceBase = 'http://localhost:5010/';
+const serviceBase = window.location.protocol + '//' + window.location.host + '/';
 const clientId = 'realTimeWebClient';
 
 function call(verb, contentType, url, data, responseHandler, errorHandler) {
     
     function parseErrors(handler) {
+        function formatErrors(data) {
+            if (data.error_description) {
+                return [ data.error_description ];
+            } 
+            if (data.Errors) {
+                return data.Errors;
+            }
+            return [ "Something went wrong :(" ];
+        }
+
         return function(request) {
             const data = JSON.parse(request.response);
-            return handler(data.errors, request);
-        }
+            var error = formatErrors(data);
+            return handler(error, request);
+           }
     }
 
     reqwest({

@@ -14,15 +14,18 @@ const storageKey = 'authorizationData';
 //    proxy.server.login(userName, password);
 //}
 
-function login(userName, password, useRefreshTokens) {
+function logonInit() {
+    userStateActions.logon();
+}
+
+function logon(userName, password, useRefreshTokens) {
 
     function handleResponse(response) {
         loggedOn(userName, response.access_token, useRefreshTokens);
     }
 
-    function handleError(request) {
-        const data = JSON.parse(request.response);
-        userStateActions.logonFailed(data.error_description);
+    function handleError(errors) {
+        userStateActions.logonFailed(errors);
     }
 
     var data = 'grant_type=password&username=' + userName + '&password=' + password;
@@ -55,20 +58,23 @@ function loggedOn(userName, token, refreshToken) {
 
     store.set(storageKey, data);
         
-    userStateActions.logon(userName, refreshToken ? true : false);
+    userStateActions.loggedOn(userName, refreshToken ? true : false);
     
     navigate.to('/home');
+}
+
+function registerInit() {
+    userStateActions.register();
 }
 
 function register(userName, eMail, password, confirmPassword) {
 
     function handleResponse(response) {
-        login(userName, password);
+        logon(userName, password);
     }
 
-    function handleError(request) {
-        const data = JSON.parse(request.response);
-        userStateActions.registrationFailed(data.error_description);
+    function handleError(errors) {
+        userStateActions.registerFailed(errors);
     }
 
     var data = {
@@ -145,9 +151,11 @@ function initialize() {
 
 export default {
     initialize: initialize,
-    login: login,
+    logon: logon,
+    logonInit: logonInit,
     logOff: logOff,
     register: register,
+    registerInit: registerInit,
     externalProviderUrl: externalProviderUrl,
     externalProviderCompleted: externalProviderCompleted,
     registerExternal: registerExternal

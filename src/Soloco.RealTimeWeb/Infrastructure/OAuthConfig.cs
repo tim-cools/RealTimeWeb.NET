@@ -22,6 +22,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
             app
                 .UseWhen(context => context.Request.Path.StartsWithSegments(new PathString("/api")), ApiAuthentication(oauthCOnfiguration))
                 .UseWhen(context => !context.Request.Path.StartsWithSegments(new PathString("/api")), WenAuthentication(oauthCOnfiguration))
+                .UseFacebookAuthentication(oauthCOnfiguration.Facebook)
+                .UseGoogleAuthentication(oauthCOnfiguration.Google)
                 .UseOpenIdConnectServer(ServerOptions(applicationServices));
 
             return app;
@@ -43,8 +45,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
                     options.LoginPath = new PathString("/signin");
                 });
 
-                branch.UseFacebookAuthentication(oauthCOnfiguration.Facebook);
-                branch.UseGoogleAuthentication(oauthCOnfiguration.Google);
                 //branch.UseTwitterAuthentication(oauthCOnfiguration.Twiiter);
             };
         }

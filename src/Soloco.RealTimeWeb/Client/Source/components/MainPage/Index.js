@@ -10,12 +10,11 @@ import Footer from './footer';
 
 class Application extends Component {
     render() {
-        const { dispatch, user } = this.props;
         return (
             <div>
                 <Header
-                    userAuthenticated={user.status == userStatus.authenticated}
-                    userName={user.name} />
+                    userAuthenticated={this.props.loggedOn}
+                    userName={this.props.name} />
                 {this.props.children}
                 <Container>
                     <Footer />
@@ -27,13 +26,16 @@ class Application extends Component {
 
 Application.propTypes = {
     user: PropTypes.shape({
-        status: React.PropTypes.oneOf(userStatus.values),
+        loggedOn: PropTypes.bool,
         name: PropTypes.string
     }).isRequired
 };
 
 function select(state) {
-    return { user: state.user };
+    return {
+        loggedOn: state.user.status === userStatus.authenticated,
+        name: state.user.name
+    };
 }
 
 export default connect(select)(Application);

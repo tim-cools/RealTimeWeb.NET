@@ -46,11 +46,9 @@ var config = {
 };
 
 gulp.task('clean', function(callback) {
-    return del(config.target, callback);
+    return del(config.target + '/**/*.*', callback);
 });
 
-
-// browserify -t babelify -t lessify -x react -x react-router -x react-bootstrap -x react-bootstrap-grid -x redux -x react-redux client/source/app.js > client/build/app.js
 gulp.task('application', function () {
     return browserify(config.app, _.extend({ debug: true }, watchify.args))
         .transform("babelify", { presets: ["es2015", "react", "stage-0"] })
@@ -64,8 +62,6 @@ gulp.task('application', function () {
         .pipe(gulp.dest(config.target));
 });
 
-// "build": "gulp build & browserify -r react -r react-router -r react-bootstrap -r react-bootstrap-grid -r redux -r react-redux > client/build/vendor.js 
-//& browserify -t [babelify --stage 0] -t lessify -x react -x react-router -x react-bootstrap -x react-bootstrap-grid -x redux -x react-redux client/source/app.js > client/build/app.js",
 gulp.task('vendor', function () {
     return browserify(null, _.extend({ debug: true }, watchify.args))
         .require(config.vendorFiles)

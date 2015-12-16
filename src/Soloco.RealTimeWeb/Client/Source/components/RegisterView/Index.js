@@ -3,25 +3,39 @@ import { connect } from 'react-redux';
 
 import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
-import { actions as userActions, userStatus } from '../../state/user'
 import membership from '../../api/membership'
 
 class LogonPage extends Component {
+    
+    componentDidMount() {
+        membership.registerInit();
+    }
+    
     onClick() {
+
         const { userNameInput, eMailInput, passwordInput,  confirmPasswordInput } = this.refs;
         const userName = userNameInput.getValue();
         const eMail = eMailInput.getValue();
         const password = passwordInput.getValue();
         const confirmPassword = confirmPasswordInput.getValue();
+
         membership.register(userName, eMail, password, confirmPassword);
     }
-    
+
     render() {
         var title = ( <h2>Register</h2> );
-        var loader = this.props.processing
+        var loader = this.props.pending
             ? ( <div>Loading</div> )
             : null;
 
+        
+        var errors = [];
+        if (this.props.errors) {
+            this.props.errors.map(message => errors.push(
+                ( <div>{message}</div> )
+                ));
+        }
+        
         var content = 
                     <Panel header={title} bsStyle="info">
                         <Input
@@ -47,8 +61,8 @@ class LogonPage extends Component {
                         <Button bsStyle="success" bzSize="large" className="btn-block" onClick={this.onClick.bind(this)} >
                             Register
                         </Button>
-                            {loader}
-                        <div>{this.props.message}</div>
+                        {loader}
+                        {errors}
                     </Panel>   
                 ;
 
@@ -70,15 +84,19 @@ class LogonPage extends Component {
 }
 
 LogonPage.propTypes = {
-    processing: PropTypes.bool.isRequired,
-    message: PropTypes.string,
+    pending: PropTypes.bool.isRequired,
+    errors: PropTypes.arrayOf(PropTypes.string)
 };
 
 function select(state) {
-    return {
-        processing: state.user.processing,
-        message: state.user.message
-    };
+    return state.user.register 
+        ? {
+            pending: state.user.register.pending,
+            errors: state.user.register.errors
+        } 
+        : {
+            pending: false         
+        };
 }
 
 export default connect(select)(LogonPage);
