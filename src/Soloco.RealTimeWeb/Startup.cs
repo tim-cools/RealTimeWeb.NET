@@ -1,10 +1,7 @@
 using System;
-using System.Linq;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc.Razor;
-using Microsoft.AspNet.Mvc.Razor.Directives;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -45,6 +42,11 @@ namespace Soloco.RealTimeWeb
             services.AddAuthentication();
             services.AddMvc();
 
+            return CreateContainerServiceProvider(services); 
+        }
+
+        private IServiceProvider CreateContainerServiceProvider(IServiceCollection services)
+        {
             var container = new Container(configuration =>
             {
                 configuration.For<IConfigurationRoot>().Use(Configuration);
@@ -54,14 +56,25 @@ namespace Soloco.RealTimeWeb
 
             container.Populate(services);
 
-            return container.GetInstance<IServiceProvider>(); 
+            return container.GetInstance<IServiceProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            ConfigureLogging(loggerFactory);
 
+            ConfigureWebApp(app, env);
+        }
+
+        private void ConfigureLogging(ILoggerFactory loggerFactory)
+        {
+            loggerFactory
+                .AddConsole(Configuration.GetSection("Logging"))
+                .AddDebug();
+        }
+
+        private static void ConfigureWebApp(IApplicationBuilder app, IHostingEnvironment env)
+        {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -71,15 +84,10 @@ namespace Soloco.RealTimeWeb
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-            
-            app.UseStaticFiles();
-            app.ConfigureOAuth();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
+               .UseStaticFiles()
+               .ConfigureOAuth()
+               .UseMvc(routes => { routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}"); });
         }
 
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
