@@ -8,7 +8,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit
 {
     public static class TestContainerFactory
     {
-        public static Container CreateContainer(Action<ConfigurationExpression> extraConfig = null)
+        public static IContainer CreateContainer(Action<ConfigurationExpression> extraConfig = null)
         {
             var container = new Container(config =>
             {

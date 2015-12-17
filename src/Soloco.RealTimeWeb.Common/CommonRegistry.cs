@@ -2,9 +2,9 @@
 using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
-using Soloco.RealTimeWeb.Common.Container;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Store;
+using Soloco.RealTimeWeb.Common.StructureMap;
 using StructureMap;
 using StructureMap.Graph;
 
