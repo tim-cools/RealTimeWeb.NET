@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using StructureMap;
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
+namespace Soloco.RealTimeWeb.Common.Messages
 {
     public class MessageDispatcher : IMessageDispatcher
     {

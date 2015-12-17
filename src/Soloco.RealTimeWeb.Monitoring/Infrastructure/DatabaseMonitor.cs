@@ -1,6 +1,6 @@
 using System;
 using Npgsql;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Store;
 
 namespace Soloco.RealTimeWeb.Monitoring.Infrastructure
 {

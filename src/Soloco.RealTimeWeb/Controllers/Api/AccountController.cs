@@ -10,15 +10,14 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json.Linq;
-using Soloco.RealTimeWeb.Common.Infrastructure;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 using Soloco.RealTimeWeb.Membership.Services;
-using Soloco.RealTimeWeb.Models;
-using Soloco.RealTimeWeb.Results;
+using Soloco.RealTimeWeb.ViewModels;
 
 namespace Soloco.RealTimeWeb.Controllers.Api
 {

@@ -1,6 +1,6 @@
 ﻿using System;
+using Soloco.RealTimeWeb.Common.Messages;
 using Xunit;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration
 {

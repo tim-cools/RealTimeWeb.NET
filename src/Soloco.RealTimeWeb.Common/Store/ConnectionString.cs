@@ -1,5 +1,5 @@
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
+namespace Soloco.RealTimeWeb.Common.Store
 {
     public class ConnectionString
     {

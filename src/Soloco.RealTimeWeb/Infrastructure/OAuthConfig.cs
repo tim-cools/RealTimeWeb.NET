@@ -4,7 +4,6 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Soloco.RealTimeWeb.Membership.Services;
-using Soloco.RealTimeWeb.Providers;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {

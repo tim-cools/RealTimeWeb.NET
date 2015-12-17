@@ -3,7 +3,7 @@ using System.Data.Common;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure.Store
+namespace Soloco.RealTimeWeb.Common.Store
 {
     public class ConnectionStringParser : IConnectionStringParser
     {

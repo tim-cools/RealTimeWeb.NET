@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
-using Soloco.RealTimeWeb.Common.Infrastructure;
 using StructureMap;
 using Soloco.RealTimeWeb.Common.Tests.Storage;
 
