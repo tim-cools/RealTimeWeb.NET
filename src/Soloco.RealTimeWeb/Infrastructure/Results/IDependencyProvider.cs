@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 
-namespace Soloco.RealTimeWeb.Results
+namespace Soloco.RealTimeWeb.Infrastructure.Results
 {
     internal interface IDependencyProvider
     {

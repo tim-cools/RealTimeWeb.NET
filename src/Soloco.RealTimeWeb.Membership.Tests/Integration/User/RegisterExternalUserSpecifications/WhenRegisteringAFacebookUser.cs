@@ -2,10 +2,10 @@
 using System.Linq;
 using Marten;
 using Shouldly;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Messages;
 using Xunit;
-using Soloco.RealTimeWeb.Common.Infrastructure;
 using StructureMap;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;

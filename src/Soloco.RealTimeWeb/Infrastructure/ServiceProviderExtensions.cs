@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Web.Http.Dependencies;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Messages;
 
-namespace Soloco.RealTimeWeb
+namespace Soloco.RealTimeWeb.Infrastructure
 {
     internal static class ServiceProviderExtensions
     {

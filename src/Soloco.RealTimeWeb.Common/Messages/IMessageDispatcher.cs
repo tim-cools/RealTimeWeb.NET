@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
+namespace Soloco.RealTimeWeb.Common.Messages
 {
     public interface IMessageDispatcher
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.AspNet.Identity;
-using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common;
 
 namespace Soloco.RealTimeWeb.Membership.Domain
 {

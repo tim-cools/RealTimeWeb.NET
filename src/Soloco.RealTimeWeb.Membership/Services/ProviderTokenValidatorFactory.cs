@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Soloco.RealTimeWeb.Common.Infrastructure;
+using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Services

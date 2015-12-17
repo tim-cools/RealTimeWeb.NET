@@ -1,9 +1,9 @@
 ﻿using System;
 using Marten;
 using Shouldly;
+using Soloco.RealTimeWeb.Common.Messages;
 using StructureMap;
 using Xunit;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;

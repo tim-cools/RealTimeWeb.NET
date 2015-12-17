@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 using Soloco.RealTimeWeb.Environment.Core;
 using Soloco.RealTimeWeb.Environment.Core.Configuration;
 

@@ -1,6 +1,6 @@
 ﻿// ReSharper disable UnusedTypeParameter
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
+namespace Soloco.RealTimeWeb.Common.Messages
 {
     public interface IMessage<TResult>
     {

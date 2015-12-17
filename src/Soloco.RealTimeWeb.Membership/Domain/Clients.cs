@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Soloco.RealTimeWeb.Common.Security;
 
 namespace Soloco.RealTimeWeb.Membership.Domain
 {
@@ -13,7 +14,7 @@ namespace Soloco.RealTimeWeb.Membership.Domain
                 {
                     Id = Guid.NewGuid(),
                     Key = "realTimeWebClient",
-                    Secret= Helper.GetHash("abc@123"),
+                    Secret= Hasher.ComputeSHA256("abc@123"),
                     Name="AngularJS front-end Application",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
@@ -24,7 +25,7 @@ namespace Soloco.RealTimeWeb.Membership.Domain
                 {
                     Id = Guid.NewGuid(),
                     Key = "consoleApp",
-                    Secret=Helper.GetHash("123@abc"),
+                    Secret=Hasher.ComputeSHA256("123@abc"),
                     Name="Console Application",
                     ApplicationType = ApplicationTypes.NativeConfidential,
                     Active = true,

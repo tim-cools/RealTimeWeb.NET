@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Marten;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Messages;
+using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 

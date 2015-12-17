@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Marten;
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure.Messages
+namespace Soloco.RealTimeWeb.Common.Messages
 {
     public abstract class CommandHandler<TCommand> : IHandleCommand<TCommand> 
         where TCommand : IMessage<CommandResult>

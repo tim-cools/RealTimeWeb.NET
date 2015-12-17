@@ -1,5 +1,5 @@
 ﻿using Shouldly;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications;
 using Xunit;
 using TestMessage = Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications.TestMessage;

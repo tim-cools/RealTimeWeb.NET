@@ -1,5 +1,5 @@
 - Log in Aws console
-  - Security credentioals
+  - Security credentials
   - Create user (use accesskey and secret key)
   - Assign rights: AdministratorAccess (TODO: assign more specific roles)
 
@@ -11,25 +11,39 @@ Settings
 --------
 All default setting can be found in the app.config:
 
-``  <appSettings>
-    <add key="AmazonRegion" value="eu-west-1"/>
-    <add key="AmazonAccessKey" value=""/>
-    <add key="AmazonSecretKey" value=""/>
-
-    <!-- disable backups for now -->
-    <add key="DatabaseName" value="RealTimeWeb"/>
-    <add key="DatabaseInstanceClass" value="db.m1.small"/>
-    <add key="DatabaseBackupRetentionPeriod" value="0"/>
-    <add key="DatabaseMasterUsername" value="RealTimeWebAdmin"/>
-    <add key="DatabaseMasterPassword" value=""/>
-  </appSettings>``
+```  
+{
+  "connectionStrings": {
+  },
+  "amazon": {
+    "region": "eu-west-1",
+    "accessKey": "",
+    "secretKey": ""
+  },
+  "database": {
+    "name": "RealTimeWeb",
+    "instanceClass": "db.m1.small",
+    "backupRetentionPeriod": "0",          //disable backups for now
+    "masterUserName": "RealTimeWebAdmin",
+    "masterUserPassword": ""
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Verbose",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  }
+}
+```
   
 To override a setting you can add it to the command line arguments.
 
-this tool will create:
-- A postgresql RDS instance (
--  
-- 
+The deployment environment in AW is created. This environment contains:
+- A Postgresql RDS instance
+- A ECS Docker Cluster of two EC2 instances
+- A load balancer for each application
 
 Troubleshooting
 ---------------

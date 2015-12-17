@@ -4,7 +4,7 @@ using System.Linq;
 using Marten;
 using Marten.Schema;
 
-namespace Soloco.RealTimeWeb.Common
+namespace Soloco.RealTimeWeb.Common.Store
 {
     internal class InMemoryStore : IDocumentSession, IDocumentStore, IDocumentCleaner
     {

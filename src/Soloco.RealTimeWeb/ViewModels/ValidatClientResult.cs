@@ -1,4 +1,4 @@
-namespace Soloco.RealTimeWeb.Models
+namespace Soloco.RealTimeWeb.ViewModels
 {
     internal class ValidatClientResult
     {

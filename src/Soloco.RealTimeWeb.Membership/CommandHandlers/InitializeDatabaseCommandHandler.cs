@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Marten;
-using Soloco.RealTimeWeb.Common.Infrastructure;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Messages;
+using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 

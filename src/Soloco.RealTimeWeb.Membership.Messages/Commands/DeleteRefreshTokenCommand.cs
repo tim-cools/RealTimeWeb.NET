@@ -1,5 +1,5 @@
 using System;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common.Messages;
 
 namespace Soloco.RealTimeWeb.Membership.Messages.Commands
 {

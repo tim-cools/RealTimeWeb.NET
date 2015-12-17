@@ -1,5 +1,5 @@
-using Soloco.RealTimeWeb.Common.Infrastructure;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Messages.Commands

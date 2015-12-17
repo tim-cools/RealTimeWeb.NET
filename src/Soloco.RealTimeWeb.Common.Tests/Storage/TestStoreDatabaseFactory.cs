@@ -1,7 +1,7 @@
 ﻿using System;
 using Npgsql;
 using Serilog;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Store;
 
 namespace Soloco.RealTimeWeb.Common.Tests.Storage
 {

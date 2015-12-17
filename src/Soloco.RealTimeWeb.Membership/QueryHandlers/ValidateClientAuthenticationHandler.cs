@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using Marten;
 using Serilog;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Messages;
+using Soloco.RealTimeWeb.Common.Security;
+using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
@@ -38,7 +39,7 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
                     Log.Warning("Client secret should be sent.");
                     return new ValidateClientAuthenticationResult(false);
                 }
-                if (client.Secret != Helper.GetHash(query.ClientSecret))
+                if (client.Secret != Hasher.ComputeSHA256(query.ClientSecret))
                 {
                     Log.Warning("Client secret is invalid.");
                     return new ValidateClientAuthenticationResult(false);

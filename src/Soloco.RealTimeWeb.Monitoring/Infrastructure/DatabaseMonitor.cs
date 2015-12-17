@@ -1,18 +1,18 @@
 using System;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
+using Soloco.RealTimeWeb.Common.Infrastructure.Store;
 
 namespace Soloco.RealTimeWeb.Monitoring.Infrastructure
 {
     public class DatabaseMonitor : IMonitor
     {
-        private readonly IConfigurationRoot _configurationRoot;
+        private readonly IConnectionStringParser _connectionStringParser;
 
-        public DatabaseMonitor(IConfigurationRoot configurationRoot)
+        public DatabaseMonitor(IConnectionStringParser connectionStringParser)
         {
-            if (configurationRoot == null) throw new ArgumentNullException(nameof(configurationRoot));
+            if (connectionStringParser == null) throw new ArgumentNullException(nameof(connectionStringParser));
 
-            _configurationRoot = configurationRoot;
+            _connectionStringParser = connectionStringParser;
         }
 
         public ServiceStatus GetStatus()
@@ -28,8 +28,7 @@ namespace Soloco.RealTimeWeb.Monitoring.Infrastructure
         {
             try
             {
-                var configurationSection = _configurationRoot.Get<ConnectionStrings>("connectionStrings");
-                var connectionString = configurationSection.DocumentStore;
+                var connectionString = _connectionStringParser.GetString();
 
                 using (var connection = new NpgsqlConnection(connectionString))
                 using (var command = connection.CreateCommand())

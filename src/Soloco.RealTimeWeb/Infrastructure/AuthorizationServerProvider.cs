@@ -10,7 +10,7 @@ using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 
-namespace Soloco.RealTimeWeb.Providers
+namespace Soloco.RealTimeWeb.Infrastructure
 {
     public class AuthorizationServerProvider : OpenIdConnectServerProvider
     {

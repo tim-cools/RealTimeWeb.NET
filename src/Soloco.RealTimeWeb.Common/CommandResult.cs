@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Soloco.RealTimeWeb.Common.Infrastructure
+namespace Soloco.RealTimeWeb.Common
 {
     public class CommandResult
     {

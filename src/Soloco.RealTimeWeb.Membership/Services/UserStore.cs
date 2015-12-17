@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Membership.Domain;
 
 namespace Soloco.RealTimeWeb.Membership.Services

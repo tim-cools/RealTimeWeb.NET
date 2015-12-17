@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Routing;
 
-namespace Soloco.RealTimeWeb
+namespace Soloco.RealTimeWeb.Infrastructure
 {
     public static class RouteConfig
     {

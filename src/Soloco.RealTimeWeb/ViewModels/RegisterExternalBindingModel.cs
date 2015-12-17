@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Soloco.RealTimeWeb.Models
+namespace Soloco.RealTimeWeb.ViewModels
 {
     public class RegisterExternalBindingModel
     {

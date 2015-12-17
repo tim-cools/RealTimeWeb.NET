@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Baseline;
 using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Graph.Scanning;
 
-namespace Soloco.RealTimeWeb.Common.Tests.Unit
+namespace Soloco.RealTimeWeb.Common.Container
 {
     public class AllInterfacesConvention : IRegistrationConvention
     {

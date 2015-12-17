@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Marten;
-using Soloco.RealTimeWeb.Common.Infrastructure;
-using Soloco.RealTimeWeb.Common.Infrastructure.Messages;
-using Soloco.RealTimeWeb.Common.Infrastructure.Store;
+using Soloco.RealTimeWeb.Common;
+using Soloco.RealTimeWeb.Common.Messages;
+using Soloco.RealTimeWeb.Common.Security;
+using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 
@@ -21,7 +22,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 
             if (existing != null)
             {
-                existing.Hash = Helper.GetHash(command.RefreshTokenId);
+                existing.Hash = Hasher.ComputeSHA256(command.RefreshTokenId);
                 existing.ClientKey = command.Clientid;
                 existing.Subject = command.Name;
                 existing.IssuedUtc = command.IssuedUtc;
@@ -34,7 +35,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
                 var token = new RefreshToken
                 {
                     Id = Guid.NewGuid(),
-                    Hash = Helper.GetHash(command.RefreshTokenId),
+                    Hash = Hasher.ComputeSHA256(command.RefreshTokenId),
                     ClientKey = command.Clientid,
                     Subject = command.Name,
                     IssuedUtc = command.IssuedUtc,
