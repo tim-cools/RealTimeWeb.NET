@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var gulp = require('gulp');
+var path = require('path');
 var gulpSequence = require('gulp-sequence').use(gulp);
 var del = require('del');
 var source = require('vinyl-source-stream');
@@ -35,8 +36,11 @@ var config = {
         'reqwest',
         'store'
     ],
-    statics:[
+    statics: [
         './Client/Statics/**/*.*'
+    ],
+    documentation: [
+        '../../doc/**/*.*'
     ],
     styles: {
         source: ['Client/Source/**/*.less'],
@@ -75,9 +79,14 @@ gulp.task('vendor', function () {
         .pipe(gulp.dest(config.target));
 });
 
-gulp.task('statics', function() {
+gulp.task('statics', function () {
     return gulp.src(config.statics)
         .pipe(gulp.dest(config.target));
+});
+
+gulp.task('documentation', function () {
+    return gulp.src(config.documentation)
+        .pipe(gulp.dest(path.join(config.target, 'documentation')));
 });
 
 gulp.task('stylesheets', function compile() {
@@ -90,10 +99,11 @@ gulp.task('stylesheets', function compile() {
 gulp.task('watch-dev', function() {
     gulp.watch(config.tools, ['build']);
     gulp.watch(config.appWatch, ['application']);
+    gulp.watch(config.documentation, ['documentation']);
     gulp.watch(config.statics, ['statics']);
     gulp.watch(config.styles.source, ['styles']);
 });
 
-gulp.task('build', gulpSequence('clean', 'application', 'vendor', 'statics', 'stylesheets'));
+gulp.task('build', gulpSequence('clean', 'application', 'vendor', 'statics', 'documentation', 'stylesheets'));
 gulp.task('build-dev', gulpSequence('application', 'statics', 'stylesheets'));
 gulp.task('default', gulpSequence('statics', 'stylesheets', 'watch'));

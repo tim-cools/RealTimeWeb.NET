@@ -10,7 +10,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications
             
         }
 
-        public Task<TestMessage> Handle(TestMessage command)
+        public Task<TestMessage> Handle(TestMessage query)
         {
             return Task.FromResult(new TestMessage());
         }

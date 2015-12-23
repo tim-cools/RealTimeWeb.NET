@@ -15,9 +15,16 @@ namespace Soloco.RealTimeWeb
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
+        private readonly IApplicationEnvironment _applicationEnvironment;
+        private readonly IConfigurationRoot _configuration;
+
+        public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment)
         {
-            Configuration = SetupConfiguration(env);
+            _applicationEnvironment = applicationEnvironment;
+            if (env == null) throw new ArgumentNullException(nameof(env));
+            if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
+
+            _configuration = SetupConfiguration(env);
         }
 
         private IConfigurationRoot SetupConfiguration(IHostingEnvironment env)
@@ -30,10 +37,10 @@ namespace Soloco.RealTimeWeb
             return builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; set; }
-
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
             services.Configure<SharedAuthenticationOptions>(options => {
                 options.SignInScheme = "ServerCookie";
             });
@@ -49,7 +56,10 @@ namespace Soloco.RealTimeWeb
         {
             var container = new Container(configuration =>
             {
-                configuration.For<IConfigurationRoot>().Use(Configuration);
+                configuration.For<IConfigurationRoot>().Use(_configuration);
+                configuration.For<IApplicationEnvironment>().Use(_applicationEnvironment);
+
+                configuration.AddRegistry<WebRegistry>();
                 configuration.AddRegistry<CommonRegistry>();
                 configuration.AddRegistry<MembershipRegistry>();
             });
@@ -61,15 +71,18 @@ namespace Soloco.RealTimeWeb
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            ConfigureLogging(loggerFactory);
+            if (app == null) throw new ArgumentNullException(nameof(app));
+            if (env == null) throw new ArgumentNullException(nameof(env));
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
+            ConfigureLogging(loggerFactory);
             ConfigureWebApp(app, env);
         }
 
         private void ConfigureLogging(ILoggerFactory loggerFactory)
         {
             loggerFactory
-                .AddConsole(Configuration.GetSection("Logging"))
+                .AddConsole(_configuration.GetSection("Logging"))
                 .AddDebug();
         }
 

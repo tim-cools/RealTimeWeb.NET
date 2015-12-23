@@ -21,15 +21,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
                 var branch = builder.Build();
 
-                return context =>
-                {
-                    if (condition(context))
-                    {
-                        return branch(context);
-                    }
-
-                    return next(context);
-                };
+                return context => condition(context) ? branch(context) : next(context);
             });
         }
     }

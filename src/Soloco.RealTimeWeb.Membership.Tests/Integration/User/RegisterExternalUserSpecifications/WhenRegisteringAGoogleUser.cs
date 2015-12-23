@@ -7,6 +7,7 @@ using Soloco.RealTimeWeb.Common.Messages;
 using Xunit;
 using StructureMap;
 using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Common.Tests.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;

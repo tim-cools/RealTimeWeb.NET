@@ -5,6 +5,7 @@ using Soloco.RealTimeWeb.Common.Messages;
 using StructureMap;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Common.Tests.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries

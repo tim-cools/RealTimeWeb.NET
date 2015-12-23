@@ -5,6 +5,7 @@ using Shouldly;
 using Soloco.RealTimeWeb.Common.Messages;
 using StructureMap;
 using Soloco.RealTimeWeb.Common.Tests;
+using Soloco.RealTimeWeb.Common.Tests.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 

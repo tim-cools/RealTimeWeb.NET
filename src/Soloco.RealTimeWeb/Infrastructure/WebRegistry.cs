@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Soloco.RealTimeWeb.Common.StructureMap;
 using Soloco.RealTimeWeb.Controllers;
+using Soloco.RealTimeWeb.Infrastructure.Documentation;
 using StructureMap;
 using StructureMap.Graph;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
-    internal class WebRegistry : Registry
+    public class WebRegistry : Registry
     {
         public WebRegistry()
         {
@@ -13,6 +14,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
             {
                 options.TheCallingAssembly();
                 options.IncludeNamespaceContainingType<AccountController>();
+                options.IncludeNamespaceContainingType<DocumentQueryHandler>();
+                options.Convention<AllInterfacesConvention>();
             });
         }
     }

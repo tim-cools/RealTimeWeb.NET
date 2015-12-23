@@ -16,11 +16,11 @@ namespace Soloco.RealTimeWeb.Common.Messages
             Session = session;
         }
 
-        public async Task<CommandResult> Handle(TCommand command)
+        public async Task<CommandResult> Handle(TCommand query)
         {
             try
             {
-                var result = await Execute(command);
+                var result = await Execute(query);
                 if (result.Succeeded)
                 {
                     Session.SaveChanges();

@@ -3,38 +3,49 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Soloco.RealTimeWeb.Monitoring.Controllers;
 using Soloco.RealTimeWeb.Monitoring.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Monitoring
 {
     public class Startup
     {
+        private readonly IConfigurationRoot _configuration;
+
         public Startup(IHostingEnvironment env)
         {
-            // Set up configuration sources.
+            _configuration = SetupConfiguration();
+        }
+
+        private static IConfigurationRoot SetupConfiguration()
+        {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            return builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; set; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             services.AddSingleton<IMonitor, DatabaseMonitor>();            
-            services.AddSingleton<IConfigurationRoot>(provider => Configuration);            
+            services.AddSingleton<IConfigurationRoot>(provider => _configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            ConfigureLogging(loggerFactory);
 
+            ConigureWebApp(app);
+        }
+
+        private void ConfigureLogging(ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+        }
+
+        private static void ConigureWebApp(IApplicationBuilder app)
+        {
             app.UseIISPlatformHandler();
 
             app.UseStaticFiles();
@@ -42,7 +53,6 @@ namespace Soloco.RealTimeWeb.Monitoring
             app.UseMvc();
         }
 
-        // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

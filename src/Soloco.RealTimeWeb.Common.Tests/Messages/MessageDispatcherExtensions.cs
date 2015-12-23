@@ -1,8 +1,7 @@
 ﻿using System;
 using Soloco.RealTimeWeb.Common.Messages;
-using Xunit;
 
-namespace Soloco.RealTimeWeb.Membership.Tests.Integration
+namespace Soloco.RealTimeWeb.Common.Tests.Messages
 {
     public static class MessageDispatcherExtensions
     {

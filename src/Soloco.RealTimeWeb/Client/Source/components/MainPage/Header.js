@@ -16,6 +16,7 @@ class Header extends Component {
                 <Nav onSelect={(key, href) =>navigate.to(href)}>
                     <NavItem href='/home'>Home</NavItem>
                     <NavItem href='/devices'>Devices</NavItem>
+                    <NavItem href='/documentation'>Documentation</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
@@ -28,6 +29,7 @@ class Header extends Component {
                 ) ]
             :  [ (
                 <Nav onSelect={(key, href) => navigate.to(href)}>
+                    <NavItem href='/documentation'>Documentation</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
@@ -43,7 +45,7 @@ class Header extends Component {
 
         return (
             <Navbar>
-                <NavBrand>Soloco - Reactive Starter Kit</NavBrand>
+                <NavBrand>Soloco - Real Time Web .NET</NavBrand>
                 {items}
             </Navbar>
         );
