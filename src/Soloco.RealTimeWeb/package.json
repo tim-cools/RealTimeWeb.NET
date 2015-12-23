@@ -21,13 +21,16 @@
     "reqwest": "^2.0.5",
     "store": "^1.3.17",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "react-remarkable": "1.1.1"
   },
   "devDependencies": {
     "babel": "6.1.18",
-    "babel-preset-es2015": "^6.1.18",
+    "babel-core": "6.3.26",
     "babel-preset-react": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
+    "babel-plugin-transform-decorators-legacy": "^1.2.0",
+    "babel-preset-es2015-loose": "^6.1.3",
     "babelify": "7.2.0",
     "browserify": "12.0.1",
     "browserify-shim": "3.8.11",
@@ -43,7 +46,10 @@
     "history": "^1.13.1",
     "lessify": "1.0.1",
     "lodash": "^3.10.1",
-    "watchify": "^3.6.1"
+    "watchify": "^3.6.1",
+    "isparta": "4.0.0",
+    "mocha": "^2.2.5",
+    "jsdom": "7.2.1"
   },
   "jest": {
     "rootDir": "./Content/app",
@@ -53,9 +59,11 @@
     ]
   },
   "scripts": {
-    "_comment": "todo browserify call to gulp script",
     "build-dev": "gulp build-dev",
     "build": "gulp build",
-    "watch-dev": "gulp watch-dev"
+    "watch-dev": "gulp watch-dev",
+    "test": "mocha ./Client/tests/ --compilers js:babel-core/register --recursive --require ./Client/tests/setup.js",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "babel-node ./node_modules/isparta/bin/isparta cover ./node_modules/mocha/bin/_mocha -- --recursive"
   }
 }

@@ -18,8 +18,8 @@ console.log('building');
 
 var config = {
     target: './wwwroot/',
-    app: 'Client/Source/app.js',
-    appWatch: 'Client/Source/**/*.*',
+    app: 'Client/src/app.js',
+    appWatch: 'Client/src/**/*.*',
     appTarget: 'app.js',
     vendorTarget: 'vendor.js',
     vendorFiles: [
@@ -37,16 +37,16 @@ var config = {
         'store'
     ],
     statics: [
-        './Client/Statics/**/*.*'
+        './Client/statics/**/*.*'
     ],
     documentation: [
         '../../doc/**/*.*'
     ],
     styles: {
-        source: ['Client/Source/**/*.less'],
+        source: ['Client/src/**/*.less'],
         destination: 'app.css'
     },
-    tools: './Client/Tools/**/*.js'
+    tools: './Client/tools/**/*.js'
 };
 
 gulp.task('clean', function(callback) {
@@ -55,7 +55,7 @@ gulp.task('clean', function(callback) {
 
 gulp.task('application', function () {
     return browserify(config.app, _.extend({ debug: true }, watchify.args))
-        .transform("babelify", { presets: ["es2015", "react", "stage-0"] })
+        .transform("babelify", { presets: ["es2015-loose", "react", "stage-0"] })
         .external(config.vendorFiles)
         .bundle()
         .on('error', function (err) {
