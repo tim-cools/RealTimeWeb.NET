@@ -7,7 +7,7 @@ import HomeView from './components/HomeView';
 import AboutView from './components/AboutView';
 import LogonView from './components/LogonView';
 import RegisterView from './components/RegisterView';
-import DocumentationView from  './components/DocumentationView';
+import DocumentationView from './components/DocumentationView';
 
 import NotFoundPage from './components/NotFoundPage';
 
@@ -21,7 +21,8 @@ class ApplicationRouter extends Component {
                     <Route path="about" component={AboutView} />
                     <Route path="register" component={RegisterView} />
                     <Route path="logon" component={LogonView} />
-                    <Route path="documentation" component="{DocumentationView}" />
+                    <Route path="documentation" component={DocumentationView} />
+                    <Route path="documentation/:id" component={DocumentationView}/>
                 </Route>
                 <Route path="*" component={NotFoundPage}/>
             </ReduxRouter>

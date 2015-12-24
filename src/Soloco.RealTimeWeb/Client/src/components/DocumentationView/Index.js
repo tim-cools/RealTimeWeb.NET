@@ -11,33 +11,47 @@ export class View extends Component {
     componentDidMount() {
         documentation.getDocuments();
     }
-    
+
+    componentDidUpdate() {
+        if (this.props.id && !this.props.document) {
+            documentation.getDocument(this.props.id);
+        }
+    }
+
+    getMain() {
+        return this.refs.main;
+    }
+
     render() {
         return (
-            <Row>
-                <Col md={3}>
-                    <Navigation documents={this.props.headers}>
-                    </Navigation>
-                </Col>
-                <Col md={9}>
-                    <Markdown source="{this.props.current}" />
-                </Col>
-            </Row>
+            <Grid>
+                <Row>
+                    <Col md={3}>
+                        <Navigation documents={this.props.headers} main={this.getMain.bind(this)} />
+                    </Col>
+                    <Col md={9}>
+                        <Markdown ref="main" source={this.props.document} />
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }
 
 View.propTypes = {
-    documents: PropTypes.arrayOf(PropTypes.string),
-    current: PropTypes.string
+    headers: PropTypes.arrayOf(PropTypes.string),
+    id: PropTypes.string,
+    document: PropTypes.string,
 };
 
-export function mapStateToProps(state) {
+export function mapStateToProps(state, props) {
     const documentation = state.documentation;
+    const id = props && props.routeParams ? props.routeParams.id : null;
     return {
         headers: documentation.headers ? documentation.headers : null,
-        current: documentation.currentDocumentIndex && documentation.documents[documentation.currentDocumentIndex] 
-            ?  documentation.documents[documentation.currentDocumentIndex].content
+        id: id,
+        document: id && documentation.documents && documentation.documents[id]
+            ?  documentation.documents[id]
             : null
     };
 }

@@ -1,23 +1,20 @@
-import { PropTypes, Component } from 'react';
-
+import React, { PropTypes, Component } from 'react';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
+import AutoAffix from 'react-overlays/lib/AutoAffix';
+import SubNav from './SubNav'
+import navigate from './../../api/navigate';
 
 class Navigation extends Component {
 
-    getInitialState() {
-        return {
-            activeNavItemHref: null
-        };
-    }
-
-    getMain() {
-        return this.refs.main;
+    constructor(props) {
+        super(props);
+        
+        this.state = { activeNavItemHref: null };
     }
 
     handleNavItemSelect(key, href) {
-        window.location = href;
-        this.setActiveNavItem();
+        navigate.to(href);
     }
 
     componentDidMount() {
@@ -28,31 +25,41 @@ class Navigation extends Component {
         this.setState({
             activeNavItemHref: href
         });
-    }
+    }    
 
     render() {
+
+        var child =  !this.props.documents 
+            ? <div>Loading</div>
+            : typeof(this.props.documents) === 'string'
+            ?  <div>{this.props.documents}</div>
+            : (
+                <AutoAffix viewportOffsetTop={20} container={this.props.main} >
+                    <Nav activeHref={this.state.activeNavItemHref}
+                         onSelect={this.handleNavItemSelect}>
+                        {this.props.documents.map(function(document, i) {
+                            return (<SubNav text={document.Name} href={"/documentation/" + document.Id}>
+                                {document.Children ? document.Children.map(function(childDocument, i) {
+                                    return <NavItem href={"/documentation/" + childDocument.Id} >{childDocument.Name}</NavItem>;
+                                }) : null}
+                                </SubNav>
+                            );
+                        })}
+                    </Nav>
+                </AutoAffix>
+            );
       
         return (
             <div className="bs-docs-sidebar hidden-print" role="complementary">
-
-                <Nav
-                    className="bs-docs-sidenav"
-                    activeHref={this.state.activeNavItemHref}
-                    onSelect={this.handleNavItemSelect}>
-                    
-                        <SubNav href={sections.buttons} text="Buttons">
-                            <NavItem href={sections.btnGroups}>Button groups</NavItem>
-                            <NavItem href={sections.dropdowns}>Dropdowns</NavItem>
-                            <NavItem href={sections.menuitems}>Menu items</NavItem>
-                        </SubNav>
-                 </Nav>
+                {child}
             </div>
         );
     }
 }
 
 Navigation.propTypes = {
-    documents: PropTypes.arrayOf(PropTypes.string)
+    documents: PropTypes.arrayOf(PropTypes.string),
+    main: PropTypes.func
 };
 
 export default Navigation;

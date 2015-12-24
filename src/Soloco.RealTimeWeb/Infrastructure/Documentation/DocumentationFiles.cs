@@ -28,7 +28,7 @@ namespace Soloco.RealTimeWeb.Infrastructure.Documentation
         public string ReadFile(string id)
         {
             var documentationFolder = GetFolder();
-            var file = Path.Combine(documentationFolder, id);
+            var file = Path.Combine(documentationFolder, id + ".md");
             return File.Exists(file) ? File.ReadAllText(file) : null;
         }
     }

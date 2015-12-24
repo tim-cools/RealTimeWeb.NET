@@ -8,23 +8,23 @@ function getDocuments() {
     }
 
     function handleError(errors) {
-        documentationStateActions.error("Error while loading");
+        documentationStateActions.error('Error while loading');
     }
 
-    api.post('api/documents', data, handleResponse, handleError);
+    api.get('api/documents', null, handleResponse, handleError);
 }
 
 function getDocument(id) {
 
     function handleResponse(response) {
-        documentationStateActions.documentLoaded(response);
+        documentationStateActions.documentLoaded(id, response.Content ? response.Content : 'empty');
     }
 
     function handleError(errors) {
-        documentationStateActions.documentError("Error while loading");
+        documentationStateActions.documentError(id, 'Error while loading');
     }
 
-    api.post('api/documents/' + id, data, handleResponse, handleError);
+    api.get('api/documents/' + id, null, handleResponse, handleError);
 }
 
 export default {

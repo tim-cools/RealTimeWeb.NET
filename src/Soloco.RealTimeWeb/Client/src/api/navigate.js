@@ -1,8 +1,8 @@
-import { pushState } from 'redux-router';
-import dispatcher from '../state/dispatcher';
+import { pushState  } from 'redux-router';
+import { dispatch } from '../state/dispatcher';
 
 var to = function (url) {
-    dispatcher.dispatch(pushState(null, url));
+    dispatch(pushState(null, url));
 };
 
 export default { to: to }

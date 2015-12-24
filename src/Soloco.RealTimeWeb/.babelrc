@@ -1,6 +1,11 @@
 {
-  "presets": ["es2015-loose", "stage-0", "react"],
+  "presets": [
+    "es2015-loose",
+    "stage-0",
+    "react" 
+  ],
   "plugins": [
-    "transform-decorators-legacy"
+    "transform-decorators-legacy",
+    "babel-plugin-rewire"
   ]
 }

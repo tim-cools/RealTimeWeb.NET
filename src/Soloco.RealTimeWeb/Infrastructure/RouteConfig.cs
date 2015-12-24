@@ -9,7 +9,10 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             //routeBuilder.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routeBuilder.MapRoute(name: "Default", template: "", defaults: new { controller = "Home", action = "Index" });
+            routeBuilder.MapRoute(
+                name: "Default",
+                template: "", 
+                defaults: new { controller = "Home", action = "Index" });
             routeBuilder. MapRoute(name: "Account", template: "Account/{action}", defaults: new { controller = "Account" });
         }
     }
