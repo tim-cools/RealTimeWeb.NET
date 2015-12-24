@@ -1,4 +1,4 @@
-﻿import assert from 'assert';
+﻿import expect from 'expect';
 import { createStore } from 'redux';
 import dispatcher from '../../src/state/dispatcher';
 import { actions } from '../../src/state/documentation';
@@ -15,7 +15,7 @@ describe('State', () => {
 
         function assertState(expected) {
             var state = store.getState();
-            assert.deepEqual(state.documentation, expected);
+            expect(state.documentation).toEqual(expected);
         }
 
         it('should have an empty state by default', () => {

@@ -6,7 +6,7 @@ import Navigation from './Navigation';
 
 import documentation from '../../api/documentation'
 
-class Index extends Component {
+export class View extends Component {
     
     componentDidMount() {
         documentation.getDocuments();
@@ -16,7 +16,7 @@ class Index extends Component {
         return (
             <Row>
                 <Col md={3}>
-                    <Navigation documents={this.props.documents}>
+                    <Navigation documents={this.props.headers}>
                     </Navigation>
                 </Col>
                 <Col md={9}>
@@ -27,20 +27,19 @@ class Index extends Component {
     }
 }
 
-
-Index.propTypes = {
+View.propTypes = {
     documents: PropTypes.arrayOf(PropTypes.string),
     current: PropTypes.string
 };
 
-function select(state) {
+export function mapStateToProps(state) {
     const documentation = state.documentation;
     return {
-        documents: documentation.documents,
-        current: documentation.documents[documentation.currentDocumentIndex] 
+        headers: documentation.headers ? documentation.headers : null,
+        current: documentation.currentDocumentIndex && documentation.documents[documentation.currentDocumentIndex] 
             ?  documentation.documents[documentation.currentDocumentIndex].content
             : null
     };
 }
 
-export default connect(select)(Index);
+export default connect(mapStateToProps)(View);

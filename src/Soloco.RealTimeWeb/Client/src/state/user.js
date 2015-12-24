@@ -78,12 +78,12 @@ export const actions = {
         });
     },
 
-    associateExternal: function(provider, externalAccessToken, externalUserName) {
+    associateExternal: function(provider, token, userName) {
         return dispatch({
             type: actionsDefinitions.ASSOCIATE_EXTERNAL,
             provider: provider,
-            token: externalAccessToken,
-            externalUserName: externalUserName
+            token: token,
+            userName: userName
         });
     },
     
@@ -144,7 +144,7 @@ export function reducer(state = notAuthenticated, action) {
                 associateExternal: {
                     provider: action.provider,
                     token: action.token,
-                    userName: action.externalUserName
+                    userName: action.userName
                 }
             };
 

@@ -134,7 +134,7 @@ function select(state) {
         ? {
             associateExternal: true,
             pending: state.user.associateExternal.pending,
-            errors: state.user.associateExternal.errors,
+            errors: state.user.associateExternal.errors ? state.user.associateExternal.errors : null,
             provider: state.user.associateExternal.provider,
             externalAccessToken: state.user.associateExternal.accessToken,
             externalUserName: state.user.associateExternal.userName

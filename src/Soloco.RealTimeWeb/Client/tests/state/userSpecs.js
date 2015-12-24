@@ -1,4 +1,4 @@
-﻿import assert from 'assert';
+﻿import expect from 'expect';
 import { createStore } from 'redux';
 import dispatcher from '../../src/state/dispatcher';
 import { actions, userStatus } from '../../src/state/user';
@@ -14,8 +14,8 @@ describe('State', () => {
         });
 
         function assertState(expected) {
-            const state = store.getState();
-            assert.deepEqual(state.user, expected);
+            var state = store.getState();
+            expect(state.user).toEqual(expected);
         }
 
         it('should should be notAuthenticated by default', () => {
