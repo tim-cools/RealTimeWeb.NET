@@ -4,3 +4,9 @@ if not "%1"=="" (
 
 dnx -p .\src\Soloco.RealTimeWeb.Common.Tests test
 dnx -p .\src\Soloco.RealTimeWeb.Membership.Tests test
+
+cd .\src\Soloco.RealTimeWeb
+
+call npm test
+
+cd ..\..\scripts
