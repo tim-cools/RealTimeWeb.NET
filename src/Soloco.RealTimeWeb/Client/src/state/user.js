@@ -1,5 +1,4 @@
-import dispatcher from './dispatcher';
-var dispatch = dispatcher.dispatch;
+import { dispatch } from './dispatcher';
 
 export const userStatus = {
     authenticated: 'authenticated',

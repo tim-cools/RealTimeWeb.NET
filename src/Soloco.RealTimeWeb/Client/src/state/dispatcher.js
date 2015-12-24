@@ -7,12 +7,11 @@ function set(value) {
     dispatcher = value;
 }
 
-function dispatch(action) {
+export function dispatch(action) {
     if (!dispatcher) throw Error('Dispatcher is not set');
     return dispatcher(action);
 }
 
 export default {
-    set: set,
-    dispatch: dispatch
+    set: set 
 }

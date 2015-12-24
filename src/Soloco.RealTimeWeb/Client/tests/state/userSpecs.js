@@ -15,7 +15,7 @@ describe('State', () => {
 
         function assertState(expected) {
             const state = store.getState();
-            assert.deepEqual(expected, state.user);
+            assert.deepEqual(state.user, expected);
         }
 
         it('should should be notAuthenticated by default', () => {

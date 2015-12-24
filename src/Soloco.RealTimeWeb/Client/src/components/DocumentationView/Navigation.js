@@ -45,14 +45,14 @@ class Navigation extends Component {
                             <NavItem href={sections.dropdowns}>Dropdowns</NavItem>
                             <NavItem href={sections.menuitems}>Menu items</NavItem>
                         </SubNav>
-                 </Nav
+                 </Nav>
             </div>
         );
     }
 }
 
 Navigation.propTypes = {
-    documents: PropTypes.arrayOf(PropR.string)
+    documents: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Navigation;
