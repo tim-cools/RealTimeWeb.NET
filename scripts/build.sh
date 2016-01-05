@@ -1,1 +1,1 @@
-dnx build ./src/Soloco.RealTimeWeb/Soloco.RealTimeWeb/project.json  -parallel none
+dnu pack ./src/Soloco.RealTimeWeb
