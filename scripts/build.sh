@@ -1,1 +1,1 @@
-dnx ./src/Soloco.RealTimeWeb/Soloco.RealTimeWeb/project.json build -parallel none
+dnx build ./src/Soloco.RealTimeWeb/Soloco.RealTimeWeb/project.json  -parallel none
