@@ -5,8 +5,13 @@ namespace Soloco.RealTimeWeb.Membership.Services
 {
     public class OAuthConfiguration : IOAuthConfiguration
     {
+        private readonly FacebookOptions _facebook;
         public GoogleOptions Google { get; }
-        public FacebookOptions Facebook { get; }
+
+        public FacebookOptions Facebook
+        {
+            get { return _facebook; }
+        }
 
         public OAuthConfiguration()
         {
@@ -16,11 +21,10 @@ namespace Soloco.RealTimeWeb.Membership.Services
                 ClientSecret = "hhg69bsNeCTEAYJRADRuCOgq",
             };
 
-            Facebook = new FacebookOptions()
+            _facebook = new FacebookOptions()
             {
                 AppId = "1648062998809846",
                 AppSecret = "c0401541376309eba60190b8999ed048",
-                
             };
         }
     }

@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0-rc1-final",
   "description": "",
   "authors": [ "" ],
   "tags": [ "" ],
@@ -12,7 +12,7 @@
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-build204",
     "Newtonsoft.Json": "7.0.1",
-    "Npgsql": "3.0.3",
+    "Npgsql": "3.1.0-alpha6",
     "Serilog": "2.0.0-beta-403",
     "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -21,7 +21,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
-    "Soloco.RealTimeWeb.Common": "1.0.0-*",
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final",
     "Marten": "0.5.0.9"
   },
   "commands": {

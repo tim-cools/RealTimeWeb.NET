@@ -67,11 +67,12 @@
     ]
   },
   "scripts": {
-    "build-dev": "gulp build-dev",
     "build": "gulp build",
-    "watch-dev": "gulp watch-dev",
-    "test": "mocha ./Client/tests/ --compilers js:babel-core/register --recursive --require ./Client/tests/setup.js",
-    "test:watch": "npm test -- --watch",
-    "test:cov": "babel-node ./node_modules/isparta/bin/isparta cover ./node_modules/mocha/bin/_mocha -- --recursive"
+    "build-dev": "gulp build-dev",
+    "build-watch": "gulp watch-dev",
+    
+	"tests": "mocha ./Client/tests/ --compilers js:babel-core/register --recursive --require ./Client/tests/setup.js",
+    "tests-watch": "npm test -- --watch",
+    "tests-coverage": "babel-node ./node_modules/isparta/bin/isparta cover ./node_modules/mocha/bin/_mocha -- --recursive"
   }
 }

@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,20 +11,23 @@ using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;
 using Soloco.RealTimeWeb.Membership;
+using Soloco.RealTimeWeb.Membership.Domain;
 
 namespace Soloco.RealTimeWeb
 {
     public class Startup
     {
+        private const string defaultName = "default";
+
         private readonly IApplicationEnvironment _applicationEnvironment;
         private readonly IConfigurationRoot _configuration;
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment)
         {
-            _applicationEnvironment = applicationEnvironment;
             if (env == null) throw new ArgumentNullException(nameof(env));
             if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
 
+            _applicationEnvironment = applicationEnvironment;
             _configuration = SetupConfiguration(env);
         }
 
@@ -41,15 +45,30 @@ namespace Soloco.RealTimeWeb
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.Configure<SharedAuthenticationOptions>(options => {
+            services.Configure<SharedAuthenticationOptions>(options =>
+            {
                 options.SignInScheme = "ServerCookie";
             });
 
+            services.AddIdentity<User, Role>();
             services.AddCaching();
-            services.AddAuthentication();
+            services.AddAuthentication(options =>
+            {
+                options.SignInScheme = "ServerCookie";
+            });
             services.AddMvc();
+            services.AddCors(ConfigureCors);
 
-            return CreateContainerServiceProvider(services); 
+            return CreateContainerServiceProvider(services);
+        }
+
+        private static void ConfigureCors(CorsOptions options)
+        {
+            options.AddPolicy(defaultName, policy =>
+                policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowCredentials());
         }
 
         private IServiceProvider CreateContainerServiceProvider(IServiceCollection services)
@@ -100,7 +119,8 @@ namespace Soloco.RealTimeWeb
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
                .UseStaticFiles()
                .ConfigureOAuth()
-               .UseMvc(routes => { routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}"); });
+               .UseCors(defaultName)
+               .UseMvc(routes => { routes.MapRoute(name: defaultName, template: "{controller=Home}/{action=Index}/{id?}"); });
         }
 
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);

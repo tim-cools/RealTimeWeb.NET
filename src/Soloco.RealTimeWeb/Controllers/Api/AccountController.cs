@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
@@ -18,6 +20,8 @@ using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 using Soloco.RealTimeWeb.Membership.Services;
 using Soloco.RealTimeWeb.ViewModels;
+using Microsoft.AspNet.Builder;
+using AspNet.Security.OpenIdConnect.Extensions;
 
 namespace Soloco.RealTimeWeb.Controllers.Api
 {
@@ -52,99 +56,164 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             return ErrorResult(result);
         }
 
-        // GET api/Account/ExternalLogin
-        //[OverrideAuthentication]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
-        [AllowAnonymous]
-        [HttpGet("ExternalLogin")]
-        public async Task<IActionResult> GetExternalLogin(string provider, string error = null)
-        {
-            if (error != null)
-            {
-                return ErrorResult(Uri.EscapeDataString(error));
-            }
+        //[HttpGet("authorize")]
+        //[HttpPost("authorize")]
+        //public async Task<IActionResult> Authorize(CancellationToken cancellationToken)
+        //{
+        //    // Note: when a fatal error occurs during the request processing, an OpenID Connect response
+        //    // is prematurely forged and added to the ASP.NET context by OpenIdConnectServerHandler.
+        //    // In this case, the OpenID Connect request is null and cannot be used.
+        //    // When the user agent can be safely redirected to the client application,
+        //    // OpenIdConnectServerHandler automatically handles the error and MVC is not invoked.
+        //    // You can safely remove this part and let AspNet.Security.OpenIdConnect.Server automatically
+        //    // handle the unrecoverable errors by switching ApplicationCanDisplayErrors to false in Startup.cs
+        //    var response = HttpContext.GetOpenIdConnectResponse();
+        //    if (response != null)
+        //    {
+        //        return View("Error", response);
+        //    }
 
-            if (!User.Identity.IsAuthenticated)
-            {
-                return new ChallengeResult(new List<string>  { provider });
-                //was return new ChallengeResult(provider, this);
-            }
+        //    // Extract the authorization request from the cache, the query string or the request form.
+        //    var request = HttpContext.GetOpenIdConnectRequest();
+        //    if (request == null)
+        //    {
+        //        return View("Error", new OpenIdConnectMessage
+        //        {
+        //            Error = "invalid_request",
+        //            ErrorDescription = "An internal error has occurred"
+        //        });
+        //    }
 
-            var result = await ValidateClientAndRedirectUri(Request);
+        //    // Note: authentication could be theorically enforced at the filter level via AuthorizeAttribute
+        //    // but this authorization endpoint accepts both GET and POST requests while the cookie middleware
+        //    // only uses 302 responses to redirect the user agent to the login page, making it incompatible with POST.
+        //    // To work around this limitation, the OpenID Connect request is automatically saved in the cache and will be
+        //    // restored by the OpenID Connect server middleware after the external authentication process has been completed.
+        //    if (!User.Identities.Any(identity => identity.IsAuthenticated))
+        //    {
+        //        return new ChallengeResult(new AuthenticationProperties
+        //        {
+        //            RedirectUri = Url.Action(nameof(Authorize), new
+        //            {
+        //                unique_id = request.GetUniqueIdentifier()
+        //            })
+        //        });
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(result.Error))
-            {
-                return ErrorResult(result.Error);
-            }
+        //    //// Note: AspNet.Security.OpenIdConnect.Server automatically ensures an application
+        //    //// corresponds to the client_id specified in the authorization request using
+        //    //// IOpenIdConnectServerProvider.ValidateClientRedirectUri (see AuthorizationProvider.cs).
+        //    //// In theory, this null check is thus not strictly necessary. That said, a race condition
+        //    //// and a null reference exception could appear here if you manually removed the application
+        //    //// details from the database after the initial check made by AspNet.Security.OpenIdConnect.Server.
+        //    //var application = await GetApplicationAsync(request.ClientId, cancellationToken);
+        //    //if (application == null)
+        //    //{
+        //    //    return View("Error", new OpenIdConnectMessage
+        //    //    {
+        //    //        Error = "invalid_client",
+        //    //        ErrorDescription = "Details concerning the calling client application cannot be found in the database"
+        //    //    });
+        //    //}
 
-            var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            if (externalLogin == null)
-            {
-                return ErrorResult();
-            }
+        //    var accessTokenResponse = GenerateLocalAccessTokenResponse(result.UserName);
+        //    return Ok(accessTokenResponse);
+        //}
 
-            if (externalLogin.LoginProvider != provider.AsLoginProvider())
-            {
-                //await Authentication.SignOutAsync(DefaultAuthenticationTypes.ExternalCookie);
-                //await Authentication.SignOutAsync("Todo"); //Todo sign out
-                return new ChallengeResult(new List<string> { provider });
-            }
 
-            var query = new UserLoginQuery(externalLogin.LoginProvider, externalLogin.ProviderKey);
-            var userLogin = await _messageDispatcher.Execute(query);
+        //// GET api/Account/ExternalLogin
+        ////[OverrideAuthentication]
+        ////[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        //[AllowAnonymous]
+        //[HttpGet("ExternalLogin")]
+        //public async Task<IActionResult> GetExternalLogin(string provider, string error = null)
+        //{
+        //    if (error != null)
+        //    {
+        //        return ErrorResult(Uri.EscapeDataString(error));
+        //    }
 
-            var hasRegistered = userLogin != null;
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return new ChallengeResult(new List<string>  { provider });
+        //        //was return new ChallengeResult(provider, this);
+        //    }
 
-            var redirectUri = $"{result.RedirectUri}#external_access_token={externalLogin.ExternalAccessToken}" +
-                          $"&provider={externalLogin.LoginProvider}" +
-                          $"&haslocalaccount={hasRegistered}" +
-                          $"&external_user_name={externalLogin.UserName}";
+        //    var result = await ValidateClientAndRedirectUri(Request);
 
-            return Redirect(redirectUri);
-        }
+        //    if (!string.IsNullOrWhiteSpace(result.Error))
+        //    {
+        //        return ErrorResult(result.Error);
+        //    }
 
-        // POST api/Account/RegisterExternal
-        [AllowAnonymous]
-        [System.Web.Http.Route("RegisterExternal")]
-        public async Task<IActionResult> RegisterExternal(RegisterExternalBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ErrorResult();
-            }
+        //    var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+        //    if (externalLogin == null)
+        //    {
+        //        return ErrorResult();
+        //    }
 
-            var command = new RegisterExternalUserCommand(model.UserName, model.Provider.AsLoginProvider(), model.ExternalAccessToken);
-            var result = await _messageDispatcher.Execute(command);
-            if (!result.Succeeded)
-            {
-                return ErrorResult(result);
-            }
+        //    if (externalLogin.LoginProvider != provider.AsLoginProvider())
+        //    {
+        //        //await Authentication.SignOutAsync(DefaultAuthenticationTypes.ExternalCookie);
+        //        //await Authentication.SignOutAsync("Todo"); //Todo sign out
+        //        return new ChallengeResult(new List<string> { provider });
+        //    }
 
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
+        //    var query = new UserLoginQuery(externalLogin.LoginProvider, externalLogin.ProviderKey);
+        //    var userLogin = await _messageDispatcher.Execute(query);
 
-            return Ok(accessTokenResponse);
-        }
+        //    var hasRegistered = userLogin != null;
 
-        [AllowAnonymous]
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("ObtainLocalAccessToken")]
-        public async Task<IActionResult> ObtainLocalAccessToken(string provider, string externalAccessToken)
-        {
-            if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
-            {
-                return ErrorResult("Provider or external access token is not sent");
-            }
+        //    var redirectUri = $"{result.RedirectUri}#external_access_token={externalLogin.ExternalAccessToken}" +
+        //                  $"&provider={externalLogin.LoginProvider}" +
+        //                  $"&haslocalaccount={hasRegistered}" +
+        //                  $"&external_user_name={externalLogin.UserName}";
 
-            var command = new VerifyExternalUserQuery(provider.AsLoginProvider(), externalAccessToken);
-            var result = await _messageDispatcher.Execute(command);
-            if (!result.Registered)
-            {
-                return ErrorResult("External user is not registered");
-            }
+        //    return Redirect(redirectUri);
+        //}
 
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(result.UserName);
-            return Ok(accessTokenResponse);
-        }
+        //// POST api/Account/RegisterExternal
+        //[AllowAnonymous]
+        //[System.Web.Http.Route("RegisterExternal")]
+        //public async Task<IActionResult> RegisterExternal(RegisterExternalBindingModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ErrorResult();
+        //    }
+
+        //    var command = new RegisterExternalUserCommand(model.UserName, model.Provider.AsLoginProvider(), model.ExternalAccessToken);
+        //    var result = await _messageDispatcher.Execute(command);
+        //    if (!result.Succeeded)
+        //    {
+        //        return ErrorResult(result);
+        //    }
+
+        //    var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
+
+        //    return Ok(accessTokenResponse);
+        //}
+
+        //[AllowAnonymous]
+        //[System.Web.Http.HttpGet]
+        //[System.Web.Http.Route("ObtainLocalAccessToken")]
+        //public async Task<IActionResult> ObtainLocalAccessToken(string provider, string externalAccessToken)
+        //{
+        //    if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
+        //    {
+        //        return ErrorResult("Provider or external access token is not sent");
+        //    }
+
+        //    var command = new VerifyExternalUserQuery(provider.AsLoginProvider(), externalAccessToken);
+        //    var result = await _messageDispatcher.Execute(command);
+        //    if (!result.Registered)
+        //    {
+        //        return ErrorResult("External user is not registered");
+        //    }
+
+        //    var accessTokenResponse = GenerateLocalAccessTokenResponse(result.UserName);
+        //    return Ok(accessTokenResponse);
+        //}
 
         private IActionResult ErrorResult(CommandResult result = null)
         {
@@ -155,11 +224,11 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
             var modelValidationResult = errors.Length == 0 ? CommandResult.Success : CommandResult.Failed(errors);
 
-            var merged = result == null 
+            var merged = result == null
                 ? modelValidationResult
                 : result.Merge(modelValidationResult);
 
-            return merged.Succeeded ? (IActionResult) Ok() : new ObjectResult(merged) { StatusCode = StatusCodes.Status400BadRequest };
+            return merged.Succeeded ? (IActionResult)Ok() : new ObjectResult(merged) { StatusCode = StatusCodes.Status400BadRequest };
         }
 
         private IActionResult ErrorResult(string error)
@@ -168,52 +237,52 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             return ErrorResult(result);
         }
 
-        private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequest request)
-        {
-            Uri redirectUri;
+        //private async Task<ValidatClientResult> ValidateClientAndRedirectUri(HttpRequest request)
+        //{
+        //    Uri redirectUri;
 
-            var redirectUriString = GetQueryString(request, "redirect_uri");
-            if (string.IsNullOrWhiteSpace(redirectUriString))
-            {
-                return new ValidatClientResult("redirect_uri is required");
-            }
+        //    var redirectUriString = GetQueryString(request, "redirect_uri");
+        //    if (string.IsNullOrWhiteSpace(redirectUriString))
+        //    {
+        //        return new ValidatClientResult("redirect_uri is required");
+        //    }
 
-            var validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
-            if (!validUri)
-            {
-                return new ValidatClientResult("redirect_uri is invalid");
-            }
+        //    var validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
+        //    if (!validUri)
+        //    {
+        //        return new ValidatClientResult("redirect_uri is invalid");
+        //    }
 
-            var clientId = GetQueryString(request, "client_id");
-            if (string.IsNullOrWhiteSpace(clientId))
-            {
-                return new ValidatClientResult("client_Id is required");
-            }
+        //    var clientId = GetQueryString(request, "client_id");
+        //    if (string.IsNullOrWhiteSpace(clientId))
+        //    {
+        //        return new ValidatClientResult("client_Id is required");
+        //    }
 
-            var query = new ClientByKeyQuery(clientId);
-            var client = await _messageDispatcher.Execute(query);
+        //    var query = new ClientByKeyQuery(clientId);
+        //    var client = await _messageDispatcher.Execute(query);
 
-            if (client == null)
-            {
-                return new ValidatClientResult($"Client_id '{clientId}' is not registered in the system.");
-            }
+        //    if (client == null)
+        //    {
+        //        return new ValidatClientResult($"Client_id '{clientId}' is not registered in the system.");
+        //    }
 
-            if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
-            {
-                return new ValidatClientResult($"The given URL is not allowed by Client_id '{clientId}' configuration.");
-            }
+        //    if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        return new ValidatClientResult($"The given URL is not allowed by Client_id '{clientId}' configuration.");
+        //    }
 
-            return new ValidatClientResult(null, redirectUri.AbsoluteUri);
-        }
+        //    return new ValidatClientResult(null, redirectUri.AbsoluteUri);
+        //}
 
-        private static string GetQueryString(HttpRequest request, string key)
-        {
-            var queryStrings = request.Query;
+        //private static string GetQueryString(HttpRequest request, string key)
+        //{
+        //    var queryStrings = request.Query;
 
-            if (queryStrings == null) return null;
+        //    if (queryStrings == null) return null;
 
-            return queryStrings.ContainsKey(key) ? queryStrings[key].FirstOrDefault() : null;
-        }
+        //    return queryStrings.ContainsKey(key) ? queryStrings[key].FirstOrDefault() : null;
+        //}
 
         private JObject GenerateLocalAccessTokenResponse(string userName)
         {

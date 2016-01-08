@@ -19,5 +19,6 @@ namespace Soloco.RealTimeWeb.Membership.Domain
         public string AllowedOrigin { get; set; }
 
         public string Key { get; set; }
+        public string  RedirectUri { get; set; }
     }
 }

@@ -25,7 +25,9 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
         {
             return new Client
             {
-                AllowedOrigin = result.AllowedOrigin
+                AllowedOrigin = result.AllowedOrigin,
+                Id = result.Id,
+                Name = result.Name
             };
         }
     }

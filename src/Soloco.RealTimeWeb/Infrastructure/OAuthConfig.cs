@@ -13,14 +13,14 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             var applicationServices = app.ApplicationServices;
             var oauthCOnfiguration = new OAuthConfiguration();
-            // (IOAuthConfiguration)applicationServices.GetService(typeof(IOAuthConfiguration));
 
-            //use a cookie to temporarily store information about a user logging in with a third party login provider
-            //app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
+            app.UseIdentity();
+
+            WebAuthentication()(app);
 
             app
-                .UseWhen(context => context.Request.Path.StartsWithSegments(new PathString("/api")), ApiAuthentication(oauthCOnfiguration))
-                .UseWhen(context => !context.Request.Path.StartsWithSegments(new PathString("/api")), WenAuthentication(oauthCOnfiguration))
+              //  .UseWhen(IsApi, ApiAuthentication(oauthCOnfiguration))
+                //.UseWhen(IsWeb, WebAuthentication(oauthCOnfiguration))
                 .UseFacebookAuthentication(oauthCOnfiguration.Facebook)
                 .UseGoogleAuthentication(oauthCOnfiguration.Google)
                 .UseOpenIdConnectServer(ServerOptions(applicationServices));
@@ -28,23 +28,32 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return app;
         }
 
-        private static Action<IApplicationBuilder> WenAuthentication(IOAuthConfiguration oauthCOnfiguration)
+        private static bool IsWeb(HttpContext context)
+        {
+            return !IsApi(context);
+        }
+
+        private static bool IsApi(HttpContext context)
+        {
+            return context.Request.Path.StartsWithSegments(new PathString("/api"));
+        }
+
+        private static Action<IApplicationBuilder> WebAuthentication()
         {
             return branch =>
             {
                 // Insert a new cookies middleware in the pipeline to store
                 // the user identity returned by the external identity provider.
-                branch.UseCookieAuthentication(options =>
-                {
-                    options.AutomaticAuthenticate = true;
-                    options.AutomaticChallenge = true;
-                    options.AuthenticationScheme = "ServerCookie";
-                    options.CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie";
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                    options.LoginPath = new PathString("/signin");
-                });
+                var options = new CookieAuthenticationOptions {
+                    AutomaticAuthenticate = true,
+                    AutomaticChallenge = true,
+                    AuthenticationScheme = "ServerCookie",
+                    CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
+                    ExpireTimeSpan = TimeSpan.FromMinutes(5),
+                    LoginPath = new PathString("/signin")
+                };
 
-                //branch.UseTwitterAuthentication(oauthCOnfiguration.Twiiter);
+                branch.UseCookieAuthentication(options);
             };
         }
 
@@ -52,15 +61,20 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             return branch =>
             {
-                branch.UseJwtBearerAuthentication(options =>
-                {
-                    options.AutomaticAuthenticate = true;
-                    options.AutomaticChallenge = true;
-                    options.RequireHttpsMetadata = false;
+                //branch.UseOAuthValidation(options => {
+                //    options.AutomaticAuthenticate = true;
+                //    options.AutomaticChallenge = true;
+                //});
 
-                    options.Audience = "http://localhost:54540/";
-                    options.Authority = "http://localhost:54540/";
-                });
+                //branch.UseJwtBearerAuthentication(options =>
+                //{
+                //    options.AutomaticAuthenticate = true;
+                //    options.AutomaticChallenge = true;
+                //    options.RequireHttpsMetadata = false;
+
+                //    options.Audience = "http://localhost:54540/";
+                //    options.Authority = "http://localhost:54540/";
+                //});
             };
         }
 
@@ -68,12 +82,12 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             return options =>
             {
+                options.Provider = new AuthorizationServerProvider(serviceProvider);
                 options.AllowInsecureHttp = true;
+                options.AuthorizationEndpointPath = "/account/authorize/";
                 options.TokenEndpointPath = "/token";
                 options.AccessTokenLifetime = TimeSpan.FromMinutes(30);
-                options.Provider = new AuthorizationServerProvider(serviceProvider);
             };
         }
-
     }
 }

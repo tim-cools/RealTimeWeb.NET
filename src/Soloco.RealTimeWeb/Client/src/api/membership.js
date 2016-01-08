@@ -5,6 +5,7 @@ import store from 'store';
 
 //const proxy = $.connection.membership;
 const storageKey = 'authorizationData';
+const id = guid();
 
 //proxy.client.LoginSuccessful = function (name) {
 //    userStateActions.logon(name);
@@ -89,15 +90,29 @@ function register(userName, eMail, password, confirmPassword) {
     api.post('api/account/register', data, handleResponse, handleError);
 }
 
-function externalProviderUrl(provider) {
-    var redirectUri = location.protocol + '//' + location.host + '/Account/Complete';
-
-    return api.serviceBase + "api/Account/ExternalLogin?provider=" + provider
-        + "&response_type=token&client_id=" + api.clientId
-        + "&redirect_uri=" + redirectUri;
+function guid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    })
 }
 
-function externalProviderCompleted(fragment) {
+function externalProviderUrl(provider) {
+    var redirectUri = api.serviceBase + 'account/authenticate/finished';
+
+    var nonce = guid();
+
+    return api.serviceBase + "account/authorize?provider=" + provider 
+        + "&redirect_uri=" + redirectUri
+        + "&scope=openid profile"
+        + "&nonce=" + nonce +
+        + "&state=" + id +
+        + "&response_type=form_post"
+        + "&response_type=token"
+        + "&client_id=" + api.clientId;
+}
+
+function externalProviderCompleted(cookie) {
 
     function handleResponse(response) {
         loggedOn(response.userName, response.access_token, null);
@@ -108,13 +123,13 @@ function externalProviderCompleted(fragment) {
         userStateActions.associateExternalFailed(data.error_description);
     }
 
-    if (fragment.haslocalaccount === 'False') {
-        return userStateActions.associateExternal(fragment.provider, fragment.external_access_token, fragment.external_user_name);        
-    }
+    //if (fragment.haslocalaccount === 'False') {
+    //    return userStateActions.associateExternal(fragment.provider, fragment.external_access_token, fragment.external_user_name);        
+    //}
 
-    const data = 'provider=' + fragment.provider + '&externalAccessToken=' + fragment.external_access_token;
+    //const data = 'provider=' + fragment.provider + '&externalAccessToken=' + fragment.external_access_token;
 
-    api.get('api/account/ObtainLocalAccessToken', data, handleResponse, handleError);
+    api.get('api/account/authorize', data, handleResponse, handleError, cookie);
 }
 
 function registerExternal(userName, provider, externalAccessToken) {

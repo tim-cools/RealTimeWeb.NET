@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0-rc1-final",
   "description": "Soloco.RealTimeWeb.Membership.Messages Class Library",
   "authors": [ "Class Library template" ],
   "tags": [""],
@@ -13,6 +13,6 @@
     "dnx451": { }
   },
   "dependencies": {
-    "Soloco.RealTimeWeb.Common": "1.0.0-*"
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final"
   }
 }

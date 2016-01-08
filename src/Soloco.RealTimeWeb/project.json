@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0-rc1-final",
   "userSecretsId": "aspnet5-Soloco.RealTimeWeb-558eb18b-8a95-46ae-81c6-4145390ed7e7",
   "compilationOptions": {
     "emitEntryPoint": true
@@ -30,10 +30,11 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "AspNet.Security.OpenIdConnect.Extensions": "1.0.0-beta4",
     "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta4",
-    "Soloco.RealTimeWeb.Common": "1.0.0-*",
-    "Soloco.RealTimeWeb.Membership": "1.0.0-*",
-    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-*"
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final",
+    "Soloco.RealTimeWeb.Membership": "1.0.0-rc1-final",
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final"
   },
 
   "commands": {

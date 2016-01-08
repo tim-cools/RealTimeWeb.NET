@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0-rc1-final",
   "description": "Soloco.RealTimeWeb.Membership Class Library",
   "authors": [ "Class Library template" ],
   "tags": [""],
@@ -20,6 +20,6 @@
     "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
-    "Soloco.RealTimeWeb.Common": "1.0.0-*",
-    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-*"  }
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final",
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final"  }
 }

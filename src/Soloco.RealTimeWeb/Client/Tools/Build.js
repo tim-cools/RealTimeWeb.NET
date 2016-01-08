@@ -20,8 +20,8 @@ var config = {
     target: './wwwroot/',
     app: 'Client/src/app.js',
     appWatch: 'Client/src/**/*.*',
-    appTarget: 'app.js',
-    vendorTarget: 'vendor.js',
+    appTarget: 'scripts/app.js',
+    vendorTarget: 'scripts/vendor.js',
     vendorFiles: [
         'react',
         'react-dom',

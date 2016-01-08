@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "1.0.0-rc1-final",
   "compilationOptions": {
     "emitEntryPoint": true
   },
@@ -15,7 +15,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Npgsql": "3.1.0-alpha5",
-    "Soloco.RealTimeWeb.Common": "1.0.0-*"
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final"
   },
 
   "commands": {
