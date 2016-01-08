@@ -1,1 +1,1 @@
-xbuild /p:Configuration=Release src/Soloco.RealTimeWeb.sln /p:TargetFrameworkVersion="v4.5" /p:DebugSymbols=False
+dnu pack ./src/Soloco.RealTimeWeb
