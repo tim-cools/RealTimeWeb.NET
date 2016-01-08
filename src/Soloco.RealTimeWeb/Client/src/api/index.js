@@ -1,12 +1,13 @@
 import reqwest from 'reqwest';
+import store from 'store';
 
-const jsonHeaders = { 'Accept': 'application/json' };
 const serviceBase = window.location.protocol + '//' + window.location.host + '/';
 const clientId = 'realTimeWebClient';
+const storageKey = 'authorizationData';
 
 function call(verb, contentType, url, data, responseHandler, errorHandler) {
     
-    function parseErrors(handler) {
+    function parseErrors() {
         function formatErrors(data) {
             if (data.error_description) {
                 return [ data.error_description ];
@@ -18,10 +19,20 @@ function call(verb, contentType, url, data, responseHandler, errorHandler) {
         }
 
         return function(request) {
+            
+            if (!errorHandler) return;
+
             const data = JSON.parse(request.response);
-            var error = formatErrors(data);
-            return handler(error, request);
-           }
+            const error = formatErrors(data);
+
+            return errorHandler(error, request);
+        }
+    }
+
+    const authentication = store.get(storageKey);
+    const headers = { 'Accept': 'application/json' };
+    if (authentication) {
+        headers.Authorization = 'Bearer ' + authentication.token;
     }
 
     reqwest({
@@ -30,9 +41,9 @@ function call(verb, contentType, url, data, responseHandler, errorHandler) {
         //type: 'json',
         contentType: contentType,
         data: data,
-        headers: jsonHeaders,
+        headers: headers,
         success: responseHandler,
-        error: parseErrors(errorHandler)
+        error: parseErrors()
     });
 }
 
@@ -44,9 +55,25 @@ function post(url, data, responseHandler, errorHandler) {
     call('post', 'application/x-www-form-urlencoded', url, data, responseHandler, errorHandler);
 }
 
+function clearAuthentication() {
+    store.remove(storageKey);
+}
+
+function authenticated(token, refreshToken) {
+    const data = {
+        token: token, 
+        useRefreshTokens: refreshToken ? true : false,
+        refreshToken: refreshToken
+    };
+
+    store.set(storageKey, data);
+}
+
 export default {
     serviceBase: serviceBase,
     clientId: clientId,
     post: post,
-    get: get
+    get: get,
+    clearAuthentication: clearAuthentication,
+    authenticated: authenticated
 }

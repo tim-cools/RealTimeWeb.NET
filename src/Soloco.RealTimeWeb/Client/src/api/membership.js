@@ -1,11 +1,9 @@
 import api from './';
 import navigate from './navigate';
 import { actions as userStateActions } from '../state/user';
-import store from 'store';
+
 
 //const proxy = $.connection.membership;
-const storageKey = 'authorizationData';
-const id = guid();
 
 //proxy.client.LoginSuccessful = function (name) {
 //    userStateActions.logon(name);
@@ -19,20 +17,18 @@ function logonInit() {
     userStateActions.logon();
 }
 
-function logon(userName, password, useRefreshTokens) {
+function logon(userName, password) {
 
     function handleResponse(response) {
-        loggedOn(userName, response.access_token, useRefreshTokens);
+        api.authenticated(response.access_token);
+        loggedOn(userName);
     }
 
     function handleError(errors) {
         userStateActions.logonFailed(errors);
     }
 
-    var data = 'grant_type=password&username=' + userName + '&password=' + password;
-    if (useRefreshTokens) {
-        data = data + '&client_id=' + api.clientId;
-    }
+    var data = 'grant_type=password&username=' + userName + '&password=' + password + '&client_id=' + api.clientId;
 
     userStateActions.logonPending();
 
@@ -40,27 +36,17 @@ function logon(userName, password, useRefreshTokens) {
 }
 
 function logOff() {
-
-    store.remove(storageKey);
+    
+    api.post('/account/signout');
+    api.clearAuthentication();
 
     userStateActions.logoff();
     
     navigate.to('/');
 }
 
-function loggedOn(userName, token, refreshToken) {
-         
-    const data = {
-        token: token, 
-        userName: userName,
-        useRefreshTokens: refreshToken ? true : false,
-        refreshToken: refreshToken
-    };
-
-    store.set(storageKey, data);
-        
-    userStateActions.loggedOn(userName, refreshToken ? true : false);
-    
+function loggedOn(userName) {
+    userStateActions.loggedOn(userName, false);
     navigate.to('/home');
 }
 
@@ -92,72 +78,41 @@ function register(userName, eMail, password, confirmPassword) {
 
 function guid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        var r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
-    })
+    });
 }
 
 function externalProviderUrl(provider) {
-    var redirectUri = api.serviceBase + 'account/authenticate/finished';
 
+    var redirectUri = api.serviceBase + 'account/authorized';
     var nonce = guid();
 
-    return api.serviceBase + "account/authorize?provider=" + provider 
-        + "&redirect_uri=" + redirectUri
-        + "&scope=openid profile"
-        + "&nonce=" + nonce +
-        + "&state=" + id +
-        + "&response_type=form_post"
-        + "&response_type=token"
-        + "&client_id=" + api.clientId;
+    return api.serviceBase + 'account/authorize/connect?provider=' + provider 
+        + '&redirect_uri=' + redirectUri
+        + '&scope=openid profile'
+        + '&response_type=token'
+        + '&client_id=' + api.clientId
+        + '&nonce=' + nonce;
 }
 
-function externalProviderCompleted(cookie) {
+function externalProviderCompleted(fragment) {
 
-    function handleResponse(response) {
-        loggedOn(response.userName, response.access_token, null);
-    }
-
-    function handleError(request) {
-        const data = JSON.parse(request.response);
-        userStateActions.associateExternalFailed(data.error_description);
-    }
-
-    //if (fragment.haslocalaccount === 'False') {
-    //    return userStateActions.associateExternal(fragment.provider, fragment.external_access_token, fragment.external_user_name);        
-    //}
-
-    //const data = 'provider=' + fragment.provider + '&externalAccessToken=' + fragment.external_access_token;
-
-    api.get('api/account/authorize', data, handleResponse, handleError, cookie);
-}
-
-function registerExternal(userName, provider, externalAccessToken) {
-    
-    function handleResponse(response) {
-        loggedOn(response.userName, response.access_token, null);
-    }
-
-    function handleError(errors, request) {
-        userStateActions.associateExternalFailed(errors[0]);
-    }
-
-    const data = {
-        userName: userName,
-        provider: provider,
-        externalAccessToken: externalAccessToken
-    };
-
-    userStateActions.associateExternalPending();
-
-    api.post('api/account/registerexternal', data, handleResponse, handleError);
+    api.authenticated(fragment.access_token);
+    initialize();
 }
 
 function initialize() {
-    const data = store.get(storageKey);
-    if (data) {
-        loggedOn(data.userName, data.token, data.refreshToken);
+      
+    function handleResponse(response) {
+        loggedOn(response.UserName);
     }
+
+    function handleError(errors) {
+        logOff();
+    }
+    
+    api.get('api/account', {}, handleResponse, handleError);    
 }
 
 //$.connection.hub.start()
@@ -172,6 +127,5 @@ export default {
     register: register,
     registerInit: registerInit,
     externalProviderUrl: externalProviderUrl,
-    externalProviderCompleted: externalProviderCompleted,
-    registerExternal: registerExternal
+    externalProviderCompleted: externalProviderCompleted
 }

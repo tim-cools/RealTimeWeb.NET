@@ -1,31 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
-using Soloco.RealTimeWeb.Membership.Domain;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
-using Soloco.RealTimeWeb.Membership.Messages.Queries;
-using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 using Soloco.RealTimeWeb.Membership.Services;
 using Soloco.RealTimeWeb.ViewModels;
-using Microsoft.AspNet.Builder;
-using AspNet.Security.OpenIdConnect.Extensions;
 
 namespace Soloco.RealTimeWeb.Controllers.Api
 {
-    [Route("api/Account")]
     public class AccountController : Controller
     {
         private readonly IMessageDispatcher _messageDispatcher;
@@ -40,9 +30,24 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             _ioAuthConfiguration = ioAuthConfiguration;
         }
 
-        // POST api/Account/Register
         [AllowAnonymous]
-        [Route("Register")]
+        [HttpGet("~/api/account/")]
+        public async Task<IActionResult> Get(UserModel userModel)
+        {
+            if (!User.Identities.Any(identity => identity.IsAuthenticated))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userName = User.FindFirst(ClaimTypes.Name);
+
+            return Json(new {
+                UserName = userName?.Value ?? "unknown" 
+            });
+        }
+
+        [AllowAnonymous]
+        [Route("~/api/account/register")]
         public async Task<IActionResult> Register(UserModel userModel)
         {
             if (!ModelState.IsValid)
@@ -55,72 +60,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
             return ErrorResult(result);
         }
-
-        //[HttpGet("authorize")]
-        //[HttpPost("authorize")]
-        //public async Task<IActionResult> Authorize(CancellationToken cancellationToken)
-        //{
-        //    // Note: when a fatal error occurs during the request processing, an OpenID Connect response
-        //    // is prematurely forged and added to the ASP.NET context by OpenIdConnectServerHandler.
-        //    // In this case, the OpenID Connect request is null and cannot be used.
-        //    // When the user agent can be safely redirected to the client application,
-        //    // OpenIdConnectServerHandler automatically handles the error and MVC is not invoked.
-        //    // You can safely remove this part and let AspNet.Security.OpenIdConnect.Server automatically
-        //    // handle the unrecoverable errors by switching ApplicationCanDisplayErrors to false in Startup.cs
-        //    var response = HttpContext.GetOpenIdConnectResponse();
-        //    if (response != null)
-        //    {
-        //        return View("Error", response);
-        //    }
-
-        //    // Extract the authorization request from the cache, the query string or the request form.
-        //    var request = HttpContext.GetOpenIdConnectRequest();
-        //    if (request == null)
-        //    {
-        //        return View("Error", new OpenIdConnectMessage
-        //        {
-        //            Error = "invalid_request",
-        //            ErrorDescription = "An internal error has occurred"
-        //        });
-        //    }
-
-        //    // Note: authentication could be theorically enforced at the filter level via AuthorizeAttribute
-        //    // but this authorization endpoint accepts both GET and POST requests while the cookie middleware
-        //    // only uses 302 responses to redirect the user agent to the login page, making it incompatible with POST.
-        //    // To work around this limitation, the OpenID Connect request is automatically saved in the cache and will be
-        //    // restored by the OpenID Connect server middleware after the external authentication process has been completed.
-        //    if (!User.Identities.Any(identity => identity.IsAuthenticated))
-        //    {
-        //        return new ChallengeResult(new AuthenticationProperties
-        //        {
-        //            RedirectUri = Url.Action(nameof(Authorize), new
-        //            {
-        //                unique_id = request.GetUniqueIdentifier()
-        //            })
-        //        });
-        //    }
-
-        //    //// Note: AspNet.Security.OpenIdConnect.Server automatically ensures an application
-        //    //// corresponds to the client_id specified in the authorization request using
-        //    //// IOpenIdConnectServerProvider.ValidateClientRedirectUri (see AuthorizationProvider.cs).
-        //    //// In theory, this null check is thus not strictly necessary. That said, a race condition
-        //    //// and a null reference exception could appear here if you manually removed the application
-        //    //// details from the database after the initial check made by AspNet.Security.OpenIdConnect.Server.
-        //    //var application = await GetApplicationAsync(request.ClientId, cancellationToken);
-        //    //if (application == null)
-        //    //{
-        //    //    return View("Error", new OpenIdConnectMessage
-        //    //    {
-        //    //        Error = "invalid_client",
-        //    //        ErrorDescription = "Details concerning the calling client application cannot be found in the database"
-        //    //    });
-        //    //}
-
-        //    var accessTokenResponse = GenerateLocalAccessTokenResponse(result.UserName);
-        //    return Ok(accessTokenResponse);
-        //}
-
-
+        
         //// GET api/Account/ExternalLogin
         ////[OverrideAuthentication]
         ////[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]

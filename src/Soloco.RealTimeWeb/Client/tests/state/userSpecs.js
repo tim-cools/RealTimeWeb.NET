@@ -95,45 +95,5 @@ describe('State', () => {
                 }
             });
         });   
-        
-        it('should should be able to associate external', () => {
-            actions.associateExternal('provider', 'externalAccessToken', 'externalUserName');
-            assertState({
-                status: userStatus.notAuthenticated,
-                associateExternal: {
-                    token: 'externalAccessToken',
-                    provider: 'provider',
-                    userName: 'externalUserName'
-                }
-            });
-        });   
-
-        it('should should be able to associate external pending', () => {
-            actions.associateExternal('provider', 'externalAccessToken', 'externalUserName');
-            actions.associateExternalPending();
-            assertState({
-                status: userStatus.notAuthenticated,
-                associateExternal: {
-                    pending: true,
-                    token: 'externalAccessToken',
-                    provider: 'provider',
-                    userName: 'externalUserName'
-                }
-            });
-        });   
-
-        it('should should be able to associate external failed', () => {
-            actions.associateExternal('provider', 'externalAccessToken', 'externalUserName');
-            actions.associateExternalFailed([ 'error1', 'error2' ]);
-            assertState({
-                status: userStatus.notAuthenticated,
-                associateExternal: {
-                    token: 'externalAccessToken',
-                    provider: 'provider',
-                    userName: 'externalUserName',
-                    errors: [ 'error1', 'error2' ]
-                }
-            });
-        });   
     });
 });

@@ -14,6 +14,30 @@ namespace Soloco.RealTimeWeb.Membership
 {
     public class MembershipRegistry : Registry
     {
+        public MembershipRegistry()
+        {
+            Scan(options => { 
+                options.TheCallingAssembly();
+                options.IncludeNamespaceContainingType<InitializeDatabaseCommandHandler>();
+                options.IncludeNamespaceContainingType<ClientByKeyQueryHandler>();
+                options.IncludeNamespaceContainingType<OAuthConfiguration>();
+                options.Convention<AllInterfacesConvention>();
+            });
+
+            For<UserManager<User>>().Use("Create UserManagerFactory", UserManagerFactory);
+        }
+
+        //todo use normal injection
+        private UserManager<User> UserManagerFactory(IContext resolver)
+        {
+            var documentSession = resolver.GetInstance<IDocumentSession>();
+            var store = new UserStore(documentSession);
+            var passwordHasher = new PasswordHasher<User>();
+            var logger = new DummyLogger(); // get the real deal
+            var manager = new UserManager<User>(store, null, passwordHasher, null, null, null, null, null, logger, null);
+            return manager;
+        }
+
         private class DummyLogger : ILogger<UserManager<User>>, IDisposable
         {
             public void Log(LogLevel logLevel, int eventId, object state, Exception exception, Func<object, Exception, string> formatter)
@@ -35,28 +59,5 @@ namespace Soloco.RealTimeWeb.Membership
             }
         }
 
-        public MembershipRegistry()
-        {
-            Scan(options => { 
-                options.TheCallingAssembly();
-                options.IncludeNamespaceContainingType<InitializeDatabaseCommandHandler>();
-                options.IncludeNamespaceContainingType<ClientByKeyQueryHandler>();
-                options.IncludeNamespaceContainingType<OAuthConfiguration>();
-                options.Convention<AllInterfacesConvention>();
-            });
-
-            For<UserManager<User>>().Use("Create UserManagerFactory", UserManagerFactory);
-        }
-
-        private UserManager<User> UserManagerFactory(IContext resolver)
-        {
-            //tod put everything in container
-            var documentSession = resolver.GetInstance<IDocumentSession>();
-            var store = new UserStore(documentSession);
-            var passwordHasher = new PasswordHasher<User>();
-            var logger = new DummyLogger(); // get the real deal
-            var manager = new UserManager<User>(store, null, passwordHasher, null, null, null, null, null, logger, null);
-            return manager;
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using AspNet.Security.OAuth.Validation;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
@@ -14,16 +15,13 @@ namespace Soloco.RealTimeWeb.Infrastructure
             var applicationServices = app.ApplicationServices;
             var oauthCOnfiguration = new OAuthConfiguration();
 
-            app.UseIdentity();
-
-            WebAuthentication()(app);
-
             app
-              //  .UseWhen(IsApi, ApiAuthentication(oauthCOnfiguration))
-                //.UseWhen(IsWeb, WebAuthentication(oauthCOnfiguration))
-                .UseFacebookAuthentication(oauthCOnfiguration.Facebook)
-                .UseGoogleAuthentication(oauthCOnfiguration.Google)
-                .UseOpenIdConnectServer(ServerOptions(applicationServices));
+               .UseIdentity()
+               .UseWhen(IsApi, ApiAuthentication)
+               .UseWhen(IsWeb, WebAuthentication)
+               .UseFacebookAuthentication(oauthCOnfiguration.Facebook)
+               .UseGoogleAuthentication(oauthCOnfiguration.Google)
+               .UseOpenIdConnectServer(ServerOptions(applicationServices));
 
             return app;
         }
@@ -38,44 +36,28 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return context.Request.Path.StartsWithSegments(new PathString("/api"));
         }
 
-        private static Action<IApplicationBuilder> WebAuthentication()
+        private static void WebAuthentication(IApplicationBuilder branch)
         {
-            return branch =>
-            {
-                // Insert a new cookies middleware in the pipeline to store
-                // the user identity returned by the external identity provider.
-                var options = new CookieAuthenticationOptions {
-                    AutomaticAuthenticate = true,
-                    AutomaticChallenge = true,
-                    AuthenticationScheme = "ServerCookie",
-                    CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
-                    ExpireTimeSpan = TimeSpan.FromMinutes(5),
-                    LoginPath = new PathString("/signin")
-                };
-
-                branch.UseCookieAuthentication(options);
-            };
+            branch.UseCookieAuthentication(new CookieAuthenticationOptions {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                AuthenticationScheme = "ServerCookie",
+                CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
+                ExpireTimeSpan = TimeSpan.FromMinutes(5),
+                LoginPath = new PathString("/signin")
+            });
         }
 
-        private static Action<IApplicationBuilder> ApiAuthentication(IOAuthConfiguration oauthCOnfiguration)
+        private static void ApiAuthentication(IApplicationBuilder branch)
         {
-            return branch =>
+            branch.UseJwtBearerAuthentication(options =>
             {
-                //branch.UseOAuthValidation(options => {
-                //    options.AutomaticAuthenticate = true;
-                //    options.AutomaticChallenge = true;
-                //});
-
-                //branch.UseJwtBearerAuthentication(options =>
-                //{
-                //    options.AutomaticAuthenticate = true;
-                //    options.AutomaticChallenge = true;
-                //    options.RequireHttpsMetadata = false;
-
-                //    options.Audience = "http://localhost:54540/";
-                //    options.Authority = "http://localhost:54540/";
-                //});
-            };
+                options.AutomaticAuthenticate = true;
+                options.AutomaticChallenge = true;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "http://localhost:3000/";
+                options.Authority = "http://localhost:3000/";
+            });
         }
 
         private static Action<OpenIdConnectServerOptions> ServerOptions(IServiceProvider serviceProvider)
@@ -84,7 +66,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             {
                 options.Provider = new AuthorizationServerProvider(serviceProvider);
                 options.AllowInsecureHttp = true;
-                options.AuthorizationEndpointPath = "/account/authorize/";
+                options.AuthorizationEndpointPath = "/account/authorize";
                 options.TokenEndpointPath = "/token";
                 options.AccessTokenLifetime = TimeSpan.FromMinutes(30);
             };

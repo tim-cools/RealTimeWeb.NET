@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Marten;
+using Microsoft.AspNet.Identity;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Store;
@@ -11,37 +12,51 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
     public class InitializeDatabaseCommandHandler : CommandHandler<InitializeDatabaseCommand>
     {
-        public InitializeDatabaseCommandHandler(IDocumentSession session)
-             : base(session)
+        private readonly UserManager<User> _userManager;
+
+        public InitializeDatabaseCommandHandler(IDocumentSession session, UserManager<User> userManager)
+            : base(session)
         {
+            _userManager = userManager;
         }
 
-        protected override Task<CommandResult> Execute(InitializeDatabaseCommand command)
+        protected override async Task<CommandResult> Execute(InitializeDatabaseCommand command)
         {
-            UpdateClients(Session);
-            return Task.FromResult(CommandResult.Success);
+            UpdateClients();
+
+            await InitializeUsers();
+
+            return CommandResult.Success;
         }
 
-        private static void UpdateClients(IDocumentSession session)
+        private async Task InitializeUsers()
+        {
+            if (await _userManager.FindByEmailAsync("tim@soloco.be") == null)
+            {
+                await _userManager.CreateAsync(new User("123456", "tim@soloco.be"), "Aa-123456");
+            }
+        }
+
+        private void UpdateClients()
         {
             var clients = Clients.Get();
             foreach (var client in clients)
             {
-                EnsureClient(session, client);
+                EnsureClient(client);
             }
         }
 
-        private static void EnsureClient(IDocumentSession session, Client client)
+        private void EnsureClient(Client client)
         {
-            var existing = session.GetFirst<Client>(criteria => criteria.Key == client.Key);
+            var existing = Session.GetFirst<Client>(criteria => criteria.Key == client.Key);
             if (existing == null)
             {
-                session.Store(client);
+                Session.Store(client);
             }
             else
             {
                 UpdateClient(client, existing);
-                session.Store(existing);
+                Session.Store(existing);
             }
         }
 

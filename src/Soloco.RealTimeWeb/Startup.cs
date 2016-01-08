@@ -11,7 +11,9 @@ using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;
 using Soloco.RealTimeWeb.Membership;
+using Soloco.RealTimeWeb.Membership.CommandHandlers;
 using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
 
 namespace Soloco.RealTimeWeb
 {
@@ -44,11 +46,6 @@ namespace Soloco.RealTimeWeb
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
-
-            services.Configure<SharedAuthenticationOptions>(options =>
-            {
-                options.SignInScheme = "ServerCookie";
-            });
 
             services.AddIdentity<User, Role>();
             services.AddCaching();
@@ -96,6 +93,16 @@ namespace Soloco.RealTimeWeb
 
             ConfigureLogging(loggerFactory);
             ConfigureWebApp(app, env);
+
+            InitalizeDatabase(app);
+        }
+
+        private static void InitalizeDatabase(IApplicationBuilder app)
+        {
+            var messageDispatcher = app.ApplicationServices.GetMessageDispatcher();
+            var command = new InitializeDatabaseCommand();
+
+            messageDispatcher.Execute(command);
         }
 
         private void ConfigureLogging(ILoggerFactory loggerFactory)

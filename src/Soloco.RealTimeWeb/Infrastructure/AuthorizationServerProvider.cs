@@ -32,15 +32,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             Debug.WriteLine("AuthorizationServerProvider.ValidateClientAuthentication");
 
-            if (string.IsNullOrEmpty(context.ClientId) || string.IsNullOrEmpty(context.ClientSecret))
-            {
-                context.Rejected(
-                    error: "invalid_request",
-                    description: "Missing credentials: ensure that your credentials were correctl entered in the request body or in the authorization header");
-
-                return;
-            }
-
             var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
             var query = new ValidateClientAuthenticationQuery(context.ClientId, context.ClientSecret);
@@ -68,8 +59,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             Debug.WriteLine("AuthorizationServerProvider.GrantResourceOwnerCredentials");
 
-            SetCorsHeader(context);
-
             var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
             var query = new ValidUserLoginQuery(context.UserName, context.Password);
@@ -80,6 +69,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 context.Rejected("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
+
+            SetCorsHeader(context);
 
             var ticket = CreateAuthenticationTicket(context);
             context.Validated(ticket);
@@ -116,7 +107,9 @@ namespace Soloco.RealTimeWeb.Infrastructure
             );
 
             var principal = new ClaimsPrincipal(new[] { identity });
-            return new AuthenticationTicket(principal, properties, context.Options.AuthenticationScheme);
+            var ticket = new AuthenticationTicket(principal, properties, context.Options.AuthenticationScheme);
+            ticket.SetResources(new [] { "http://localhost:3000/" });
+            return ticket;
         }
 
         public override Task GrantRefreshToken(GrantRefreshTokenContext context)
@@ -200,18 +193,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
         public override Task ValidateTokenRequest(ValidateTokenRequestContext context)
         {
             Debug.WriteLine("AuthorizationServerProvider.ValidateTokenRequest");
-          
-            // Note: OpenIdConnectServerHandler supports authorization code, refresh token, client credentials
-            // and resource owner password credentials grant types but this authorization server uses a safer policy
-            // rejecting the last two ones. You may consider relaxing it to support the ROPC or client credentials grant types.
-            if (!context.Request.IsAuthorizationCodeGrantType() && !context.Request.IsRefreshTokenGrantType())
-            {
-                context.Rejected(
-                    error: "unsupported_grant_type",
-                    description: "Only authorization code and refresh token grant types " +
-                                 "are accepted by this authorization server");
-            }
-
             return Task.FromResult<object>(null);
         }
 

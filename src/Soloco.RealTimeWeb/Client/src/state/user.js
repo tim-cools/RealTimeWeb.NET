@@ -18,11 +18,7 @@ export const actionsDefinitions = {
 
     REGISTER: 'REGISTER',
     REGISTER_PENDING: 'REGISTER_PENDING',
-    REGISTER_FAILED: 'REGISTER_FAILED',
-    
-    ASSOCIATE_EXTERNAL: 'ASSOCIATE_EXTERNAL',
-    ASSOCIATE_EXTERNAL_PENDING: 'ASSOCIATE_EXTERNAL_PENDING',
-    ASSOCIATE_EXTERNAL_FAILED: 'ASSOCIATE_EXTERNAL_FAILED'
+    REGISTER_FAILED: 'REGISTER_FAILED'
 };
 
 export const actions = {
@@ -76,28 +72,6 @@ export const actions = {
             type: actionsDefinitions.REGISTER_FAILED,
             errors: errors
         });
-    },
-
-    associateExternal: function(provider, token, userName) {
-        return dispatch({
-            type: actionsDefinitions.ASSOCIATE_EXTERNAL,
-            provider: provider,
-            token: token,
-            userName: userName
-        });
-    },
-    
-    associateExternalPending: function () {
-        return dispatch({
-            type: actionsDefinitions.ASSOCIATE_EXTERNAL_PENDING
-        });
-    },
-
-    associateExternalFailed: function (errors) {
-        return dispatch({
-            type: actionsDefinitions.ASSOCIATE_EXTERNAL_FAILED, 
-            errors: errors
-        });
     }
 };
 
@@ -136,38 +110,6 @@ export function reducer(state = notAuthenticated, action) {
         case actionsDefinitions.LOG_OFF:
             return {
                 status: userStatus.notAuthenticated
-            };
-
-        case actionsDefinitions.ASSOCIATE_EXTERNAL:
-            return {
-                status: userStatus.notAuthenticated,
-                associateExternal: {
-                    provider: action.provider,
-                    token: action.token,
-                    userName: action.userName
-                }
-            };
-
-        case actionsDefinitions.ASSOCIATE_EXTERNAL_PENDING:
-            return {
-                status: userStatus.notAuthenticated,
-                associateExternal: {
-                    pending: true,
-                    provider: state.associateExternal.provider,
-                    token: state.associateExternal.token,
-                    userName: state.associateExternal.userName
-                }
-            };
-
-        case actionsDefinitions.ASSOCIATE_EXTERNAL_FAILED:
-            return {
-                status: userStatus.notAuthenticated, 
-                associateExternal: {
-                    errors: action.errors,
-                    provider: state.associateExternal.provider,
-                    token: state.associateExternal.token,
-                    userName: state.associateExternal.userName
-                }
             };
             
         case actionsDefinitions.REGISTER:

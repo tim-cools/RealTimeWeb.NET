@@ -3,7 +3,7 @@ window.common = (function () {
     var common = {};
 
     common.getFragment = function getFragment() {
-        if (window.location.hash.indexOf("#") === 0) {
+        if (window.location.hash.indexOf('#') === 0) {
             return parseQueryString(window.location.hash.substr(1));
         } else {
             return {};
@@ -11,18 +11,18 @@ window.common = (function () {
     };
 
     function parseQueryString(queryString) {
-        var data = {},
-            pairs, pair, separatorIndex, escapedKey, escapedValue, key, value;
+        var data = {};
 
-        if (queryString === null) {
+        if (!queryString) {
             return data;
         }
 
-        pairs = queryString.split("&");
+        var pairs = queryString.split('&');
 
         for (var i = 0; i < pairs.length; i++) {
-            pair = pairs[i];
-            separatorIndex = pair.indexOf("=");
+            var pair = pairs[i];
+            var separatorIndex = pair.indexOf('=');
+            var escapedKey, escapedValue;
 
             if (separatorIndex === -1) {
                 escapedKey = pair;
@@ -32,8 +32,8 @@ window.common = (function () {
                 escapedValue = pair.substr(separatorIndex + 1);
             }
 
-            key = decodeURIComponent(escapedKey);
-            value = decodeURIComponent(escapedValue);
+            var key = decodeURIComponent(escapedKey);
+            var value = decodeURIComponent(escapedValue);
 
             data[key] = value;
         }
@@ -46,7 +46,5 @@ window.common = (function () {
 
 var fragment = common.getFragment();
 
-window.location.hash = fragment.state || '';
 window.opener.authenticationScope.complete(fragment);
-
-//window.close();
+window.close();

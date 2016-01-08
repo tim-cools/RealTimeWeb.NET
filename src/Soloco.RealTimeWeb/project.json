@@ -9,11 +9,12 @@
   },
 
   "dependencies": {
+    "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
     "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
@@ -23,6 +24,7 @@
     "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
     "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
     "Microsoft.Dnx.Runtime": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc1-final",
     "Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -30,11 +32,10 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "AspNet.Security.OpenIdConnect.Extensions": "1.0.0-beta4",
-    "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta4",
     "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final",
     "Soloco.RealTimeWeb.Membership": "1.0.0-rc1-final",
-    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final"
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final",
+    "Microsoft.IdentityModel.Protocols.OpenIdConnect": "2.0.0-rc1-211161024"
   },
 
   "commands": {

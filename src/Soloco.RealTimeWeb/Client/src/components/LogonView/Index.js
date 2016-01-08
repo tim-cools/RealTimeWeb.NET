@@ -32,13 +32,6 @@ class LogonPage extends Component {
         window.open(externalProviderUrl, "Authenticate Account", "location=0,status=0,width=600,height=750");
     }
 
-    associateExternal() {
-        const userName = this.refs.userNameInput.getValue();
-        const { provider, externalAccessToken, externalUserName } = this.props;
-
-        membership.registerExternal(userName, provider, externalAccessToken, externalUserName);
-    }
-    
     render() {
         var title = ( <h2>Log On</h2> );
         var loader = this.props.pending
@@ -52,26 +45,7 @@ class LogonPage extends Component {
                 ));
         }
 
-        var content = this.props.associateExternal
-            ? (        
-                <Panel header={title} bsStyle="info">
-                    <div>
-                        <p><strong>You have successfully authenticated with {this.props.provider} </strong>.</p>
-                        <p>Please enter a user name below for this site and click the Register button to log in.</p>
-                    </div>
-                    <Input
-                        type="text"
-                        placeholder="User name"
-                        hasFeedback
-                        ref="userNameInput"/>
-                    <Button bsStyle="success" bzSize="large" className="btn-block" onClick={this.associateExternal.bind(this)} >
-                        Button
-                    </Button>
-                    {loader}
-                    {errors}
-                </Panel>
-              )
-            : ( 
+        var content = ( 
                     <Panel header={title} bsStyle="info">
                         <Input
                             type="text"
@@ -115,7 +89,6 @@ class LogonPage extends Component {
 }
 
 LogonPage.propTypes = {
-    associateExternal: PropTypes.bool.isRequired,
     pending: PropTypes.bool.isRequired,
     errors: PropTypes.arrayOf(PropTypes.string),
     provider: PropTypes.string,
@@ -126,21 +99,10 @@ LogonPage.propTypes = {
 function select(state) {
     return state.user.logon
         ? {
-            associateExternal: false,
             pending: state.user.logon.pending,
             errors: state.user.logon.errors
         } 
-        : state.user.associateExternal 
-        ? {
-            associateExternal: true,
-            pending: state.user.associateExternal.pending,
-            errors: state.user.associateExternal.errors ? state.user.associateExternal.errors : null,
-            provider: state.user.associateExternal.provider,
-            externalAccessToken: state.user.associateExternal.accessToken,
-            externalUserName: state.user.associateExternal.userName
-        }
         : {
-            associateExternal: false,
             pending: false
         };
 }

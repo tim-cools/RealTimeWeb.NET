@@ -1,12 +1,10 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Infrastructure;
 using Microsoft.AspNet.Builder;
@@ -25,14 +23,13 @@ namespace Soloco.RealTimeWeb.Controllers
             _messageDispatcher = messageDispatcher;
         }
 
-        [HttpGet("~/account/authorize")]
-        public ActionResult Authorize(string provider)
+        [HttpGet("~/account/authorize/connect")]
+        public ActionResult Connect(string provider)
         {
             if (string.IsNullOrEmpty(provider) || !HttpContext.IsProviderSupported(provider))
             {
                 return InvalidRequest($"An internal error has occurred (provider not supported '{provider}')");
             }
-        
 
             var response = HttpContext.GetOpenIdConnectResponse();
             if (response != null)
@@ -62,7 +59,7 @@ namespace Soloco.RealTimeWeb.Controllers
         }
 
         [HttpGet("~/account/authorize/complete")]
-        public async Task<ActionResult> Authorize(CancellationToken cancellationToken)
+        public async Task<ActionResult> Connect(CancellationToken cancellationToken)
         {
             var request = HttpContext.GetOpenIdConnectRequest();
             if (request == null)
@@ -107,6 +104,7 @@ namespace Soloco.RealTimeWeb.Controllers
                 OpenIdConnectConstants.Scopes.Email,
                 OpenIdConnectConstants.Scopes.Profile
             });
+            properties.SetResources(new[] { "http://localhost:3000/" });
             return properties;
         }
 
@@ -133,11 +131,11 @@ namespace Soloco.RealTimeWeb.Controllers
         }
 
         [HttpGet("~/account/authorized")]
-        public async Task<ActionResult> Authorize(CancellationToken cancellationToken)
+        public ActionResult Authorized()
         {
+            return View();
         }
 
-        [HttpGet("~/account/signout")]
         [HttpPost("~/account/signout")]
         public async Task SignOut()
         {
