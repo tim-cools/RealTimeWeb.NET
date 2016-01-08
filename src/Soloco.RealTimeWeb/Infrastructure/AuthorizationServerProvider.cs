@@ -96,8 +96,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
         private static AuthenticationTicket CreateAuthenticationTicket(GrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationScheme);
-            identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
+            identity.AddClaim(ClaimTypes.Name, context.UserName, "id_token token");
+            identity.AddClaim(ClaimTypes.Role, "user");
 
             var properties = new AuthenticationProperties(new Dictionary<string, string>
                 {
