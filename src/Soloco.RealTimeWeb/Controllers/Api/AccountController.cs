@@ -12,7 +12,6 @@ using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
-using Soloco.RealTimeWeb.Membership.Services;
 using Soloco.RealTimeWeb.ViewModels;
 
 namespace Soloco.RealTimeWeb.Controllers.Api

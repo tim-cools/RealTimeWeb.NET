@@ -44,7 +44,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 
         private async Task<User> GetByExternalId(string externalType, string externalIdentifier)
         {
-            return await _userManager.FindByLoginAsync(externalType, externalIdentifier)s;
+            return await _userManager.FindByLoginAsync(externalType, externalIdentifier);
         }
 
         private User GetByEmail(string email)

@@ -14,7 +14,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
     public class WhenValidatingClientAuthentication : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
         private ValidateClientAuthenticationResult _result;
-        private ValidateClientAuthenticationQuery _query;
+        private ClientApplicationValidator _query;
 
         public WhenValidatingClientAuthentication(MembershipIntegrationTestFixture fixture) : base(fixture)
         {
@@ -24,7 +24,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
             var clientId = Guid.NewGuid().ToString("n");
             var clientSecret = Guid.NewGuid().ToString("n");
-            _query = new ValidateClientAuthenticationQuery(clientId, clientSecret);
+            _query = new ClientApplicationValidator(clientId, clientSecret);
 
             _result = dispatcher.ExecuteNowWithTimeout(_query);
         }

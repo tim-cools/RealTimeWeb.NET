@@ -11,19 +11,19 @@ using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.QueryHandlers
 {
-    public class ValidateClientAuthenticationHandler : QueryHandler<ValidateClientAuthenticationQuery, ValidateClientAuthenticationResult>
+    public class ValidateClientAuthenticationHandler : QueryHandler<ClientApplicationValidator, ValidateClientAuthenticationResult>
     {
         public ValidateClientAuthenticationHandler(IQuerySession session)
               : base(session)
         {
         }
 
-        protected override Task<ValidateClientAuthenticationResult> Execute(ValidateClientAuthenticationQuery query)
+        protected override Task<ValidateClientAuthenticationResult> Execute(ClientApplicationValidator query)
         {
             return Task.FromResult(GetResult(query));
         }
 
-        private ValidateClientAuthenticationResult GetResult(ValidateClientAuthenticationQuery query)
+        private ValidateClientAuthenticationResult GetResult(ClientApplicationValidator query)
         {
             var client = Session.GetFirst<Domain.Client>(criteria => criteria.Key == query.ClientId);
             if (client == null)

@@ -32,11 +32,9 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// </summary>
         public override async Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
         {
-            Debug.WriteLine("AuthorizationServerProvider.ValidateClientAuthentication");
-
             var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
-            var query = new ValidateClientAuthenticationQuery(context.ClientId, context.ClientSecret);
+            var query = new ClientApplicationValidator(context.ClientId, context.ClientSecret);
             var result = await messageDispatcher.Execute(query);
 
             if (!result.Valid)
@@ -48,7 +46,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 return;
             }
 
-            context.HttpContext.Items.Add("client", result);
             context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
             context.HttpContext.Items.Add("as:clientRefreshTokenLifeTime", result.RefreshTokenLifeTime.ToString());
 
@@ -60,8 +57,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// </summary>
         public override async Task GrantResourceOwnerCredentials(GrantResourceOwnerCredentialsContext context)
         {
-            Debug.WriteLine("AuthorizationServerProvider.GrantResourceOwnerCredentials");
-
             var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
             var query = new UserNamePasswordLogin(context.UserName, context.Password);
@@ -109,14 +104,13 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             var principal = new ClaimsPrincipal(new[] { identity });
             var ticket = new AuthenticationTicket(principal, properties, context.Options.AuthenticationScheme);
-            ticket.SetResources(new [] { "http://localhost:3000/" });
+            ticket.Properties.ExpiresUtc = DateTime.UtcNow.Add(context.Options.AccessTokenLifetime);
+            ticket.SetResources(new [] { Configuration.AuthenticationResource });
             return ticket;
         }
 
         public override Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
-            Debug.WriteLine("AuthorizationServerProvider.GrantRefreshToken");
-
             var originalClient = context.AuthenticationTicket.Properties.Items["as:client_id"];
             var currentClient = context.ClientId;
 
@@ -164,13 +158,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
         public override Task MatchEndpoint(MatchEndpointContext context)
         {
-            Debug.WriteLine("AuthorizationServerProvider.MatchEndpoint");
-           
-            // Note: by default, OpenIdConnectServerHandler only handles authorization requests made to the authorization endpoint.
-            // This context handler uses a more relaxed policy that allows extracting authorization requests received at
-            // /connect/authorize/accept and /connect/authorize/deny (see AuthorizationController.cs for more information).
-            if (context.Options.AuthorizationEndpointPath.HasValue &&
-                context.Request.Path.StartsWithSegments(context.Options.AuthorizationEndpointPath))
+            if (context.Options.AuthorizationEndpointPath.HasValue 
+             && context.Request.Path.StartsWithSegments(context.Options.AuthorizationEndpointPath))
             {
                 context.MatchesAuthorizationEndpoint();
             }
@@ -206,7 +195,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
-            var query = new ValidateClientAuthenticationQuery(context.ClientId, context.ClientSecret);
+            var query = new ClientApplicationValidator(context.ClientId, context.ClientSecret);
             var result = await messageDispatcher.Execute(query);
 
             if (!result.Valid)

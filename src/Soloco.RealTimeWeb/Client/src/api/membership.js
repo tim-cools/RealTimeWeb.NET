@@ -20,7 +20,7 @@ function logonInit() {
 function logon(userName, password) {
 
     function handleResponse(response) {
-        api.authenticated(response.access_token);
+        api.authenticated(response.access_token, response.refresh_token);
         loggedOn(userName);
     }
 
@@ -28,10 +28,9 @@ function logon(userName, password) {
         userStateActions.logonFailed(errors);
     }
 
-    var data = 'grant_type=password&username=' + userName + '&password=' + password + '&client_id=' + api.clientId;
-
     userStateActions.logonPending();
-
+ 
+    var data = 'grant_type=password&username=' + userName + '&password=' + password + '&client_id=' + api.clientId + '&scope=offline_access';
     api.post('token', data, handleResponse, handleError);
 }
 
@@ -90,7 +89,7 @@ function externalProviderUrl(provider) {
 
     return api.serviceBase + 'account/authorize/connect?provider=' + provider 
         + '&redirect_uri=' + redirectUri
-        + '&scope=openid profile'
+        + '&scope=openid offline_access'
         + '&response_type=token'
         + '&client_id=' + api.clientId
         + '&nonce=' + nonce;

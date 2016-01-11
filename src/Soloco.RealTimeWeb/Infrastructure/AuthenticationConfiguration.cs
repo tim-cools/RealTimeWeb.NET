@@ -31,23 +31,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return !IsApi(context);
         }
 
-        private static bool IsApi(HttpContext context)
-        {
-            return context.Request.Path.StartsWithSegments(new PathString("/api"));
-        }
-
-        private static void WebAuthentication(IApplicationBuilder branch)
-        {
-            branch.UseCookieAuthentication(new CookieAuthenticationOptions {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                AuthenticationScheme = "ServerCookie",
-                CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
-                ExpireTimeSpan = TimeSpan.FromMinutes(5),
-                LoginPath = new PathString("/signin")
-            });
-        }
-
         private static void ApiAuthentication(IApplicationBuilder branch)
         {
             branch.UseJwtBearerAuthentication(options =>
@@ -55,8 +38,26 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 options.AutomaticAuthenticate = true;
                 options.AutomaticChallenge = true;
                 options.RequireHttpsMetadata = false;
-                options.Audience = "http://localhost:3000/";
-                options.Authority = "http://localhost:3000/";
+                options.Audience = Configuration.AuthenticationResource;
+                options.Authority = Configuration.AuthenticationResource;
+            });
+        }
+
+        private static bool IsApi(HttpContext context)
+        {
+            return context.Request.Path.StartsWithSegments(new PathString("/api"));
+        }
+
+        private static void WebAuthentication(IApplicationBuilder branch)
+        {
+            branch.UseCookieAuthentication(options =>
+            {
+                options.AutomaticAuthenticate = true;
+                options.AutomaticChallenge = true;
+                options.AuthenticationScheme = "ServerCookie";
+                options.CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.LoginPath = new PathString("/signin");
             });
         }
 
@@ -72,6 +73,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             //todo remove from git and put in use specific env var's (or somthing else)
             options.AppId = "1648062998809846";
             options.AppSecret = "c0401541376309eba60190b8999ed048";
+
             options.Scope.Add("email");
             options.BackchannelHttpHandler = new HttpClientHandler();
             options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email";
@@ -85,7 +87,10 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 options.AllowInsecureHttp = true;
                 options.AuthorizationEndpointPath = "/account/authorize";
                 options.TokenEndpointPath = "/token";
-                options.AccessTokenLifetime = TimeSpan.FromMinutes(30);
+
+                options.IdentityTokenLifetime = TimeSpan.FromMinutes(1);
+                options.AccessTokenLifetime = TimeSpan.FromMinutes(1);
+                options.RefreshTokenLifetime = TimeSpan.FromHours(24);
             };
         }
     }

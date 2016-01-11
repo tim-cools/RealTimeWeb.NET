@@ -74,7 +74,7 @@ namespace Soloco.RealTimeWeb.Controllers
                 return InvalidRequest("An internal error has occurred (No Claims)");
             }
 
-            var query = new ValidateClientAuthenticationQuery(request.ClientId, request.ClientSecret);
+            var query = new ClientApplicationValidator(request.ClientId, request.ClientSecret);
             var applicationResult = await _messageDispatcher.Execute(query);
             if (!applicationResult.Valid)
             {
@@ -108,7 +108,8 @@ namespace Soloco.RealTimeWeb.Controllers
             {
                 OpenIdConnectConstants.Scopes.OpenId,
                 OpenIdConnectConstants.Scopes.Email,
-                OpenIdConnectConstants.Scopes.Profile
+                OpenIdConnectConstants.Scopes.Profile,
+                OpenIdConnectConstants.Scopes.OfflineAccess
             });
             properties.SetResources(new[] { "http://localhost:3000/" });
             return properties;
