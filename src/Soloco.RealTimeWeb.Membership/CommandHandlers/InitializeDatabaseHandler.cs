@@ -10,11 +10,11 @@ using Soloco.RealTimeWeb.Membership.Messages.Commands;
 
 namespace Soloco.RealTimeWeb.Membership.CommandHandlers
 {
-    public class InitializeDatabaseCommandHandler : CommandHandler<InitializeDatabaseCommand>
+    public class InitializeDatabaseHandler : CommandHandler<InitializeDatabaseCommand>
     {
         private readonly UserManager<User> _userManager;
 
-        public InitializeDatabaseCommandHandler(IDocumentSession session, UserManager<User> userManager)
+        public InitializeDatabaseHandler(IDocumentSession session, UserManager<User> userManager)
             : base(session)
         {
             _userManager = userManager;
@@ -33,7 +33,8 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         {
             if (await _userManager.FindByEmailAsync("tim@soloco.be") == null)
             {
-                await _userManager.CreateAsync(new User("123456", "tim@soloco.be"), "Aa-123456");
+                var user = new User("123456", "123 456", "tim@soloco.be");
+                await _userManager.CreateAsync(user, "Aa-123456");
             }
         }
 

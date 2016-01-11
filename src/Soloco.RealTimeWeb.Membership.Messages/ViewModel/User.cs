@@ -6,5 +6,7 @@ namespace Soloco.RealTimeWeb.Membership.Messages.ViewModel
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }
+        public string Name { get; set; }
+        public string EMail { get; set; }
     }
 }

@@ -9,8 +9,12 @@ namespace Soloco.RealTimeWeb.Common
         private static readonly CommandResult _success = new CommandResult(true);
         public static CommandResult Success { get; } = _success;
 
-        public bool Succeeded { get; }
-        public IEnumerable<string> Errors { get; }
+        public bool Succeeded { get; internal set; }
+        public IEnumerable<string> Errors { get; internal set; }
+
+        public CommandResult()
+        {
+        }
 
         private CommandResult(params string[] errors) : this((IEnumerable<string>) errors)
         {
@@ -27,7 +31,7 @@ namespace Soloco.RealTimeWeb.Common
             Errors = errors;
         }
 
-        private CommandResult(bool success)
+        protected CommandResult(bool success)
         {
             Succeeded = success;
             Errors = new string[0];

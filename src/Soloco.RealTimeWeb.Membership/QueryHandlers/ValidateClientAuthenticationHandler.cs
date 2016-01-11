@@ -52,7 +52,7 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
                 return new ValidateClientAuthenticationResult(false);
             }
 
-            return new ValidateClientAuthenticationResult(true, client.AllowedOrigin, client.RefreshTokenLifeTime, client.RedirectUri);
+            return new ValidateClientAuthenticationResult(true, client.Id, client.Name, client.AllowedOrigin, client.RefreshTokenLifeTime, client.RedirectUri);
         }
     }
 }

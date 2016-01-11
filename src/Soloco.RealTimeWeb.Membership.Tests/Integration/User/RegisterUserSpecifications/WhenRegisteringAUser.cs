@@ -63,10 +63,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
         {
             SessionScope((dispatcher, session, container) =>
             {
-                var validUserLoginQuery = new ValidUserLoginQuery(_command.UserName, _command.Password);
-                var valid = dispatcher.ExecuteNowWithTimeout(validUserLoginQuery);
+                var validUserLoginQuery = new UserNamePasswordLogin(_command.UserName, _command.Password);
+                var result = dispatcher.ExecuteNowWithTimeout(validUserLoginQuery);
 
-                valid.ShouldBeTrue();
+                result.Succeeded.ShouldBeTrue();
             });
         }
 
@@ -75,10 +75,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
         {
             SessionScope((dispatcher, session, container) =>
             {
-                var query = new ValidUserLoginQuery(_command.UserName, "wrong password");
-                var valid = dispatcher.ExecuteNowWithTimeout(query);
+                var query = new UserNamePasswordLogin(_command.UserName, "wrong password");
+                var result = dispatcher.ExecuteNowWithTimeout(query);
 
-                valid.ShouldBeFalse();
+                result.Succeeded.ShouldBeFalse();
             });
         }
     }

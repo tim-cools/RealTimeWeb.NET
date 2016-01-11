@@ -18,9 +18,9 @@ namespace Soloco.RealTimeWeb.Membership
         {
             Scan(options => { 
                 options.TheCallingAssembly();
-                options.IncludeNamespaceContainingType<InitializeDatabaseCommandHandler>();
-                options.IncludeNamespaceContainingType<ClientByKeyQueryHandler>();
-                options.IncludeNamespaceContainingType<OAuthConfiguration>();
+                options.IncludeNamespaceContainingType<ValidateClientAuthenticationHandler>();
+                options.IncludeNamespaceContainingType<InitializeDatabaseHandler>();
+                options.IncludeNamespaceContainingType<UserStore>();
                 options.Convention<AllInterfacesConvention>();
             });
 

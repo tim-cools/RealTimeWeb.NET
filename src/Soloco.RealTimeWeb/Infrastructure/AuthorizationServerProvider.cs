@@ -11,6 +11,8 @@ using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using AspNet.Security.OpenIdConnect.Extensions;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
@@ -46,6 +48,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 return;
             }
 
+            context.HttpContext.Items.Add("client", result);
             context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
             context.HttpContext.Items.Add("as:clientRefreshTokenLifeTime", result.RefreshTokenLifeTime.ToString());
 
@@ -61,10 +64,10 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
-            var query = new ValidUserLoginQuery(context.UserName, context.Password);
-            var valid = await messageDispatcher.Execute(query);
+            var query = new UserNamePasswordLogin(context.UserName, context.Password);
+            var result = await messageDispatcher.Execute(query);
 
-            if (!valid)
+            if (!result.Succeeded)
             {
                 context.Rejected("invalid_grant", "The user name or password is incorrect.");
                 return;
@@ -72,7 +75,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             SetCorsHeader(context);
 
-            var ticket = CreateAuthenticationTicket(context);
+            var ticket = CreateAuthenticationTicket(result, context);
             context.Validated(ticket);
         }
 
@@ -83,7 +86,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
         private static void SetCorsHeader(GrantResourceOwnerCredentialsContext context)
         {
             var allowedOrigin = context.HttpContext.Items["as:clientAllowedOrigin"] as string;
-
             if (allowedOrigin != null)
             {
                 context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", new StringValues(allowedOrigin));
@@ -93,16 +95,15 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// <summary>
         /// Creates a valid authentication token used to validate the 
         /// </summary>
-        private static AuthenticationTicket CreateAuthenticationTicket(GrantResourceOwnerCredentialsContext context)
+        private static AuthenticationTicket CreateAuthenticationTicket(LoginResult result, GrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.Name, context.UserName, "id_token token");
-            identity.AddClaim(ClaimTypes.Role, "user");
+            identity.AddClaim(ClaimTypes.Name, result.UserName, destination: "id_token token");
+            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), destination: "id_token token");
 
             var properties = new AuthenticationProperties(new Dictionary<string, string>
                 {
-                    {"as:client_id", context.ClientId ?? string.Empty},
-                    {"userName", context.UserName}
+                    {"as:client_id", context.ClientId ?? string.Empty}
                 }
             );
 
@@ -154,7 +155,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             Debug.WriteLine("AuthorizationServerProvider.TokenEndpointResponse");
 
-            foreach (var property in context.HttpContext.Items)
+            foreach (var property in context.HttpContext.Items.Where(item => item.Key.ToString().StartsWith("as:")))
             {
                 context.Payload.Add(property.Key as string, new JValue(property.Value));
             }

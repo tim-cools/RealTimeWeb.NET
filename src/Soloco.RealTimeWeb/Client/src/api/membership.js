@@ -105,7 +105,7 @@ function externalProviderCompleted(fragment) {
 function initialize() {
       
     function handleResponse(response) {
-        loggedOn(response.UserName);
+        loggedOn(response.Name);
     }
 
     function handleError(errors) {

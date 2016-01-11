@@ -6,14 +6,16 @@ using StructureMap;
 using Xunit;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Common.Tests.Messages;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
 {
     public class WhenValidatingUserLogin : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
-        private bool _result;
-        private ValidUserLoginQuery _query;
+        private LoginResult _result;
+        private UserNamePasswordLogin _query;
 
         public WhenValidatingUserLogin(MembershipIntegrationTestFixture fixture) : base(fixture)
         {
@@ -23,7 +25,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         {
             var userName = Guid.NewGuid().ToString("n");
             var password = Guid.NewGuid().ToString("n");
-            _query = new ValidUserLoginQuery(userName, password);
+            _query = new UserNamePasswordLogin(userName, password);
 
             _result = dispatcher.ExecuteNowWithTimeout(_query);
         }
@@ -31,7 +33,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         [Fact]
         public void ThenTheRefreshTokensShouldBeReturned()
         {
-            _result.ShouldBeFalse();
+            _result.Succeeded.ShouldBeFalse();
         }
     }
 }

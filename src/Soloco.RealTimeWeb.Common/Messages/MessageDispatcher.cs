@@ -36,7 +36,7 @@ namespace Soloco.RealTimeWeb.Common.Messages
             {
                 return container.GetInstance(handlerType);
             }
-            catch (Exception exception)
+            catch (StructureMapConfigurationException exception)
             {
                 throw new InvalidOperationException(
                     $"Handler {handlerType} for message : {message.GetType()} not found. " +

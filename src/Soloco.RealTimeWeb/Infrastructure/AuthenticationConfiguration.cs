@@ -1,27 +1,27 @@
 ﻿using System;
-using AspNet.Security.OAuth.Validation;
+using System.Net.Http;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Authentication.Facebook;
+using Microsoft.AspNet.Authentication.Google;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
-using Soloco.RealTimeWeb.Membership.Services;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
-    public static class OAuthConfig
+    public static class AuthenticationConfiguration
     {
-        public static IApplicationBuilder ConfigureOAuth(this IApplicationBuilder app)
+        public static IApplicationBuilder ConfigureAuthentication(this IApplicationBuilder app)
         {
-            var applicationServices = app.ApplicationServices;
-            var oauthCOnfiguration = new OAuthConfiguration();
+            if (app == null) throw new ArgumentNullException(nameof(app));
 
             app
                .UseIdentity()
                .UseWhen(IsApi, ApiAuthentication)
                .UseWhen(IsWeb, WebAuthentication)
-               .UseFacebookAuthentication(oauthCOnfiguration.Facebook)
-               .UseGoogleAuthentication(oauthCOnfiguration.Google)
-               .UseOpenIdConnectServer(ServerOptions(applicationServices));
+               .UseFacebookAuthentication(FacebookOptions)
+               .UseGoogleAuthentication(GoogleOptions)
+               .UseOpenIdConnectServer(ServerOptions(app.ApplicationServices));
 
             return app;
         }
@@ -58,6 +58,23 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 options.Audience = "http://localhost:3000/";
                 options.Authority = "http://localhost:3000/";
             });
+        }
+
+        private static void GoogleOptions(GoogleOptions options)
+        {
+            //todo remove from git and put in use specific env var's (or somthing else)
+            options.ClientId = "342962424267-h6dfsc4sgn0spf9fk6506d3iqf8ul8fj.apps.googleusercontent.com";
+            options.ClientSecret = "hhg69bsNeCTEAYJRADRuCOgq";
+        }
+
+        private static void FacebookOptions(FacebookOptions options)
+        {
+            //todo remove from git and put in use specific env var's (or somthing else)
+            options.AppId = "1648062998809846";
+            options.AppSecret = "c0401541376309eba60190b8999ed048";
+            options.Scope.Add("email");
+            options.BackchannelHttpHandler = new HttpClientHandler();
+            options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email";
         }
 
         private static Action<OpenIdConnectServerOptions> ServerOptions(IServiceProvider serviceProvider)

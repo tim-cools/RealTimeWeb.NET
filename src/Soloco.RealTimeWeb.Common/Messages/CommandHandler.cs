@@ -4,8 +4,9 @@ using Marten;
 
 namespace Soloco.RealTimeWeb.Common.Messages
 {
-    public abstract class CommandHandler<TCommand> : IHandleCommand<TCommand> 
-        where TCommand : IMessage<CommandResult>
+    public abstract class CommandHandler<TCommand, TResult> : IHandleMessage<TCommand, TResult>
+        where TCommand : IMessage<TResult>
+        where TResult : CommandResult, new()
     {
         protected IDocumentSession Session { get; }
 
@@ -16,7 +17,7 @@ namespace Soloco.RealTimeWeb.Common.Messages
             Session = session;
         }
 
-        public async Task<CommandResult> Handle(TCommand query)
+        public async Task<TResult> Handle(TCommand query)
         {
             try
             {
@@ -29,10 +30,18 @@ namespace Soloco.RealTimeWeb.Common.Messages
             }
             catch (BusinessException businessException)
             {
-                return new CommandResult(businessException.Errors);
+                return new TResult { Succeeded = false, Errors = businessException.Errors };
             }
         }
 
-        protected abstract Task<CommandResult> Execute(TCommand command);
+        protected abstract Task<TResult> Execute(TCommand command);
+    }
+
+    public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, CommandResult> 
+        where TCommand : IMessage<CommandResult>
+    {
+        protected CommandHandler(IDocumentSession session) : base(session)
+        {
+        }
     }
 }

@@ -16,7 +16,6 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Queries
         private ValidateClientAuthenticationResult _result;
         private ValidateClientAuthenticationQuery _query;
 
-
         public WhenValidatingClientAuthentication(MembershipIntegrationTestFixture fixture) : base(fixture)
         {
         }

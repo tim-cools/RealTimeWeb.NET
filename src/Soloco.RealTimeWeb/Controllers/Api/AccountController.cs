@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using Soloco.RealTimeWeb.Membership.Services;
 using Soloco.RealTimeWeb.ViewModels;
 
@@ -19,31 +20,28 @@ namespace Soloco.RealTimeWeb.Controllers.Api
     public class AccountController : Controller
     {
         private readonly IMessageDispatcher _messageDispatcher;
-        private readonly IOAuthConfiguration _ioAuthConfiguration;
 
-        public AccountController(IMessageDispatcher messageDispatcher, IOAuthConfiguration ioAuthConfiguration)
+        public AccountController(IMessageDispatcher messageDispatcher)
         {
             if (messageDispatcher == null) throw new ArgumentNullException(nameof(messageDispatcher));
-            if (ioAuthConfiguration == null) throw new ArgumentNullException(nameof(ioAuthConfiguration));
 
             _messageDispatcher = messageDispatcher;
-            _ioAuthConfiguration = ioAuthConfiguration;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("~/api/account/")]
         public async Task<IActionResult> Get(UserModel userModel)
         {
-            if (!User.Identities.Any(identity => identity.IsAuthenticated))
+            var identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(identifier))
             {
-                return new HttpUnauthorizedResult();
+                return HttpBadRequest();
             }
 
-            var userName = User.FindFirst(ClaimTypes.Name);
+            var query = new UserByIdQuery(Guid.Parse(identifier));
+            var user = await _messageDispatcher.Execute(query);
 
-            return Json(new {
-                UserName = userName?.Value ?? "unknown" 
-            });
+            return Json(user);
         }
 
         [AllowAnonymous]

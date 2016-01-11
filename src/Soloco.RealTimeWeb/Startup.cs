@@ -125,7 +125,7 @@ namespace Soloco.RealTimeWeb
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
                .UseStaticFiles()
-               .ConfigureOAuth()
+               .ConfigureAuthentication()
                .UseCors(defaultName)
                .UseMvc(routes => { routes.MapRoute(name: defaultName, template: "{controller=Home}/{action=Index}/{id?}"); });
         }

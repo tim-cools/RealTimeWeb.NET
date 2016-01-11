@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
@@ -10,6 +11,7 @@ using Soloco.RealTimeWeb.Infrastructure;
 using Microsoft.AspNet.Builder;
 using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using System.Linq;
+using Soloco.RealTimeWeb.Membership.Messages.Commands;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Controllers
@@ -59,7 +61,7 @@ namespace Soloco.RealTimeWeb.Controllers
         }
 
         [HttpGet("~/account/authorize/complete")]
-        public async Task<ActionResult> Connect(CancellationToken cancellationToken)
+        public async Task<ActionResult> Complete(CancellationToken cancellationToken)
         {
             var request = HttpContext.GetOpenIdConnectRequest();
             if (request == null)
@@ -67,30 +69,34 @@ namespace Soloco.RealTimeWeb.Controllers
                 return InvalidRequest("An internal error has occurred (No OpenIdConnectRequest)");
             }
 
-            var claims = HttpContext.User.Claims.ToArray();
-            if (claims.Length == 0)
+            if (User.Claims.ToArray().Length == 0)
             {
                 return InvalidRequest("An internal error has occurred (No Claims)");
             }
 
-            var application = await _messageDispatcher.Execute(new ClientByKeyQuery(request.ClientId));
-            if (application == null)
+            var query = new ValidateClientAuthenticationQuery(request.ClientId, request.ClientSecret);
+            var applicationResult = await _messageDispatcher.Execute(query);
+            if (!applicationResult.Valid)
             {
-                //todo get real application here
-                application = new Client { Name = "App" };
-                //return HttpBadRequest(new
-                //{
-                //    Error = "invalid_client",
-                //    ErrorDescription = "Details concerning the calling client application cannot be found in the database"
-                //});
+                return InvalidRequest("invalid_client", "Client application not validated"); 
             }
 
-            var identity = CreateClaimsIdentity(claims, application);
+            var type = User.Identity.AuthenticationType;
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var externalIdentifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            var command = new ExternalLoginCommand(type, userName, externalIdentifier, email);
+            var result = await _messageDispatcher.Execute(command);
+            if (!result.Succeeded)
+            {
+                return InvalidRequest("Could not login external");
+            }
+
+            var principal = CreateClaimsPrincipal(result, applicationResult);
             var properties = CreateAuthenticationProperties();
 
-            await HttpContext.Authentication.SignInAsync(
-                OpenIdConnectServerDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(identity), properties);
+            await HttpContext.Authentication.SignInAsync(OpenIdConnectServerDefaults.AuthenticationScheme, principal, properties);
 
             return new EmptyResult();
         }
@@ -108,31 +114,23 @@ namespace Soloco.RealTimeWeb.Controllers
             return properties;
         }
 
-        private static ClaimsIdentity CreateClaimsIdentity(Claim[] claims, Client application)
+        private ClaimsPrincipal CreateClaimsPrincipal(LoginResult result, ValidateClientAuthenticationResult client)
         {
             var identity = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
-            foreach (var claim in claims)
-            {
-                if (claim.Type == ClaimTypes.Name)
-                {
-                    claim.WithDestination("id_token")
-                        .WithDestination("token");
-                }
-
-                identity.AddClaim(claim);
-            }
+            identity.AddClaim(ClaimTypes.Name, result.UserName, destination: "id_token token");
+            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), destination: "id_token token");
 
             identity.Actor = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
-            identity.Actor.AddClaim(ClaimTypes.NameIdentifier, application.Id.ToString());
-            identity.Actor.AddClaim(ClaimTypes.Name, application.Name, destination: "id_token token");
+            identity.Actor.AddClaim(ClaimTypes.NameIdentifier, client.Id.ToString());
+            identity.Actor.AddClaim(ClaimTypes.Name, client.Name);
 
-
-            return identity;
+            return new ClaimsPrincipal(identity);
         }
 
         [HttpGet("~/account/authorized")]
         public ActionResult Authorized()
         {
+            //Authorization token is pushed to main window in JS (see view)
             return View();
         }
 
@@ -140,6 +138,11 @@ namespace Soloco.RealTimeWeb.Controllers
         public async Task SignOut()
         {
             await DeleteLocalAuthenticationCookie();
+        }
+
+        private async Task DeleteLocalAuthenticationCookie()
+        {
+            await HttpContext.Authentication.SignOutAsync("ServerCookie");
         }
 
         private BadRequestObjectResult InvalidRequest(string message)
@@ -151,9 +154,13 @@ namespace Soloco.RealTimeWeb.Controllers
             });
         }
 
-        private async Task DeleteLocalAuthenticationCookie()
+        private BadRequestObjectResult InvalidRequest(string error, string message)
         {
-            await HttpContext.Authentication.SignOutAsync("ServerCookie");
+            return HttpBadRequest(new
+            {
+                Error = error,
+                ErrorDescription = message
+            });
         }
     }
 }
