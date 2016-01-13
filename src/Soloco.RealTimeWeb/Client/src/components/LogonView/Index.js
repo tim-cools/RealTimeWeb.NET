@@ -99,7 +99,7 @@ LogonPage.propTypes = {
 function select(state) {
     return state.user.logon
         ? {
-            pending: state.user.logon.pending,
+            pending: state.user.logon.pending ? true : false,
             errors: state.user.logon.errors
         } 
         : {

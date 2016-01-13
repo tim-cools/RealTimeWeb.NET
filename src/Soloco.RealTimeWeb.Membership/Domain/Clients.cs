@@ -17,7 +17,6 @@ namespace Soloco.RealTimeWeb.Membership.Domain
                     Name = "React front-end Application",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
-                    RefreshTokenLifeTime = 7200,
                     AllowedOrigin = "http://localhost:3000"
                 },
                 new Client
@@ -28,7 +27,6 @@ namespace Soloco.RealTimeWeb.Membership.Domain
                     Name = "Console Application",
                     ApplicationType = ApplicationTypes.NativeConfidential,
                     Active = true,
-                    RefreshTokenLifeTime = 14400,
                     AllowedOrigin = "*"
                 }
             };

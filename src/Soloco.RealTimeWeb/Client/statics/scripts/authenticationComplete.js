@@ -47,4 +47,4 @@ window.common = (function () {
 var fragment = common.getFragment();
 
 window.opener.authenticationScope.complete(fragment);
-//window.close();
+window.close();

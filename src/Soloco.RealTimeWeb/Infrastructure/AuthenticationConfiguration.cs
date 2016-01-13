@@ -38,6 +38,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 options.AutomaticAuthenticate = true;
                 options.AutomaticChallenge = true;
                 options.RequireHttpsMetadata = false;
+
                 options.Audience = Configuration.AuthenticationResource;
                 options.Authority = Configuration.AuthenticationResource;
             });

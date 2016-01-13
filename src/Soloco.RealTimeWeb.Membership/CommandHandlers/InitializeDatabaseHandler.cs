@@ -67,7 +67,6 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
             existing.Name = client.Name;
             existing.ApplicationType = client.ApplicationType;
             existing.Active = client.Active;
-            existing.RefreshTokenLifeTime = client.RefreshTokenLifeTime;
             existing.AllowedOrigin = client.AllowedOrigin;
         }
     }

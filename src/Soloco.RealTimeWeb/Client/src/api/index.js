@@ -1,5 +1,6 @@
 import reqwest from 'reqwest';
 import store from 'store';
+import { actions as userStateActions } from '../state/user';
 
 const serviceBase = window.location.protocol + '//' + window.location.host + '/';
 const clientId = 'realTimeWebClient';
@@ -27,52 +28,54 @@ function call(verb, contentType, url, data, responseHandler, errorHandler) {
         });
     }
     
-    function refreshTokenOnUnauthorized(next) {
+    function refreshTokenOnUnauthorized(response) {
         
         function handleResponse(response) {
             authenticated(response.access_token, response.refresh_token);
             makeCall(responseHandler, parseErrors);
         }
-        
-        return function(response) {
-            const authentication = store.get(storageKey);
-            
-            //todo remove 500 check, this is due to a bug, should be fixed in RC2
-            if (response.status === 401 || response.status === 500) {
-                clearAuthentication();
 
-                if (authentication && authentication.refreshToken) {
-                    const data = 'grant_type=refresh_token&refresh_token=' + authentication.refreshToken + '&client_id' + clientId;
-                    return post('token', data, handleResponse, next);
-                }
-            } 
-            next();
+        function finalLogOff(response) {
+            userStateActions.logoff();
+            parseErrors(response);
         }
+        
+        const authentication = store.get(storageKey);
+            
+        //todo remove 500 check, this is due to a bug, should be fixed in RC2
+        if (response.status === 401 || response.status === 500) {
+            clearAuthentication();
+            if (authentication && authentication.refreshToken) {
+                const data = 'grant_type=refresh_token&refresh_token=' + authentication.refreshToken + '&client_id=' + clientId;
+                return post('token', data, handleResponse, finalLogOff);
+            }
+        } 
+        finalLogOff(response);
     }
 
-    function parseErrors() {
-        function formatErrors(data) {
-            if (data.error_description) {
-                return [ data.error_description ];
-            } 
-            if (data.Errors) {
-                return data.Errors;
+    function parseErrors(response) {
+        function formatErrors() {
+            try {
+                const data = JSON.parse(response.response);
+                if (data.error_description) {
+                    return [data.error_description];
+                }
+                if (data.Errors) {
+                    return data.Errors;
+                }
+            } catch (e) {
             }
+
             return [ "Something went wrong :(" ];
         }
 
-        return function(request) {
+        if (!errorHandler) return;
 
-            if (!errorHandler) return;
-
-            const data = JSON.parse(request.response);
-            const error = formatErrors(data);
-
-            return errorHandler(error, request);
-        }
+        const error = formatErrors();
+        return errorHandler(error, response);
     }
 
-    makeCall(responseHandler, refreshTokenOnUnauthorized(parseErrors));
+    makeCall(responseHandler, refreshTokenOnUnauthorized);
 }
 
 function get(url, data, responseHandler, errorHandler) {

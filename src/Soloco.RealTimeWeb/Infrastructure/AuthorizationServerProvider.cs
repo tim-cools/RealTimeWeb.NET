@@ -47,7 +47,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
             }
 
             context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
-            context.HttpContext.Items.Add("as:clientRefreshTokenLifeTime", result.RefreshTokenLifeTime.ToString());
 
             context.Validated();
         }
@@ -88,67 +87,50 @@ namespace Soloco.RealTimeWeb.Infrastructure
         }
 
         /// <summary>
-        /// Creates a valid authentication token used to validate the 
+        /// Creates a valid authentication token used to create the access_token.
         /// </summary>
         private static AuthenticationTicket CreateAuthenticationTicket(LoginResult result, GrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.Name, result.UserName, destination: "id_token token");
-            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), destination: "id_token token");
+            identity.AddClaim(ClaimTypes.Name, result.UserName, "id_token token");
+            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), "id_token token");
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
-                {
-                    {"as:client_id", context.ClientId ?? string.Empty}
-                }
-            );
-
+            var properties = new AuthenticationProperties(new Dictionary<string, string> { {"as:client_id", context.ClientId ?? string.Empty} });
             var principal = new ClaimsPrincipal(new[] { identity });
-            var ticket = new AuthenticationTicket(principal, properties, context.Options.AuthenticationScheme);
-            ticket.Properties.ExpiresUtc = DateTime.UtcNow.Add(context.Options.AccessTokenLifetime);
-            ticket.SetResources(new [] { Configuration.AuthenticationResource });
-            return ticket;
+
+            return CreateAuthenticationTicket(principal, properties, context.Options);
         }
 
+        /// <summary>
+        /// Grant a new access_token based on the current refresh_token. Here we couldvalidate whether the 
+        /// refresh token is still valid or revoked.
+        /// </summary>
         public override Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
             var originalClient = context.AuthenticationTicket.Properties.Items["as:client_id"];
-            var currentClient = context.ClientId;
-
-            if (originalClient != currentClient)
+            if (originalClient != context.ClientId)
             {
                 context.Rejected("invalid_clientId", "Refresh token is issued to a different clientId.");
                 return Task.FromResult(true);
             }
 
-            // Change auth ticket for refresh token requests
-            var principal = context.AuthenticationTicket.Principal;
-            var newPrincipal = new ClaimsPrincipal(principal);
+            var principal = new ClaimsPrincipal(context.AuthenticationTicket.Principal);
+            var ticket = CreateAuthenticationTicket(principal, context.AuthenticationTicket.Properties, context.Options);
 
-            var claimsIdentity = newPrincipal.Identity as ClaimsIdentity;
-            if (claimsIdentity == null)
-            {
-                context.Rejected("invalid_principal", "ClaimPrincipal is invalid.");
-                return Task.FromResult(true);
-            }
-
-            var newClaim = newPrincipal.Claims.FirstOrDefault(c => c.Type == "newClaim");
-            if (newClaim != null)
-            {
-                claimsIdentity.RemoveClaim(newClaim);
-            }
-            claimsIdentity.AddClaim(new Claim("newClaim", "newValue"));
-
-            var newTicket = new AuthenticationTicket(newPrincipal, context.AuthenticationTicket.Properties, context.Options.AuthenticationScheme);
-
-            context.Validated(newTicket);
+            context.Validated(ticket);
 
             return Task.FromResult(true);
         }
 
+        private static AuthenticationTicket CreateAuthenticationTicket(ClaimsPrincipal principal, AuthenticationProperties authenticationProperties, OpenIdConnectServerOptions options)
+        {
+            var ticket = new AuthenticationTicket(principal, authenticationProperties, options.AuthenticationScheme);
+            ticket.SetResources(new[] { Configuration.AuthenticationResource });
+            return ticket;
+        }
+
         public override Task TokenEndpointResponse(TokenEndpointResponseContext context)
         {
-            Debug.WriteLine("AuthorizationServerProvider.TokenEndpointResponse");
-
             foreach (var property in context.HttpContext.Items.Where(item => item.Key.ToString().StartsWith("as:")))
             {
                 context.Payload.Add(property.Key as string, new JValue(property.Value));
@@ -164,25 +146,11 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 context.MatchesAuthorizationEndpoint();
             }
 
-            return Task.FromResult<object>(null);
-        }
-
-        public override Task ProfileEndpoint(ProfileEndpointContext context)
-        {
-            Debug.WriteLine("AuthorizationServerProvider.ValidateClientLogoutRedirectUri");
-            
-            // Note: by default, OpenIdConnectServerHandler automatically handles userinfo requests and directly
-            // writes the JSON response to the response stream. This sample uses a custom ProfileController that
-            // handles userinfo requests: context.SkipToNextMiddleware() is called to bypass the default
-            // request processing executed by OpenIdConnectServerHandler.
-            context.SkipToNextMiddleware();
-
-            return Task.FromResult<object>(null);
+            return Task.FromResult(true);
         }
 
         public override Task ValidateTokenRequest(ValidateTokenRequestContext context)
         {
-            Debug.WriteLine("AuthorizationServerProvider.ValidateTokenRequest");
             return Task.FromResult<object>(null);
         }
 
@@ -218,6 +186,11 @@ namespace Soloco.RealTimeWeb.Infrastructure
             }
 
             context.Validated(context.RedirectUri);
+        }
+
+        public override Task ProfileEndpoint(ProfileEndpointContext context)
+        {
+            return base.ProfileEndpoint(context);
         }
 
         public override Task ValidateClientLogoutRedirectUri(ValidateClientLogoutRedirectUriContext context)

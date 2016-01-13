@@ -41,6 +41,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
             var user = await _messageDispatcher.Execute(query);
 
             return Json(user);
+            return HttpUnauthorized();
         }
 
         [AllowAnonymous]
