@@ -3,8 +3,8 @@ window.common = (function () {
     var common = {};
 
     common.getFragment = function getFragment() {
-        if (window.location.hash.indexOf('#') === 0) {
-            return parseQueryString(window.location.hash.substr(1));
+        if (window.location.search.indexOf('?') === 0) {
+            return parseQueryString(window.location.search.substr(1));
         } else {
             return {};
         }
@@ -47,4 +47,4 @@ window.common = (function () {
 var fragment = common.getFragment();
 
 window.opener.authenticationScope.complete(fragment);
-window.close();
+//window.close();

@@ -90,15 +90,29 @@ function externalProviderUrl(provider) {
     return api.serviceBase + 'account/authorize/connect?provider=' + provider 
         + '&redirect_uri=' + redirectUri
         + '&scope=openid offline_access'
-        + '&response_type=token'
+        + '&response_type=code'
         + '&client_id=' + api.clientId
         + '&nonce=' + nonce;
 }
 
 function externalProviderCompleted(fragment) {
+    
+    function handleResponse(response) {
+        api.authenticated(response.access_token, response.refresh_token);
+        initialize();
+    }
 
-    api.authenticated(fragment.access_token);
-    initialize();
+    function handleError(errors) {
+        userStateActions.logonFailed(errors);
+    }
+    
+    const redirectUri = api.serviceBase + 'account/authorized';
+    const data = 'grant_type=authorization_code&code=' + fragment.code 
+        + '&client_id=' + api.clientId 
+        + '&scope=offline_access' 
+        + '&redirect_uri=' + redirectUri;
+
+    api.post('token', data, handleResponse, handleError);
 }
 
 function initialize() {

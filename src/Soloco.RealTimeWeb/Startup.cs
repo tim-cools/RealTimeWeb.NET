@@ -11,9 +11,8 @@ using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;
 using Soloco.RealTimeWeb.Membership;
-using Soloco.RealTimeWeb.Membership.CommandHandlers;
-using Soloco.RealTimeWeb.Membership.Domain;
-using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.Infrastructure;
+using Soloco.RealTimeWeb.Membership.Users.Domain;
 
 namespace Soloco.RealTimeWeb
 {

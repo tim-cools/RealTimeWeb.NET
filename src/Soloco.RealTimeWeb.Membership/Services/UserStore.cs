@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
 using Soloco.RealTimeWeb.Common.Store;
-using Soloco.RealTimeWeb.Membership.Domain;
+using Soloco.RealTimeWeb.Membership.Users.Domain;
 
 namespace Soloco.RealTimeWeb.Membership.Services
 {
@@ -138,7 +138,7 @@ namespace Soloco.RealTimeWeb.Membership.Services
                     && criteria.LoginProvider == loginProvider 
                     && criteria.ProviderKey == providerKey);
 
-            if (login != null)
+            if (login == null)
             {
                 throw new InvalidOperationException("Could not find the login: '" + loginProvider + "' key:' " + providerKey);
             }

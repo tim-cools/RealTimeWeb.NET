@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Soloco.RealTimeWeb.Common.Messages;
-using Soloco.RealTimeWeb.Membership.Messages.Commands;
-using Soloco.RealTimeWeb.Membership.Messages.Queries;
+using Soloco.RealTimeWeb.Membership.Messages.RefreshTokens;
 
 namespace Soloco.RealTimeWeb.Controllers
 {

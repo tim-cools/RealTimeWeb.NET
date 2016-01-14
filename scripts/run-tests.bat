@@ -7,6 +7,6 @@ dnx -p .\src\Soloco.RealTimeWeb.Membership.Tests test
 
 cd .\src\Soloco.RealTimeWeb
 
-call npm test
+call npm run tests
 
-cd ..\..\scripts
+cd ..\..

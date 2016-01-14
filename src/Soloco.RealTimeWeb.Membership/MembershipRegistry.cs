@@ -3,10 +3,10 @@ using Marten;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.Logging;
 using Soloco.RealTimeWeb.Common.StructureMap;
-using Soloco.RealTimeWeb.Membership.CommandHandlers;
-using Soloco.RealTimeWeb.Membership.Domain;
-using Soloco.RealTimeWeb.Membership.QueryHandlers;
+using Soloco.RealTimeWeb.Membership.Clients.Handlers;
+using Soloco.RealTimeWeb.Membership.Infrastructure;
 using Soloco.RealTimeWeb.Membership.Services;
+using Soloco.RealTimeWeb.Membership.Users.Domain;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -18,8 +18,7 @@ namespace Soloco.RealTimeWeb.Membership
         {
             Scan(options => { 
                 options.TheCallingAssembly();
-                options.IncludeNamespaceContainingType<ValidateClientAuthenticationHandler>();
-                options.IncludeNamespaceContainingType<InitializeDatabaseHandler>();
+                options.Include(type => type.Name.EndsWith("Handler"));
                 options.IncludeNamespaceContainingType<UserStore>();
                 options.Convention<AllInterfacesConvention>();
             });

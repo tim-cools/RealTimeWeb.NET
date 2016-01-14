@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,35 +7,26 @@ using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
-using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using AspNet.Security.OpenIdConnect.Extensions;
-using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Common.Messages;
+using Soloco.RealTimeWeb.Membership.Messages.Clients;
+using Soloco.RealTimeWeb.Membership.Messages.RefreshTokens;
+using Soloco.RealTimeWeb.Membership.Messages.Users;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
     public class AuthorizationServerProvider : OpenIdConnectServerProvider
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public AuthorizationServerProvider(IServiceProvider serviceProvider)
-        {
-            if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
-
-            _serviceProvider = serviceProvider;
-        }
-
         /// <summary>
         /// Validates whether the client is a valid known application in our system.
         /// </summary>
         public override async Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
         {
-            var messageDispatcher = _serviceProvider.GetMessageDispatcher();
+            var query = new ClientValidator(context.ClientId, context.ClientSecret);
+            var result = await ExecuteMessage(context, query);
 
-            var query = new ClientApplicationValidator(context.ClientId, context.ClientSecret);
-            var result = await messageDispatcher.Execute(query);
-
-            if (!result.Valid)
+            if (!result.Succeeded)
             {
                 context.Rejected(
                     error: "invalid_client",
@@ -50,16 +39,34 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             context.Validated();
         }
+        
+        /// <summary>
+        /// Validate wether the redirect uri is valid for the specific client .
+        /// </summary>
+        public override async Task ValidateClientRedirectUri(ValidateClientRedirectUriContext context)
+        {
+            var query = new ClientRedirectUriValidator(context.ClientId, context.RedirectUri);
+            var result = await ExecuteMessage(context, query);
+
+            if (!result.Succeeded)
+            {
+                context.Rejected(
+                    error: "invalid_client",
+                    description: "Invalid redirect uri");
+
+                return;
+            }
+
+            context.Validated();
+        }
 
         /// <summary>
         /// Validates the userName and password provided by the user.
         /// </summary>
         public override async Task GrantResourceOwnerCredentials(GrantResourceOwnerCredentialsContext context)
         {
-            var messageDispatcher = _serviceProvider.GetMessageDispatcher();
-
             var query = new UserNamePasswordLogin(context.UserName, context.Password);
-            var result = await messageDispatcher.Execute(query);
+            var result = await ExecuteMessage(context, query);
 
             if (!result.Succeeded)
             {
@@ -105,31 +112,31 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// Grant a new access_token based on the current refresh_token. Here we couldvalidate whether the 
         /// refresh token is still valid or revoked.
         /// </summary>
-        public override Task GrantRefreshToken(GrantRefreshTokenContext context)
+        public override async Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
             var originalClient = context.AuthenticationTicket.Properties.Items["client_id"];
             if (originalClient != context.ClientId)
             {
                 context.Rejected("invalid_clientId", "Refresh token is issued to a different clientId.");
-                return Task.FromResult(true);
+                return;
             }
 
             var properties = context.AuthenticationTicket.Properties;
             var validator = new RefreshTokenValidator(context.Request.RefreshToken,
                 properties.Items["client_id"],
                 context.AuthenticationTicket.Principal.GetClaim(ClaimTypes.NameIdentifier));
-            var messageDispatcher = _serviceProvider.GetMessageDispatcher();
 
-            var result = messageDispatcher.Execute(validator);
-            if (result.)
-
+            var result = await ExecuteMessage(context, validator);
+            if (!result.Succeeded)
+            {
+                context.Rejected(OpenIdConnectConstants.Errors.InvalidRequest, "Could not validate refresh_token.");
+                return;
+            }
 
             var principal = new ClaimsPrincipal(context.AuthenticationTicket.Principal);
             var ticket = CreateAuthenticationTicket(principal, context.AuthenticationTicket.Properties, context.Options);
 
             context.Validated(ticket);
-
-            return Task.FromResult(true);
         }
 
         private static AuthenticationTicket CreateAuthenticationTicket(ClaimsPrincipal principal, AuthenticationProperties authenticationProperties, OpenIdConnectServerOptions options)
@@ -162,8 +169,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
         private async Task StoreRefreshToken(SerializeRefreshTokenContext context)
         {
-            var messageDispatcher = _serviceProvider.GetMessageDispatcher();
-
             var principal = context.AuthenticationTicket.Principal;
             var properties = context.AuthenticationTicket.Properties;
 
@@ -172,11 +177,11 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 properties.Items["client_id"],
                 principal.GetClaim(ClaimTypes.NameIdentifier),
                 principal.GetClaim(ClaimTypes.Name),
-                context.HttpContext.Connection.RemoteIpAddress.ToString(),
-                properties.IssuedUtc,
-                properties.ExpiresUtc);
+                context.HttpContext.Connection.RemoteIpAddress?.ToString(),
+                properties.IssuedUtc.GetValueOrDefault(),
+                properties.ExpiresUtc.GetValueOrDefault());
 
-            var result = await messageDispatcher.Execute(command);
+            var result = await ExecuteMessage(context, command);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException("Could not store the refreshtoken");
@@ -196,6 +201,12 @@ namespace Soloco.RealTimeWeb.Infrastructure
             }
 
             return Task.FromResult(true);
+        }
+
+        private async Task<TResult> ExecuteMessage<TResult>(BaseContext context, IMessage<TResult> message)
+        {
+            var messageDispatcher = context.HttpContext.RequestServices.GetMessageDispatcher();
+            return await messageDispatcher.Execute(message);
         }
     }
 }

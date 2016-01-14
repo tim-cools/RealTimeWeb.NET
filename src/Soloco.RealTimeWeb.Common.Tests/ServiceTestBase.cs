@@ -14,9 +14,14 @@ namespace Soloco.RealTimeWeb.Common.Tests
 
             SessionScope<IDocumentStore>(CleanDocuments);
             SessionScope<T>(Given);
+            SessionScope<T>(When);
         }
 
-        protected abstract void Given(T service, IDocumentSession session, IContainer container);
+        protected virtual void Given(T service, IDocumentSession session, IContainer container)
+        {
+        }
+
+        protected abstract void When(T service, IDocumentSession session, IContainer container);
 
         protected void SessionScope(Action<T, IDocumentSession, IContainer> execute)
         {

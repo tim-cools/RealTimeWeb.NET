@@ -21,7 +21,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
                .UseWhen(IsWeb, WebAuthentication)
                .UseFacebookAuthentication(FacebookOptions)
                .UseGoogleAuthentication(GoogleOptions)
-               .UseOpenIdConnectServer(ServerOptions(app.ApplicationServices));
+               .UseOpenIdConnectServer(ServerOptions);
 
             return app;
         }
@@ -80,19 +80,15 @@ namespace Soloco.RealTimeWeb.Infrastructure
             options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email";
         }
 
-        private static Action<OpenIdConnectServerOptions> ServerOptions(IServiceProvider serviceProvider)
+        private static void ServerOptions(OpenIdConnectServerOptions options)
         {
-            return options =>
-            {
-                options.Provider = new AuthorizationServerProvider(serviceProvider);
-                options.AllowInsecureHttp = true;
-                options.AuthorizationEndpointPath = "/account/authorize";
-                options.TokenEndpointPath = "/token";
+            options.Provider = new AuthorizationServerProvider();
+            options.AllowInsecureHttp = true;
+            options.AuthorizationEndpointPath = "/account/authorize";
+            options.TokenEndpointPath = "/token";
 
-                options.IdentityTokenLifetime = TimeSpan.FromMinutes(1);
-                options.AccessTokenLifetime = TimeSpan.FromMinutes(1);
-                options.RefreshTokenLifetime = TimeSpan.FromHours(24);
-            };
+            options.AccessTokenLifetime = TimeSpan.FromMinutes(1);
+            options.RefreshTokenLifetime = TimeSpan.FromHours(24);
         }
     }
 }

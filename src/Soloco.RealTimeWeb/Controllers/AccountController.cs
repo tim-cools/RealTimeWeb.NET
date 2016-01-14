@@ -9,9 +9,9 @@ using Microsoft.AspNet.Mvc;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Infrastructure;
 using Microsoft.AspNet.Builder;
-using Soloco.RealTimeWeb.Membership.Messages.Queries;
 using System.Linq;
-using Soloco.RealTimeWeb.Membership.Messages.Commands;
+using Soloco.RealTimeWeb.Membership.Messages.Clients;
+using Soloco.RealTimeWeb.Membership.Messages.Users;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
 
 namespace Soloco.RealTimeWeb.Controllers
@@ -74,9 +74,9 @@ namespace Soloco.RealTimeWeb.Controllers
                 return InvalidRequest("An internal error has occurred (No Claims)");
             }
 
-            var query = new ClientApplicationValidator(request.ClientId, request.ClientSecret);
+            var query = new ClientValidator(request.ClientId, request.ClientSecret);
             var applicationResult = await _messageDispatcher.Execute(query);
-            if (!applicationResult.Valid)
+            if (!applicationResult.Succeeded)
             {
                 return InvalidRequest("invalid_client", "Client application not validated"); 
             }
@@ -115,7 +115,7 @@ namespace Soloco.RealTimeWeb.Controllers
             return properties;
         }
 
-        private ClaimsPrincipal CreateClaimsPrincipal(LoginResult result, ValidateClientAuthenticationResult client)
+        private ClaimsPrincipal CreateClaimsPrincipal(LoginResult result, ValidateClientResult client)
         {
             var identity = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
             identity.AddClaim(ClaimTypes.Name, result.UserName, destination: "id_token token");
