@@ -18,7 +18,7 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
             _userManager = userManager;
         }
 
-        protected override async Task<CommandResult> Execute(RegisterUserCommand command)
+        protected override async Task<Result> Execute(RegisterUserCommand command)
         {
             var user = new User(command.UserName, command.UserName, command.EMail);
             var result = await _userManager.CreateAsync(user, command.Password);

@@ -3,7 +3,7 @@ using Soloco.RealTimeWeb.Common;
 
 namespace Soloco.RealTimeWeb.Membership.Messages.ViewModel
 {
-    public class LoginResult : CommandResult
+    public class LoginResult : Result
     {
         public Guid UserId { get; }
         public string UserName { get; }

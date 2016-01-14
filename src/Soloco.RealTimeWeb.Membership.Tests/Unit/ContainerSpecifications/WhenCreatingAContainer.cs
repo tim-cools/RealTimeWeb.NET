@@ -20,7 +20,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Unit.ContainerSpecifications
 
             Debug.WriteLine(container.WhatDidIScan());
 
-            container.GetInstance<IHandleMessage<DeleteRefreshTokenCommand, CommandResult>>()
+            container.GetInstance<IHandleMessage<DeleteRefreshTokenCommand, Result>>()
                 .ShouldNotBeNull();
         }
     }

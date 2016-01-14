@@ -6,9 +6,11 @@ namespace Soloco.RealTimeWeb.Membership.Messages.ViewModel
     {
         public Guid Id { get; set; }
 
-        public string Subject { get; set; }
 
-        public string ClientKey { get; set; }
+        public string UserId { get; set; }
+        public string ClientId { get; set; }
+
+        public string IpAddress { get; set; }
 
         public DateTimeOffset? IssuedUtc { get; set; }
         public DateTimeOffset? ExpiresUtc { get; set; }

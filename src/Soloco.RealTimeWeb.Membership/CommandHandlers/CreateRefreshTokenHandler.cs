@@ -16,35 +16,29 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         {
         }
 
-        protected override Task<CommandResult> Execute(CreateRefreshTokenCommand command)
+        protected override Task<Result> Execute(CreateRefreshTokenCommand command)
         {
-            var existing = Session.GetFirst<RefreshToken>(criteria => criteria.Subject == command.Name && criteria.ClientKey == command.Clientid);
-
-            if (existing != null)
+            var hash = Hasher.ComputeSHA256(command.RefreshToken);
+            var existing = Session.GetFirst<RefreshToken>(criteria => criteria.Hash == hash);
+            if (existing == null)
             {
-                existing.Hash = Hasher.ComputeSHA256(command.RefreshTokenId);
-                existing.ClientKey = command.Clientid;
-                existing.Subject = command.Name;
-                existing.IssuedUtc = command.IssuedUtc;
-                existing.ExpiresUtc = command.ExpiresUtc;
-
-                Session.Store(existing);
-            }
-            else
-            {
-                var token = new RefreshToken
-                {
-                    Id = Guid.NewGuid(),
-                    Hash = Hasher.ComputeSHA256(command.RefreshTokenId),
-                    ClientKey = command.Clientid,
-                    Subject = command.Name,
-                    IssuedUtc = command.IssuedUtc,
-                    ExpiresUtc = command.ExpiresUtc
-                };
-                Session.Store(token);
+                throw new BusinessException("Create refresh token failed", "RefreshTokenAlreadyExists");
             }
 
-            return Task.FromResult(CommandResult.Success);
+            var token = new RefreshToken
+            {
+                Id = Guid.NewGuid(),
+                Hash = hash,
+                ClientId = command.ClientId,
+                UserId = command.UserId,
+                IpAddress = command.IpAddress,
+                ExpiresUtc = command.ExpiresUtc,
+                IssuedUtc = command.IssuedUtc
+            };
+
+            Session.Store(token);
+
+            return Task.FromResult(Result.Success);
         }
     }
 }

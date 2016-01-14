@@ -5,21 +5,14 @@ namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public class RefreshToken
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public string Subject { get; set; }
+        public string ClientId { get; set; }
+        public string UserId { get; set; }
+        public string IpAddress { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public string ClientKey { get; set; }
-
-        public DateTimeOffset? IssuedUtc { get; set; }
         public DateTimeOffset? ExpiresUtc { get; set; }
-        [Required]
-        public string ProtectedTicket { get; set; }
+        public DateTimeOffset? IssuedUtc { get; set; }
 
         public string Hash { get; set; }
     }

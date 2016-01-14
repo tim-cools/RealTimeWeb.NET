@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,11 +21,12 @@ namespace Soloco.RealTimeWeb.Membership.QueryHandlers
             IEnumerable<RefreshToken> tokens = Session.Query<Domain.RefreshToken>()
                 .Select(token => new RefreshToken
                 {
-                    ClientKey = token.ClientKey,
-                    ExpiresUtc = token.ExpiresUtc,
                     Id = token.Id,
+                    IpAddress = token.IpAddress, 
+                    ClientId = token.ClientId,
+                    ExpiresUtc = token.ExpiresUtc,
                     IssuedUtc = token.IssuedUtc,
-                    Subject = token.Subject
+                    UserId = token.UserId
                 })
                 .ToArray();
             return Task.FromResult(tokens);

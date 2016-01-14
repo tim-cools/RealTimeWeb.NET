@@ -6,7 +6,7 @@ namespace Soloco.RealTimeWeb.Common.Messages
 {
     public abstract class CommandHandler<TCommand, TResult> : IHandleMessage<TCommand, TResult>
         where TCommand : IMessage<TResult>
-        where TResult : CommandResult, new()
+        where TResult : Result, new()
     {
         protected IDocumentSession Session { get; }
 
@@ -37,8 +37,8 @@ namespace Soloco.RealTimeWeb.Common.Messages
         protected abstract Task<TResult> Execute(TCommand command);
     }
 
-    public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, CommandResult> 
-        where TCommand : IMessage<CommandResult>
+    public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, Result> 
+        where TCommand : IMessage<Result>
     {
         protected CommandHandler(IDocumentSession session) : base(session)
         {

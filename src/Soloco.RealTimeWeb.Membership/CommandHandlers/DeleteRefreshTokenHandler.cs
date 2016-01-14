@@ -14,21 +14,21 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
         {
         }
 
-        protected override Task<CommandResult> Execute(DeleteRefreshTokenCommand command)
+        protected override Task<Result> Execute(DeleteRefreshTokenCommand command)
         {
             return Task.FromResult(GetResult(command));
         }
 
-        private CommandResult GetResult(DeleteRefreshTokenCommand command)
+        private Result GetResult(DeleteRefreshTokenCommand command)
         {
             var token = Session.Load<RefreshToken>(command.TokenId);
             if (token == null)
             {
-                return CommandResult.Failed("Could not find token");
+                return Result.Failed("Could not find token");
             }
 
             Session.Delete(token);
-            return CommandResult.Success;
+            return Result.Success;
         }
     }
 }

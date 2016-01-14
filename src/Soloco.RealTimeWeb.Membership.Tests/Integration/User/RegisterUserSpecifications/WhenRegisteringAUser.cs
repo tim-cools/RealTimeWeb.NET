@@ -15,7 +15,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User.RegisterUserSpeci
 {
     public class WhenRegisteringAUser : ServiceTestBase<IMessageDispatcher>, IClassFixture<MembershipIntegrationTestFixture>
     {
-        private CommandResult _result;
+        private Result _result;
         private RegisterUserCommand _command;
 
         public WhenRegisteringAUser(MembershipIntegrationTestFixture fixture) : base(fixture)

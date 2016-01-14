@@ -16,7 +16,7 @@ namespace Soloco.RealTimeWeb.Common
         {
         }
 
-        public BusinessException(string message, IEnumerable<string> Errors) : base(message)
+        public BusinessException(string message, params string[] Errors) : base(message)
         {
             this.Errors = Errors;
         }

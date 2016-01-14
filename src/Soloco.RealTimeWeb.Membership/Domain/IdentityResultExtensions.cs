@@ -7,13 +7,13 @@ namespace Soloco.RealTimeWeb.Membership.Domain
 {
     public static class IdentityResultExtensions
     {
-        public static CommandResult ToCommandResult(this IdentityResult result)
+        public static Result ToCommandResult(this IdentityResult result)
         {
             if (result == null) throw new ArgumentNullException(nameof(result));
 
             return result.Succeeded 
-                ? CommandResult.Success 
-                : CommandResult.Failed(result.Errors.Select(error => error.Code).ToArray());
+                ? Result.Success 
+                : Result.Failed(result.Errors.Select(error => error.Code).ToArray());
         }
 
         public static void ThrowWhenFailed(this IdentityResult result, string message)
@@ -22,7 +22,7 @@ namespace Soloco.RealTimeWeb.Membership.Domain
 
             if (!result.Succeeded)
             {
-                throw new BusinessException(message, result.Errors.Select(error => error.Code));
+                throw new BusinessException(message, result.Errors.Select(error => error.Code).ToArray());
             }            
         }
     }

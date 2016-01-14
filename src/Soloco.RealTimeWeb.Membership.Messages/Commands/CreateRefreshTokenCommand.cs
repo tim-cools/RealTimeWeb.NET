@@ -4,21 +4,26 @@ using Soloco.RealTimeWeb.Common.Messages;
 
 namespace Soloco.RealTimeWeb.Membership.Messages.Commands
 {
-    public class CreateRefreshTokenCommand : IMessage<CommandResult>
+    public class CreateRefreshTokenCommand : IMessage<Result>
     {
-        public string ProtectedTicket { get; }
-        public string Clientid { get; }
-        public string Name { get; }
-        public DateTimeOffset? IssuedUtc { get; }
-        public DateTimeOffset? ExpiresUtc { get; }
-        public string RefreshTokenId { get; }
+        public string RefreshToken { get; }
 
-        public CreateRefreshTokenCommand(string refreshTokenId, string protectedTicket, string clientid, string name, DateTimeOffset issuedUtc, DateTimeOffset expiresUtc)
+        public string ClientId { get; }
+        public string UserId { get; }
+        public string UserName { get; set; }
+
+        public string IpAddress { get; }
+
+        public DateTimeOffset ExpiresUtc { get; }
+        public DateTimeOffset IssuedUtc { get; set; }
+
+        public CreateRefreshTokenCommand(string refreshToken, string clientId, string userId, string userName, string ipAddress, DateTimeOffset? issuedUtc, DateTimeOffset? expiresUtc)
         {
-            RefreshTokenId = refreshTokenId;
-            ProtectedTicket = protectedTicket;
-            Clientid = clientid;
-            Name = name;
+            RefreshToken = refreshToken;
+            ClientId = clientId;
+            UserId = userId;
+            UserName = userName;
+            IpAddress = ipAddress;
             IssuedUtc = issuedUtc;
             ExpiresUtc = expiresUtc;
         }

@@ -20,13 +20,13 @@ namespace Soloco.RealTimeWeb.Membership.CommandHandlers
             _userManager = userManager;
         }
 
-        protected override async Task<CommandResult> Execute(InitializeDatabaseCommand command)
+        protected override async Task<Result> Execute(InitializeDatabaseCommand command)
         {
             UpdateClients();
 
             await InitializeUsers();
 
-            return CommandResult.Success;
+            return Result.Success;
         }
 
         private async Task InitializeUsers()

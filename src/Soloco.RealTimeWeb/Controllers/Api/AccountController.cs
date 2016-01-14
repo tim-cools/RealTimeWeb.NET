@@ -153,14 +153,14 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         //    return Ok(accessTokenResponse);
         //}
 
-        private IActionResult ErrorResult(CommandResult result = null)
+        private IActionResult ErrorResult(Result result = null)
         {
             var errors = ModelState
                     .SelectMany(value => value.Value.Errors)
                     .Select(error => error.ErrorMessage)
                     .ToArray();
 
-            var modelValidationResult = errors.Length == 0 ? CommandResult.Success : CommandResult.Failed(errors);
+            var modelValidationResult = errors.Length == 0 ? Result.Success : Result.Failed(errors);
 
             var merged = result == null
                 ? modelValidationResult
@@ -171,7 +171,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
 
         private IActionResult ErrorResult(string error)
         {
-            var result = CommandResult.Failed(error);
+            var result = Result.Failed(error);
             return ErrorResult(result);
         }
 
