@@ -4,7 +4,7 @@
   "engines": {
     "node": ">= 0.12",
     "iojs": ">= 3.0",
-    "npm": ">= 2.1"
+    "npm": ">= 2.14.2"
   },
   "dependencies": {
     "react": "0.14.3",
@@ -71,7 +71,7 @@
     "build-dev": "gulp build-dev",
     "build-watch": "gulp watch-dev",
     
-	"tests": "mocha ./Client/tests/ --compilers js:babel-core/register --recursive --require ./Client/tests/setup.js",
+	  "tests": "mocha ./Client/tests/ --compilers js:babel-core/register --recursive --require ./Client/tests/setup.js",
     "tests-watch": "npm test -- --watch",
     "tests-coverage": "babel-node ./node_modules/isparta/bin/isparta cover ./node_modules/mocha/bin/_mocha -- --recursive"
   }

@@ -1,8 +1,12 @@
 language: csharp
 mono:
   - latest
-env: VERSION=0.3.10
+env: 
+  - VERSION=0.3.10
+  - TRAVIS_NODE_VERSION="4"
+
 solution: src/Soloco.RealTimeWeb.sln
+
 addons:
   postgresql: "9.4"
 
