@@ -8,7 +8,7 @@ import { actions as userActions, userStatus } from '../../state/user'
 import Header from './header';
 import Footer from './footer';
 
-class Application extends Component {
+class MainPage extends Component {
     render() {
         return (
             <div>
@@ -24,7 +24,7 @@ class Application extends Component {
     }
 }
 
-Application.propTypes = {
+MainPage.propTypes = {
     loggedOn: PropTypes.bool,
     name: PropTypes.string
 };
@@ -36,4 +36,4 @@ function select(state) {
     };
 }
 
-export default connect(select)(Application);
+export default connect(select)(MainPage);
