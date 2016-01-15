@@ -29,8 +29,13 @@ function logon(userName, password) {
     }
 
     userStateActions.logonPending();
- 
-    var data = 'grant_type=password&username=' + userName + '&password=' + password + '&client_id=' + api.clientId + '&scope=offline_access';
+    
+    const data = 'grant_type=password' 
+        + '&username=' + userName 
+        + '&password=' + password 
+        + '&client_id=' + api.clientId 
+        + '&scope=offline_access';
+    
     api.post('token', data, handleResponse, handleError);
 }
 

@@ -1,5 +1,4 @@
 using System;
-using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
@@ -71,7 +70,7 @@ namespace Soloco.RealTimeWeb
         {
             var container = new Container(configuration =>
             {
-                configuration.For<IConfigurationRoot>().Use(_configuration);
+                configuration.For<IConfiguration>().Use(_configuration);
                 configuration.For<IApplicationEnvironment>().Use(_applicationEnvironment);
 
                 configuration.AddRegistry<WebRegistry>();

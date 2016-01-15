@@ -3,8 +3,6 @@ using Marten;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.Logging;
 using Soloco.RealTimeWeb.Common.StructureMap;
-using Soloco.RealTimeWeb.Membership.Clients.Handlers;
-using Soloco.RealTimeWeb.Membership.Infrastructure;
 using Soloco.RealTimeWeb.Membership.Services;
 using Soloco.RealTimeWeb.Membership.Users.Domain;
 using StructureMap;

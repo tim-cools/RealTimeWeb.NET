@@ -9,7 +9,7 @@ namespace Soloco.RealTimeWeb.Common.Tests
     {
         private readonly IContainer _container;
 
-        public IntegrationTestFixture()
+        protected IntegrationTestFixture()
         {
             LoggingInitializer.Initialize();
 
@@ -40,7 +40,7 @@ namespace Soloco.RealTimeWeb.Common.Tests
             return builder.Build();
         }
 
-        private IContainer InitializeContainer(IConfigurationRoot configuration)
+        private IContainer InitializeContainer(IConfiguration configuration)
         {
             var container = new Container(config =>
             {
@@ -48,7 +48,7 @@ namespace Soloco.RealTimeWeb.Common.Tests
                 config.AddRegistry<TestRegistry>();
                 config.For<IContext>().Use("Return context", context => context);
 
-                config.For<IConfigurationRoot>().Use(configuration);
+                config.For<IConfiguration>().Use(configuration);
 
                 InitializeContainer(config);
             });

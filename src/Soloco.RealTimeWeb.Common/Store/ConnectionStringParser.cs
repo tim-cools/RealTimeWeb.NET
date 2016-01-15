@@ -7,9 +7,9 @@ namespace Soloco.RealTimeWeb.Common.Store
 {
     public class ConnectionStringParser : IConnectionStringParser
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
-        public ConnectionStringParser(IConfigurationRoot configuration)
+        public ConnectionStringParser(IConfiguration configuration)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 

@@ -14,7 +14,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit
             {
                 config.AddRegistry<CommonRegistry>();
                 config.AddRegistry<TestRegistry>();
-                config.For<IConfigurationRoot>().Use<DummyConfiguration>();
+                config.For<IConfiguration>().Use<DummyConfiguration>();
 
                 extraConfig?.Invoke(config);
             });

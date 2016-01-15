@@ -39,7 +39,7 @@
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:5801"
+    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:3000"
   },
 
   "frameworks": {

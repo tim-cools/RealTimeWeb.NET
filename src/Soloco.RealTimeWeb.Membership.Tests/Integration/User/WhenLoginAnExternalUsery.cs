@@ -20,13 +20,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             _userName = Guid.NewGuid().ToString("n");
             var externalIdentifier = Guid.NewGuid().ToString("n");
 
             var command = new ExternalLoginCommand("Facebook", _userName, externalIdentifier, _userName + "@me.com");
-            _result = dispatcher.ExecuteNowWithTimeout(command);
+            _result = context.Service.ExecuteNowWithTimeout(command);
         }
 
         [Fact]
@@ -38,9 +38,9 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         [Fact]
         public void ThenTheUserShouldExist()
         {
-            SessionScope((dispatcher, session, container) =>
+            SessionScope((context) =>
             {
-                var user = session.Load<Users.Domain.User>(_result.UserId);
+                var user = context.Session.Load<Users.Domain.User>(_result.UserId);
                 user.ShouldNotBeNull();
                 user.FullName.ShouldBe(_userName);
             });
@@ -59,22 +59,22 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _userName = Guid.NewGuid().ToString("n");
             _externalIdentifier = Guid.NewGuid().ToString("n");
 
             _command = new ExternalLoginCommand("Facebook", _userName, _externalIdentifier, _userName + "@me.com");
-            var result = dispatcher.ExecuteNowWithTimeout(_command);
+            var result = context.Service.ExecuteNowWithTimeout(_command);
 
             result.Succeeded.ShouldBeTrue(result.ToString);
 
             _userId = result.UserId;
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
-            _result = dispatcher.ExecuteNowWithTimeout(_command);
+            _result = context.Service.ExecuteNowWithTimeout(_command);
         }
 
         [Fact]
@@ -100,21 +100,21 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _userName = Guid.NewGuid().ToString("n");
             _externalIdentifier = Guid.NewGuid().ToString("n");
 
             var command = new RegisterUserCommand(_userName, _userName + "@me.com", Guid.NewGuid().ToString("n"));
-            var result = dispatcher.ExecuteNowWithTimeout(command);
+            var result = context.Service.ExecuteNowWithTimeout(command);
 
             result.Succeeded.ShouldBeTrue(result.ToString);
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var command = new ExternalLoginCommand("Facebook", "otherUserName", _externalIdentifier, _userName + "@me.com");
-            _result = dispatcher.ExecuteNowWithTimeout(command);
+            _result = context.Service.ExecuteNowWithTimeout(command);
         }
 
         [Fact]
@@ -141,23 +141,23 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _userName = Guid.NewGuid().ToString("n");
             _externalIdentifier = Guid.NewGuid().ToString("n");
 
             var command = new ExternalLoginCommand("Facebook", _userName, _externalIdentifier, _userName + "@me.com");
-            var result = dispatcher.ExecuteNowWithTimeout(command);
+            var result = context.Service.ExecuteNowWithTimeout(command);
 
             result.Succeeded.ShouldBeTrue(result.ToString);
 
             _userId = result.UserId;
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var command = new ExternalLoginCommand("Google", _userName, _externalIdentifier, _userName + "@me.com");
-            _result = dispatcher.ExecuteNowWithTimeout(command);
+            _result = context.Service.ExecuteNowWithTimeout(command);
         }
 
         [Fact]

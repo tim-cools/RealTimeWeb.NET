@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Security;
 
 namespace Soloco.RealTimeWeb.Membership.Clients.Domain
 {
     public static class Clients
     {
-        public static IEnumerable<Client> Get()
+        public static IEnumerable<Client> Get(IConfiguration configuration)
         {
             return new List<Client>
             {
@@ -17,14 +19,14 @@ namespace Soloco.RealTimeWeb.Membership.Clients.Domain
                     Name = "React front-end Application",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
-                    AllowedOrigin = "http://localhost:3000",  //todo get from config
-                    RedirectUri = "http://localhost:3000/account/authorized"
+                    AllowedOrigin = configuration.WebHostName(),
+                    RedirectUri = configuration.WebHostName() + "/account/authorized"
                 },
                 new Client
                 {
                     Id = Guid.NewGuid(),
                     Key = "automatedTests",
-                    Secret = Hasher.ComputeSHA256("123@abc"),
+                    Secret = Hasher.ComputeSHA256("*automatedTests@localhost"),
                     Name = "Automated tests",
                     ApplicationType = ApplicationTypes.NativeConfidential,
                     Active = true,

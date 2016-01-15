@@ -20,7 +20,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             _userName = Guid.NewGuid().ToString("n");
             var command = new RegisterUserCommand(
@@ -29,11 +29,11 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
                 Guid.NewGuid().ToString("n")
                 );
 
-            dispatcher.Execute(command);
+            context.Service.Execute(command);
        
             _query = new UserByNameQuery(_userName);
 
-            _result = dispatcher.ExecuteNowWithTimeout(_query);
+            _result = context.Service.ExecuteNowWithTimeout(_query);
         }
 
         [Fact]

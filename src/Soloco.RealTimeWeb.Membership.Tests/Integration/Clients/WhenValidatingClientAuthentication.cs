@@ -1,11 +1,9 @@
 ﻿using System;
-using Marten;
 using Shouldly;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Common.Tests.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Clients;
-using StructureMap;
 using Xunit;
 using Client = Soloco.RealTimeWeb.Membership.Clients.Domain.Client;
 
@@ -21,13 +19,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Clients
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var clientId = Guid.NewGuid().ToString("n");
             var clientSecret = Guid.NewGuid().ToString("n");
 
             var query = new ClientValidator(clientId, clientSecret);
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]
@@ -49,18 +47,18 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Clients
         {
         }
 
-        protected override void Given(IMessageDispatcher service, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _client = ClientFactory.Create();
 
-            session.Store(_client);
-            session.SaveChanges();
+            context.Session.Store(_client);
+            context.Session.SaveChanges();
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var query = new ClientValidator(_client.Key, _client.Secret);
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]

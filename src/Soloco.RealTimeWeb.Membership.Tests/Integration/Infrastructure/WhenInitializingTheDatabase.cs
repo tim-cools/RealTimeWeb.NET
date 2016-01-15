@@ -21,10 +21,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             _command = new InitializeDatabaseCommand();
-            _result = dispatcher.ExecuteNowWithTimeout(_command);
+            _result = context.Service.ExecuteNowWithTimeout(_command);
         }
 
         [Fact]
@@ -37,18 +37,18 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Infrastructure
         [Fact]
         public void ThenClientSHouldBeCreated()
         {
-            SessionScope((dispatcher, session, container) =>
+            SessionScope((context) =>
             {
-                session.Query<Client>().Count().ShouldBeGreaterThan(0);
+                context.Session.Query<Client>().Count().ShouldBeGreaterThan(0);
             });
         }
 
         [Fact]
         public void ThenUsersShouldBeCreated()
         {
-            SessionScope((dispatcher, session, container) =>
+            SessionScope((context) =>
             {
-                session.Query<Users.Domain.User>().Count().ShouldBeGreaterThan(0);
+                context.Session.Query<Users.Domain.User>().Count().ShouldBeGreaterThan(0);
             });
         }
     }

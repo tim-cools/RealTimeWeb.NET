@@ -1,12 +1,10 @@
 ﻿using System;
-using Marten;
 using Shouldly;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Common.Tests.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.RefreshTokens;
-using StructureMap;
 using Xunit;
 
 namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
@@ -24,7 +22,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _refreshToken = Guid.NewGuid().ToString("n");
             _clientId = Guid.NewGuid().ToString("n");
@@ -33,14 +31,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
             var command = new CreateRefreshTokenCommand(_refreshToken, _clientId, _userId, "me", "*", DateTimeOffset.Now,
                 DateTimeOffset.Now);
 
-            var result = dispatcher.ExecuteNowWithTimeout(command);
+            var result = context.Service.ExecuteNowWithTimeout(command);
             result.Succeeded.ShouldBeTrue(result.ToString);
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var query = new RefreshTokenValidator(_refreshToken, _clientId, _userId);
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]
@@ -61,14 +59,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var refreshToken = Guid.NewGuid().ToString("n");
             var clientId = Guid.NewGuid().ToString("n");
             var userId = Guid.NewGuid().ToString("n");
 
             var query = new RefreshTokenValidator(refreshToken, clientId, userId);
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]
@@ -92,7 +90,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _refreshToken = Guid.NewGuid().ToString("n");
             _clientId = Guid.NewGuid().ToString("n");
@@ -101,14 +99,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
             var command = new CreateRefreshTokenCommand(_refreshToken, _clientId, userId, "me", "*", DateTimeOffset.Now,
                 DateTimeOffset.Now);
 
-            var result = dispatcher.ExecuteNowWithTimeout(command);
+            var result = context.Service.ExecuteNowWithTimeout(command);
             result.Succeeded.ShouldBeTrue(result.ToString);
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var query = new RefreshTokenValidator(_refreshToken, _clientId, Guid.NewGuid().ToString("n"));
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]
@@ -132,7 +130,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _refreshToken = Guid.NewGuid().ToString("n");
             _userId = Guid.NewGuid().ToString("n");
@@ -141,14 +139,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
             var command = new CreateRefreshTokenCommand(_refreshToken, clientId, _userId, "me", "*", DateTimeOffset.Now,
                 DateTimeOffset.Now);
 
-            var result = dispatcher.ExecuteNowWithTimeout(command);
+            var result = context.Service.ExecuteNowWithTimeout(command);
             result.Succeeded.ShouldBeTrue(result.ToString);
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var query = new RefreshTokenValidator(_refreshToken, Guid.NewGuid().ToString("n"), _userId);
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]

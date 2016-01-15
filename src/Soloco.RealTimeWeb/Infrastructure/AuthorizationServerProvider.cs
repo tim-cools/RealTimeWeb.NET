@@ -30,7 +30,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             {
                 context.Rejected(
                     error: "invalid_client",
-                    description: "Application not found in the database: ensure that your client_id is correct");
+                    description: "Client not found in the database: ensure that your client_id is correct");
 
                 return;
             }

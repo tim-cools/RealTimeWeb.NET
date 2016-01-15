@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Marten;
 using Microsoft.AspNet.Identity;
+using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Store;
@@ -13,11 +14,13 @@ namespace Soloco.RealTimeWeb.Membership.Infrastructure
     public class InitializeDatabaseHandler : CommandHandler<InitializeDatabaseCommand>
     {
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public InitializeDatabaseHandler(IDocumentSession session, UserManager<User> userManager)
+        public InitializeDatabaseHandler(IDocumentSession session, UserManager<User> userManager, IConfiguration configuration)
             : base(session)
         {
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         protected override async Task<Result> Execute(InitializeDatabaseCommand command)
@@ -40,7 +43,7 @@ namespace Soloco.RealTimeWeb.Membership.Infrastructure
 
         private void UpdateClients()
         {
-            var clients = Clients.Domain.Clients.Get();
+            var clients = Clients.Domain.Clients.Get(_configuration);
             foreach (var client in clients)
             {
                 EnsureClient(client);

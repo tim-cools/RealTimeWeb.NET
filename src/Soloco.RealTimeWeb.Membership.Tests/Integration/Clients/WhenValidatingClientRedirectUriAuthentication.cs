@@ -23,13 +23,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Clients
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var clientId = Guid.NewGuid().ToString("n");
             var redirectUri = Guid.NewGuid().ToString("n");
             var validator = new ClientRedirectUriValidator(clientId, redirectUri);
 
-            _result = dispatcher.ExecuteNowWithTimeout(validator);
+            _result = context.Service.ExecuteNowWithTimeout(validator);
         }
 
         [Fact]
@@ -51,18 +51,18 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Clients
         {
         }
 
-        protected override void Given(IMessageDispatcher service, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _client = ClientFactory.Create();
 
-            session.Store(_client);
-            session.SaveChanges();
+            context.Session.Store(_client);
+            context.Session.SaveChanges();
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var validator = new ClientRedirectUriValidator(_client.Key, _client.RedirectUri);
-            _result = dispatcher.ExecuteNowWithTimeout(validator);
+            _result = context.Service.ExecuteNowWithTimeout(validator);
         }
 
         [Fact]
@@ -84,18 +84,18 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.Clients
         {
         }
 
-        protected override void Given(IMessageDispatcher service, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             _client = ClientFactory.Create();
 
-            session.Store(_client);
-            session.SaveChanges();
+            context.Session.Store(_client);
+            context.Session.SaveChanges();
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var validator = new ClientRedirectUriValidator(_client.Key, _client.RedirectUri);
-            _result = dispatcher.ExecuteNowWithTimeout(validator);
+            _result = context.Service.ExecuteNowWithTimeout(validator);
         }
 
         [Fact]

@@ -46,7 +46,11 @@ function call(verb, contentType, url, data, responseHandler, errorHandler) {
         if (response.status === 401 || response.status === 500) {
             clearAuthentication();
             if (authentication && authentication.refreshToken) {
-                const data = 'grant_type=refresh_token&refresh_token=' + authentication.refreshToken + '&client_id=' + clientId;
+                
+                const data = 'grant_type=refresh_token' 
+                    + '&refresh_token=' + authentication.refreshToken
+                    + '&client_id=' + clientId;
+
                 return post('token', data, handleResponse, finalLogOff);
             }
         } 

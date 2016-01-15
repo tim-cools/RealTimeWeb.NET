@@ -19,13 +19,13 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var userName = Guid.NewGuid().ToString("n");
             var password = Guid.NewGuid().ToString("n");
 
             var command = new UserNamePasswordLogin(userName, password);
-            _result = dispatcher.ExecuteNowWithTimeout(command);
+            _result = context.Service.ExecuteNowWithTimeout(command);
         }
 
         [Fact]

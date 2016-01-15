@@ -28,7 +28,7 @@ namespace Soloco.RealTimeWeb.Monitoring
         {
             services.AddMvc();
             services.AddSingleton<IMonitor, DatabaseMonitor>();            
-            services.AddSingleton<IConfigurationRoot>(provider => _configuration);
+            services.AddSingleton<IConfiguration>(provider => _configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

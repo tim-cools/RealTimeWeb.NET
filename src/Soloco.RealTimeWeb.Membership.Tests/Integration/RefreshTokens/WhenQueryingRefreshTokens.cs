@@ -20,7 +20,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
         {
         }
 
-        protected override void Given(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void Given(TestContext<IMessageDispatcher> context)
         {
             var command = new CreateRefreshTokenCommand(
               Guid.NewGuid().ToString(),
@@ -31,14 +31,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.RefreshTokens
               DateTimeOffset.Now,
               DateTimeOffset.Now);
 
-            var result = dispatcher.ExecuteNowWithTimeout(command);
+            var result = context.Service.ExecuteNowWithTimeout(command);
             result.Succeeded.ShouldBeTrue(result.ToString());
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var query = new RefreshTokensQuery();
-            _result = dispatcher.ExecuteNowWithTimeout(query);
+            _result = context.Service.ExecuteNowWithTimeout(query);
         }
 
         [Fact]

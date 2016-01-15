@@ -21,12 +21,12 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         {
         }
 
-        protected override void When(IMessageDispatcher dispatcher, IDocumentSession session, IContainer container)
+        protected override void When(TestContext<IMessageDispatcher> context)
         {
             var name = Guid.NewGuid().ToString("n");
             _command = new RegisterUserCommand(name, "eMail@future.now", "password");
 
-            _result = dispatcher.ExecuteNowWithTimeout(_command);
+            _result = context.Service.ExecuteNowWithTimeout(_command);
         }
 
         [Fact]
@@ -48,10 +48,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         [Fact]
         public void ThenAUserShouldBeStored()
         {
-            SessionScope((dispatcher, session, container) =>
+            SessionScope((context) =>
             {
                 var userByNameQuery = new UserByNameQuery(_command.UserName);
-                var user = dispatcher.ExecuteNowWithTimeout(userByNameQuery);
+                var user = context.Service.ExecuteNowWithTimeout(userByNameQuery);
 
                 user.ShouldNotBeNull();
             });
@@ -60,10 +60,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         [Fact]
         public void ThenAUserShouldBeAbleToLogin()
         {
-            SessionScope((dispatcher, session, container) =>
+            SessionScope((context) =>
             {
                 var validUserLoginQuery = new UserNamePasswordLogin(_command.UserName, _command.Password);
-                var result = dispatcher.ExecuteNowWithTimeout(validUserLoginQuery);
+                var result = context.Service.ExecuteNowWithTimeout(validUserLoginQuery);
 
                 result.Succeeded.ShouldBeTrue();
             });
@@ -72,10 +72,10 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         [Fact]
         public void ThenADifferentPasswordShouldFailToLogin()
         {
-            SessionScope((dispatcher, session, container) =>
+            SessionScope((context) =>
             {
                 var query = new UserNamePasswordLogin(_command.UserName, "wrong password");
-                var result = dispatcher.ExecuteNowWithTimeout(query);
+                var result = context.Service.ExecuteNowWithTimeout(query);
 
                 result.Succeeded.ShouldBeFalse();
             });
