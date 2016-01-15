@@ -20,7 +20,7 @@ namespace Soloco.RealTimeWeb.Membership.Clients.Domain
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
                     AllowedOrigin = configuration.WebHostName(),
-                    RedirectUri = configuration.WebHostName() + "/account/authorized"
+                    RedirectUri = configuration.WebHostName() + "account/authorized"
                 },
                 new Client
                 {

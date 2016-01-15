@@ -1,8 +1,6 @@
-﻿
-window.common = (function () {
-    var common = {};
+﻿(function () {
 
-    common.getFragment = function getFragment() {
+    function getFragment() {
         if (window.location.search.indexOf('?') === 0) {
             return parseQueryString(window.location.search.substr(1));
         } else {
@@ -41,10 +39,7 @@ window.common = (function () {
         return data;
     }
 
-    return common;
+    const fragment = getFragment();
+    window.opener.authenticationScope.complete(fragment);
+    window.close();
 })();
-
-var fragment = common.getFragment();
-
-window.opener.authenticationScope.complete(fragment);
-//window.close();

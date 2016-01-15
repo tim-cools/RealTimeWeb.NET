@@ -24,5 +24,17 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 return context => condition(context) ? branch(context) : next(context);
             });
         }
+
+        public static IApplicationBuilder ConfigureWhen(this IApplicationBuilder app, bool condition, Action<IApplicationBuilder> configuration)
+        {
+            if (app == null) throw new ArgumentNullException(nameof(app));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+            if (condition)
+            {
+                configuration(app);
+            }
+            return app;
+        }
     }
 }

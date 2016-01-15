@@ -36,6 +36,7 @@ namespace Soloco.RealTimeWeb
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.private.json", optional: true)
                 .AddEnvironmentVariables();
 
             return builder.Build();
@@ -110,7 +111,7 @@ namespace Soloco.RealTimeWeb
                 .AddDebug();
         }
 
-        private static void ConfigureWebApp(IApplicationBuilder app, IHostingEnvironment env)
+        private void ConfigureWebApp(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -123,7 +124,7 @@ namespace Soloco.RealTimeWeb
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
                .UseStaticFiles()
-               .ConfigureAuthentication()
+               .ConfigureAuthentication(_configuration)
                .UseCors(defaultName)
                .UseMvc(routes => { routes.MapRoute(name: defaultName, template: "{controller=Home}/{action=Index}/{id?}"); });
         }

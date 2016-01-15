@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Router, Route, Link } from 'react-router'
 
-import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, NavbarBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
 import navigate from './../../api/navigate';
 import membership from './../../api/membership';
@@ -45,7 +45,7 @@ class Header extends Component {
 
         return (
             <Navbar>
-                <NavBrand>Soloco - Real Time Web .NET</NavBrand>
+                <NavbarBrand>Soloco - Real Time Web .NET</NavbarBrand>
                 {items}
             </Navbar>
         );

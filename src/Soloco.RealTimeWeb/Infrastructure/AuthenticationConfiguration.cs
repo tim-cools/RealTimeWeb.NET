@@ -2,26 +2,25 @@
 using System.Net.Http;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.Facebook;
-using Microsoft.AspNet.Authentication.Google;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using Microsoft.Extensions.Configuration;
+using Soloco.RealTimeWeb.Common;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
     public static class AuthenticationConfiguration
     {
-        public static IApplicationBuilder ConfigureAuthentication(this IApplicationBuilder app)
+        public static IApplicationBuilder ConfigureAuthentication(this IApplicationBuilder app, IConfiguration configuration)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 
-            app
-               .UseIdentity()
-               .UseWhen(IsApi, ApiAuthentication)
-               .UseWhen(IsWeb, WebAuthentication)
-               .UseFacebookAuthentication(FacebookOptions)
-               .UseGoogleAuthentication(GoogleOptions)
-               .UseOpenIdConnectServer(ServerOptions);
+            app.UseIdentity()
+                .UseWhen(IsApi, ApiAuthentication(configuration))
+                .UseWhen(IsWeb, WebAuthentication)
+                .ConfigureWhen(configuration.AuthenticationFacebookConfigured(), FacebookAuthentication(configuration))
+                .ConfigureWhen(configuration.AuthenticationGoogleConfigured(), GoogleAuthentication(configuration))
+                .UseOpenIdConnectServer(ServerOptions);
 
             return app;
         }
@@ -31,16 +30,16 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return !IsApi(context);
         }
 
-        private static void ApiAuthentication(IApplicationBuilder branch)
+        private static Action<IApplicationBuilder> ApiAuthentication(IConfiguration configuration)
         {
-            branch.UseJwtBearerAuthentication(options =>
+            return branch => branch.UseJwtBearerAuthentication(options =>
             {
                 options.AutomaticAuthenticate = true;
                 options.AutomaticChallenge = true;
                 options.RequireHttpsMetadata = false;
 
-                options.Audience = Configuration.AuthenticationResource;
-                options.Authority = Configuration.AuthenticationResource;
+                options.Audience = configuration.ApiHostName();
+                options.Authority = configuration.ApiHostName();
             });
         }
 
@@ -62,22 +61,25 @@ namespace Soloco.RealTimeWeb.Infrastructure
             });
         }
 
-        private static void GoogleOptions(GoogleOptions options)
+        private static Action<IApplicationBuilder> GoogleAuthentication(IConfiguration configuration)
         {
-            //todo remove from git and put in use specific env var's (or somthing else)
-            options.ClientId = "342962424267-h6dfsc4sgn0spf9fk6506d3iqf8ul8fj.apps.googleusercontent.com";
-            options.ClientSecret = "hhg69bsNeCTEAYJRADRuCOgq";
+            return app => app.UseGoogleAuthentication(options =>
+            {
+                options.ClientId = configuration.AuthenticationGoogleClientId();
+                options.ClientSecret = configuration.AuthenticationGoogleClientSecret();
+            });
         }
 
-        private static void FacebookOptions(FacebookOptions options)
+        private static Action<IApplicationBuilder> FacebookAuthentication(IConfiguration configuration)
         {
-            //todo remove from git and put in use specific env var's (or somthing else)
-            options.AppId = "1648062998809846";
-            options.AppSecret = "c0401541376309eba60190b8999ed048";
-
-            options.Scope.Add("email");
-            options.BackchannelHttpHandler = new HttpClientHandler();
-            options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email";
+            return app => app.UseFacebookAuthentication(options =>
+            {
+                options.AppId = configuration.AuthenticationFacebookAppId();
+                options.AppSecret = configuration.AuthenticationFacebookAppSecret();
+                options.BackchannelHttpHandler = new HttpClientHandler();
+                options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email";
+                options.Scope.Add("email");
+            });
         }
 
         private static void ServerOptions(OpenIdConnectServerOptions options)

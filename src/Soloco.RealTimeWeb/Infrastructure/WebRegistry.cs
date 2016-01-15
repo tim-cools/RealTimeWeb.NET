@@ -13,7 +13,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             Scan(options =>
             {
                 options.TheCallingAssembly();
-                options.IncludeNamespaceContainingType<AccountController>();
+                options.Include(type => type.Name.EndsWith("Handler"));
                 options.IncludeNamespaceContainingType<DocumentQueryHandler>();
                 options.Convention<AllInterfacesConvention>();
             });

@@ -2,17 +2,6 @@ import api from './';
 import navigate from './navigate';
 import { actions as userStateActions } from '../state/user';
 
-
-//const proxy = $.connection.membership;
-
-//proxy.client.LoginSuccessful = function (name) {
-//    userStateActions.logon(name);
-//};
-
-//function login(userName, password) {
-//    proxy.server.login(userName, password);
-//}
-
 function logonInit() {
     userStateActions.logon();
 }
@@ -41,7 +30,7 @@ function logon(userName, password) {
 
 function logOff() {
     
-    api.post('/account/signout');
+    api.post('account/signout');
     api.clearAuthentication();
 
     userStateActions.logoff();
@@ -132,10 +121,6 @@ function initialize() {
     
     api.get('api/account', {}, handleResponse, handleError);    
 }
-
-//$.connection.hub.start()
-//    .done(function(){ console.log('Now connected, connection ID=' + $.connection.hub.id); })
-//    .fail(function(){ console.log('Could not Connect!'); });
 
 export default {
     initialize: initialize,

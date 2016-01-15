@@ -19,9 +19,9 @@
     "RestSharp": "105.2.3"
   },
   "scripts": {
-  },	
+  },
   "commands": {
-    "test": "xunit.runner.dnx"
+    "test": "xunit.runner.dnx -notrait category=acceptance"
   },
   "frameworks": {
     "dnx451": { }

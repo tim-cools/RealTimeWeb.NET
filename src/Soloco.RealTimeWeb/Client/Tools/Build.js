@@ -21,7 +21,7 @@ var config = {
     app: 'Client/src/app.js',
     appWatch: 'Client/src/**/*.*',
     appTarget: 'scripts/app.js',
-    vendorTarget: 'scripts/;vendor.js',
+    vendorTarget: 'scripts/vendor.js',
     vendorFiles: [
         'react',
         'react-dom',

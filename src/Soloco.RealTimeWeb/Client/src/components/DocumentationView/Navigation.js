@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, NavbarBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 import SubNav from './SubNav'

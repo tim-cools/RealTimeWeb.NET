@@ -8,6 +8,8 @@ using Microsoft.AspNet.Http.Authentication;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using AspNet.Security.OpenIdConnect.Extensions;
+using Microsoft.Extensions.Configuration;
+using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Clients;
 using Soloco.RealTimeWeb.Membership.Messages.RefreshTokens;
@@ -105,7 +107,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             var properties = new AuthenticationProperties(); // new Dictionary<string, string> { { "as:client_id", context.ClientId ?? string.Empty } });
             var principal = new ClaimsPrincipal(new[] { identity });
 
-            return CreateAuthenticationTicket(principal, properties, context.Options);
+            return CreateAuthenticationTicket(principal, properties, context.Options, context);
         }
 
         /// <summary>
@@ -134,15 +136,16 @@ namespace Soloco.RealTimeWeb.Infrastructure
             }
 
             var principal = new ClaimsPrincipal(context.AuthenticationTicket.Principal);
-            var ticket = CreateAuthenticationTicket(principal, context.AuthenticationTicket.Properties, context.Options);
+            var ticket = CreateAuthenticationTicket(principal, context.AuthenticationTicket.Properties, context.Options, context);
 
             context.Validated(ticket);
         }
 
-        private static AuthenticationTicket CreateAuthenticationTicket(ClaimsPrincipal principal, AuthenticationProperties authenticationProperties, OpenIdConnectServerOptions options)
+        private static AuthenticationTicket CreateAuthenticationTicket(ClaimsPrincipal principal, AuthenticationProperties authenticationProperties, OpenIdConnectServerOptions options, BaseContext context)
         {
+            var configuration = Configuration(context);
             var ticket = new AuthenticationTicket(principal, authenticationProperties, options.AuthenticationScheme);
-            ticket.SetResources(new[] { Configuration.AuthenticationResource });
+            ticket.SetResources(new[] { configuration.ApiHostName() });
             return ticket;
         }
 
@@ -203,10 +206,15 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return Task.FromResult(true);
         }
 
-        private async Task<TResult> ExecuteMessage<TResult>(BaseContext context, IMessage<TResult> message)
+        private static async Task<TResult> ExecuteMessage<TResult>(BaseContext context, IMessage<TResult> message)
         {
             var messageDispatcher = context.HttpContext.RequestServices.GetMessageDispatcher();
             return await messageDispatcher.Execute(message);
+        }
+
+        private static IConfiguration Configuration(BaseContext context)
+        {
+            return context.HttpContext.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration;
         }
     }
 }
