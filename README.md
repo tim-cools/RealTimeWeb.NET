@@ -12,4 +12,5 @@ It demostrates:
 - How to use OAuth to authenticate the SPA and additional applications
 - (more to come)
 
-More information about the implementation can be found on Tim Cools's blog: http://www.soloco.be/realtimeweb-net-overview/
+More information about the implementation can be found on Tim Cools's blog: 
+http://www.soloco.be/realtimeweb-net-overview/
