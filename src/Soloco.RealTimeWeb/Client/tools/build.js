@@ -11,7 +11,6 @@ var concat = require('gulp-concat');
 var cssnano = require('gulp-cssnano');
 
 var browserify = require('browserify');
-var watchify = require('watchify');
 var babelify = require('babelify');
 
 console.log('building');
@@ -53,7 +52,7 @@ gulp.task('clean', function(callback) {
 });
 
 gulp.task('application', function () {
-    return browserify(config.app, _.extend({ debug: true }, watchify.args))
+    return browserify(config.app, { debug: true })
         .transform("babelify", { presets: ["es2015-loose", "react", "stage-0"] })
         .external(config.vendorFiles)
         .bundle()
@@ -66,7 +65,7 @@ gulp.task('application', function () {
 });
 
 gulp.task('vendor', function () {
-    return browserify(null, _.extend({ debug: true }, watchify.args))
+    return browserify(null, { debug: true })
         .require(config.vendorFiles)
         .transform("babelify", { presets: ["es2015-loose", "react", "stage-0"] })
         .bundle()
