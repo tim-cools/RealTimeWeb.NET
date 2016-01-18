@@ -11,7 +11,7 @@ addons:
 
 install:
  - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
- - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | bash && nvm run 5.0 --version
+ - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install 4
  - npm install npm@latest -g
  - dnvm upgrade
  - dnu restore
