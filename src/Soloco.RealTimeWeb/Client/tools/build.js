@@ -8,7 +8,7 @@ var del = require('del');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
-var minify = require('gulp-minify-css');
+var cssnano = require('gulp-cssnano');
 
 var browserify = require('browserify');
 var watchify = require('watchify');
@@ -27,7 +27,6 @@ var config = {
         'react-dom',
         'react-router',
         'react-bootstrap',
-        'react-bootstrap-grid',
         'react-redux',
         'redux',
         'redux-router',
@@ -92,7 +91,7 @@ gulp.task('documentation', function () {
 gulp.task('stylesheets', function compile() {
     return gulp.src(config.styles.source)
         .pipe(concat(config.styles.destination))
-        .pipe(minify())
+        .pipe(cssnano())
         .pipe(gulp.dest(config.target));
 });
 

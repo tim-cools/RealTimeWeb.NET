@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Panel, Jumbotron } from 'react-bootstrap';
-import { Container } from 'react-bootstrap-grid';
 
 import { actions as userActions, userStatus } from '../../state/user'
 import Header from './Header';
@@ -16,9 +15,9 @@ class MainPage extends Component {
                     userAuthenticated={this.props.loggedOn}
                     userName={this.props.name} />
                 {this.props.children}
-                <Container>
+                <div className='container'>
                     <Footer />
-                </Container>
+                </div>
             </div>
         );
     }
