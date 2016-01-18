@@ -69,7 +69,7 @@ gulp.task('application', function () {
 gulp.task('vendor', function () {
     return browserify(null, _.extend({ debug: true }, watchify.args))
         .require(config.vendorFiles)
-        .transform("babelify", { presets: ["es2015", "react", "stage-0"] })
+        .transform("babelify", { presets: ["es2015-loose", "react", "stage-0"] })
         .bundle()
         .on('error', function (err) {
             console.log('Error: ' + err.message);
