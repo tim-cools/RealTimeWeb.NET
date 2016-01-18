@@ -19,7 +19,7 @@ before_script:
  - chmod +x ./scripts/build.sh ./scripts/run-tests.sh
  
 script:
-  - ./scripts/build.sh
+  - ./scripts/build.sh && ./scripts/run-tests.sh
 
 after_failure:
   - ls -LR src/packages
