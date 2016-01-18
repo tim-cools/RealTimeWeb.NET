@@ -5,8 +5,8 @@ import { Button, Panel, Jumbotron } from 'react-bootstrap';
 import { Container } from 'react-bootstrap-grid';
 
 import { actions as userActions, userStatus } from '../../state/user'
-import Header from './header';
-import Footer from './footer';
+import Header from './Header';
+import Footer from './Footer';
 
 class MainPage extends Component {
     render() {
