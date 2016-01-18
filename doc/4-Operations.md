@@ -1,3 +1,5 @@
+*This doc is work in progress and will be completed in the near future*
+
 - Log in Aws console
   - Security credentials
   - Create user (use accesskey and secret key)

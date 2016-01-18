@@ -1,51 +1,63 @@
-- Log in Aws console
-  - Security credentials
-  - Create user (use accesskey and secret key)
-  - Assign rights: AdministratorAccess (TODO: assign more specific roles)
+*This doc is work in progress and will be completed in the near future*
 
-run  Environment migration tool
+Front-end Development
+---------------------
+Modern web-application consist of large part JavaScript code these days. The tools improved drasticly the laast years.
 
-``src\Soloco.RealTimeWeb.Environment\bin\Debug\Soloco.RealTimeWeb.Environment.exe AmazonAccessKey=ENTER_YOUR_ACCESS_KEY_HERE AmazonSecretKey=ENTER_YOUR_SECRET_KEY_HERE DatabaseMasterPassword=SPECIFY_A_DB_MASTER_PASSWORD``
+A whole range of JavaScript files are available to use these days. You could argue a little too much as pointed out in <technology radar link>. These libraries are managed by npm, the node package manager.
 
-Settings
---------
-All default setting can be found in the app.config:
+The main library in RealTimeWeb are
+- React, a client side library developed by Facebook, for creating a single page application
+- Redux for managing state in the javascript application
+- React bootstrap enabling the usage of the Twitter Bootstrap library from React
+
+<Add text why a build tool is needed>
+
+Front-End command line tools
+----------------------------
+
+To build all front-end files files from client to wwwroot we us a build script:
+
+```
+gulp build
+```
+
+Watch for changes in JS files and build
+```
+gulp build-watch
+```
+
+Build only development files
+```
+gulp build-dev
+```
+
+Run all JS tests:
 
 ```  
-{
-  "connectionStrings": {
-  },
-  "amazon": {
-    "region": "eu-west-1",
-    "accessKey": "",
-    "secretKey": ""
-  },
-  "database": {
-    "name": "RealTimeWeb",
-    "instanceClass": "db.m1.small",
-    "backupRetentionPeriod": "0",          //disable backups for now
-    "masterUserName": "RealTimeWebAdmin",
-    "masterUserPassword": ""
-  },
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Verbose",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
-  }
-}
+npm test
 ```
+
+Run all JS tests and watch for changes:
   
-To override a setting you can add it to the command line arguments.
+```  
+npm test-watch
+```
 
-The deployment environment in AW is created. This environment contains:
-- A Postgresql RDS instance
-- A ECS Docker Cluster of two EC2 instances
-- A load balancer for each application
+Run all JS tests and check for coverage:
+  
+```  
+npm test-coverage
+```
 
-Troubleshooting
----------------
-- A client error (InsufficientDBInstanceCapacity) occurred when calling the CreateDBInstance operation: Cannot create a db.t2.micro database instance because there are no availability zones with sufficient capacity for non-VPC and storage type : standard for db.t2.micro. Please try the request again at a later time.
-> use a different DatabaseInstanceClass (see: https://aws.amazon.com/rds/postgresql/
+Gulp scripts
+------------
+Gulp is a node.js task runner that supports many plug-ins. It is used to create build tasks and  The most important plug-ins used are browserify and babelify. Browserify combines all javascripts in a single file. And babelify transpilesw ES6 to JavaScript to enable the usage of new JS features and syntaxes.
+
+Combining browserify and babelify to build the react application:
+
+<add script>
+
+Building the vendor external files. 
+
+<add script>
