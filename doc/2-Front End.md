@@ -2,7 +2,7 @@
 
 Front-end Development
 ---------------------
-Modern web-application consist of large part JavaScript code these days. The tools improved drasticly the laast years.
+Modern web-application consist of large part JavaScript code these days. The tools improved drastically the last years.
 
 A whole range of JavaScript files are available to use these days. You could argue a little too much as pointed out in <technology radar link>. These libraries are managed by npm, the node package manager.
 

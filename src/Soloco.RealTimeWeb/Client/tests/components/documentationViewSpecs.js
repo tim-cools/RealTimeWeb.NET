@@ -4,6 +4,7 @@ import { createStore } from 'redux';
 import dispatcher from '../../src/state/dispatcher';
 import { actions } from '../../src/state/documentation';
 import reducers from '../../src/state/reducers';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import rewire from "rewire";

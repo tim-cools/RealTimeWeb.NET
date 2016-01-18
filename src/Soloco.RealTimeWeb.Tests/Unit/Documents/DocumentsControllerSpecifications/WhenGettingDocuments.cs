@@ -13,14 +13,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Unit.Documents.DocumentsController
             var documentationFiles = new Mock<IDocumentationFiles>();
             var files = new[]
             {
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\0-Overview-2-Monitoring.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\0-Overview-0-Identity.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\0-Overview.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\1-Getting Started.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\2-Front End-0-Asp.Net 5.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\0-Overview-1-Orders.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\2-Front End.md",
-                @"C:\_\Soloco.RealTimeWeb\git\src\Soloco.RealTimeWeb\wwwroot\documentation\3-Environment.md"
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/0-Overview-2-Monitoring.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/0-Overview-0-Identity.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/0-Overview.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/1-Getting Started.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/2-Front End-0-Asp.Net 5.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/0-Overview-1-Orders.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/2-Front End.md",
+                @"C:/_/Soloco.RealTimeWeb/git/src/Soloco.RealTimeWeb/wwwroot/documentation/3-Environment.md"
             };
 
             documentationFiles.Setup(mock => mock.GetFiles()).Returns(files);
