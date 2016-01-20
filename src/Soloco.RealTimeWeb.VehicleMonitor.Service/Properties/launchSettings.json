@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Soloco.RealTimeWeb.Environment": {
+      "commandName": "Soloco.RealTimeWeb.Environment",
+      "commandLineArgs": "--down"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-rc1-final",
+  "description": "RealTimeWeb VehicleMonitor Messages",
+  "authors": [ "Class Library template" ],
+  "tags": [""],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Soloco.RealTimeWeb.VehicleMonitor.Messages"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  },
+  "dependencies": {
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final"
+  }
+}

@@ -49,10 +49,7 @@ namespace Soloco.RealTimeWeb
 
             services.AddIdentity<User, Role>();
             services.AddCaching();
-            services.AddAuthentication(options =>
-            {
-                options.SignInScheme = "ServerCookie";
-            });
+            services.AddAuthentication(options =>  { options.SignInScheme = "ServerCookie"; });
             services.AddMvc();
             services.AddCors(ConfigureCors);
 
@@ -95,17 +92,8 @@ namespace Soloco.RealTimeWeb
             ConfigureLogging(loggerFactory);
             ConfigureWebApp(app, env);
 
-            app.InitalizeDatabase();
-
-            ConfigureBus(app, lifetime);
-        }
-
-        private void ConfigureBus(IApplicationBuilder app, IApplicationLifetime lifetime)
-        {
-            _busHandle = app.InitalizeBus(_configuration);
-            
-            //todo: handler the bus lifetime by the container
-            lifetime.ApplicationStopping.Register(() => { _busHandle.Dispose(); });
+            app.InitalizeDatabase()
+                .InitalizeBus(_configuration, lifetime);
         }
 
         private void ConfigureLogging(ILoggerFactory loggerFactory)
