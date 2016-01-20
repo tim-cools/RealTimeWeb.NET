@@ -1,4 +1,5 @@
 using System;
+using MassTransit;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
@@ -10,7 +11,6 @@ using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;
 using Soloco.RealTimeWeb.Membership;
-using Soloco.RealTimeWeb.Membership.Messages.Infrastructure;
 using Soloco.RealTimeWeb.Membership.Users.Domain;
 
 namespace Soloco.RealTimeWeb
@@ -21,6 +21,7 @@ namespace Soloco.RealTimeWeb
 
         private readonly IApplicationEnvironment _applicationEnvironment;
         private readonly IConfigurationRoot _configuration;
+        private BusHandle _busHandle;
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment)
         {
@@ -84,7 +85,8 @@ namespace Soloco.RealTimeWeb
             return container.GetInstance<IServiceProvider>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime lifetime)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
             if (env == null) throw new ArgumentNullException(nameof(env));
@@ -93,15 +95,17 @@ namespace Soloco.RealTimeWeb
             ConfigureLogging(loggerFactory);
             ConfigureWebApp(app, env);
 
-            InitalizeDatabase(app);
+            app.InitalizeDatabase();
+
+            ConfigureBus(app, lifetime);
         }
 
-        private static void InitalizeDatabase(IApplicationBuilder app)
+        private void ConfigureBus(IApplicationBuilder app, IApplicationLifetime lifetime)
         {
-            var messageDispatcher = app.ApplicationServices.GetMessageDispatcher();
-            var command = new InitializeDatabaseCommand();
-
-            messageDispatcher.Execute(command);
+            _busHandle = app.InitalizeBus(_configuration);
+            
+            //todo: handler the bus lifetime by the container
+            lifetime.ApplicationStopping.Register(() => { _busHandle.Dispose(); });
         }
 
         private void ConfigureLogging(ILoggerFactory loggerFactory)

@@ -36,7 +36,10 @@
     "Soloco.RealTimeWeb.Membership": "1.0.0-rc1-final",
     "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final",
     "Microsoft.IdentityModel.Protocols.OpenIdConnect": "2.0.0-rc1-211161024",
-    "Newtonsoft.Json": "7.0.1"
+    "Newtonsoft.Json": "7.0.1",
+    "MassTransit": "3.1.2",
+    "MassTransit.RabbitMQ": "3.1.2",
+    "Soloco.RealTimeWeb.VehicleMonitor.Messages": "1.0.0-rc1-final"
   },
 
   "commands": {

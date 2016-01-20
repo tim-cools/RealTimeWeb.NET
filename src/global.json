@@ -12,6 +12,7 @@
   ],
   "sdk": {
     "runtime": "clr",
-    "architecture": "x86"
+    "architecture": "x86",
+    "version": "1.0.0-rc1-update1"
   }
 }

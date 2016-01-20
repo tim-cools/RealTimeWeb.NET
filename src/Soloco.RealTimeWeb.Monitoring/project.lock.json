@@ -49,6 +49,34 @@
           "lib/net45/Marten.dll": {}
         }
       },
+      "MassTransit/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "NewId": "2.1.3",
+          "Newtonsoft.Json": "7.0.1"
+        },
+        "compile": {
+          "lib/net45/MassTransit.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MassTransit.dll": {}
+        }
+      },
+      "MassTransit.RabbitMQ/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "MassTransit": "3.1.2",
+          "NewId": "2.1.3",
+          "Newtonsoft.Json": "7.0.1",
+          "RabbitMQ.Client": "3.6.0"
+        },
+        "compile": {
+          "lib/net45/MassTransit.RabbitMqTransport.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MassTransit.RabbitMqTransport.dll": {}
+        }
+      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -1412,6 +1440,15 @@
           "lib/net451/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "NewId/2.1.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NewId.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NewId.dll": {}
+        }
+      },
       "Newtonsoft.Json/7.0.1": {
         "type": "package",
         "compile": {
@@ -1434,6 +1471,15 @@
         },
         "runtime": {
           "lib/net45/Npgsql.dll": {}
+        }
+      },
+      "RabbitMQ.Client/3.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/RabbitMQ.Client.dll": {}
+        },
+        "runtime": {
+          "lib/net45/RabbitMQ.Client.dll": {}
         }
       },
       "Serilog/2.0.0-beta-403": {
@@ -1466,6 +1512,8 @@
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "Marten": "0.5.0.9",
+          "MassTransit": "3.1.2",
+          "MassTransit.RabbitMQ": "3.1.2",
           "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
           "Microsoft.AspNet.WebApi.Core": "5.2.3",
@@ -1766,6 +1814,34 @@
         },
         "runtime": {
           "lib/net45/Marten.dll": {}
+        }
+      },
+      "MassTransit/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "NewId": "2.1.3",
+          "Newtonsoft.Json": "7.0.1"
+        },
+        "compile": {
+          "lib/net45/MassTransit.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MassTransit.dll": {}
+        }
+      },
+      "MassTransit.RabbitMQ/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "MassTransit": "3.1.2",
+          "NewId": "2.1.3",
+          "Newtonsoft.Json": "7.0.1",
+          "RabbitMQ.Client": "3.6.0"
+        },
+        "compile": {
+          "lib/net45/MassTransit.RabbitMqTransport.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MassTransit.RabbitMqTransport.dll": {}
         }
       },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
@@ -3134,6 +3210,15 @@
           "lib/net451/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "NewId/2.1.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NewId.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NewId.dll": {}
+        }
+      },
       "Newtonsoft.Json/7.0.1": {
         "type": "package",
         "compile": {
@@ -3156,6 +3241,15 @@
         },
         "runtime": {
           "lib/net45/Npgsql.dll": {}
+        }
+      },
+      "RabbitMQ.Client/3.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/RabbitMQ.Client.dll": {}
+        },
+        "runtime": {
+          "lib/net45/RabbitMQ.Client.dll": {}
         }
       },
       "Serilog/2.0.0-beta-403": {
@@ -3188,6 +3282,8 @@
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "Marten": "0.5.0.9",
+          "MassTransit": "3.1.2",
+          "MassTransit.RabbitMQ": "3.1.2",
           "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
           "Microsoft.AspNet.WebApi.Core": "5.2.3",
@@ -3488,6 +3584,34 @@
         },
         "runtime": {
           "lib/net45/Marten.dll": {}
+        }
+      },
+      "MassTransit/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "NewId": "2.1.3",
+          "Newtonsoft.Json": "7.0.1"
+        },
+        "compile": {
+          "lib/net45/MassTransit.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MassTransit.dll": {}
+        }
+      },
+      "MassTransit.RabbitMQ/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "MassTransit": "3.1.2",
+          "NewId": "2.1.3",
+          "Newtonsoft.Json": "7.0.1",
+          "RabbitMQ.Client": "3.6.0"
+        },
+        "compile": {
+          "lib/net45/MassTransit.RabbitMqTransport.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MassTransit.RabbitMqTransport.dll": {}
         }
       },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
@@ -4856,6 +4980,15 @@
           "lib/net451/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "NewId/2.1.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NewId.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NewId.dll": {}
+        }
+      },
       "Newtonsoft.Json/7.0.1": {
         "type": "package",
         "compile": {
@@ -4878,6 +5011,15 @@
         },
         "runtime": {
           "lib/net45/Npgsql.dll": {}
+        }
+      },
+      "RabbitMQ.Client/3.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/RabbitMQ.Client.dll": {}
+        },
+        "runtime": {
+          "lib/net45/RabbitMQ.Client.dll": {}
         }
       },
       "Serilog/2.0.0-beta-403": {
@@ -4910,6 +5052,8 @@
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "Marten": "0.5.0.9",
+          "MassTransit": "3.1.2",
+          "MassTransit.RabbitMQ": "3.1.2",
           "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
           "Microsoft.AspNet.WebApi.Core": "5.2.3",
@@ -5205,6 +5349,28 @@
         "Marten.0.5.0.9.nupkg",
         "Marten.0.5.0.9.nupkg.sha512",
         "Marten.nuspec"
+      ]
+    },
+    "MassTransit/3.1.2": {
+      "type": "package",
+      "sha512": "Ru08f9n2iDu32rDmyvFOozV520lVUHcacYvC118myCTZiVVK6RtQ/BB0G1w3Rd6DdmwwLvFm8Om6XmYL8a3Uig==",
+      "files": [
+        "lib/net45/MassTransit.dll",
+        "lib/net45/MassTransit.XML",
+        "MassTransit.3.1.2.nupkg",
+        "MassTransit.3.1.2.nupkg.sha512",
+        "MassTransit.nuspec"
+      ]
+    },
+    "MassTransit.RabbitMQ/3.1.2": {
+      "type": "package",
+      "sha512": "C6KK9CfQvy7SdEMKiTwUNg1gSvBHoJQDi7ek7Bw7Ou+QVrD1a07dtOE7wgSlnTtk8Lx26SnU4mE72UNP3/RKBQ==",
+      "files": [
+        "lib/net45/MassTransit.RabbitMqTransport.dll",
+        "lib/net45/MassTransit.RabbitMqTransport.xml",
+        "MassTransit.RabbitMQ.3.1.2.nupkg",
+        "MassTransit.RabbitMQ.3.1.2.nupkg.sha512",
+        "MassTransit.RabbitMQ.nuspec"
       ]
     },
     "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
@@ -6278,6 +6444,16 @@
         "Microsoft.Net.Http.Headers.nuspec"
       ]
     },
+    "NewId/2.1.3": {
+      "type": "package",
+      "sha512": "SmfFDkw86FLdv4Sth71Pu5B9br7jjBxP5kGT7JuFunIh6HS9AORzUwkdrlgZwY34kl4VgYMmUOusFErBjk1Vrg==",
+      "files": [
+        "lib/net45/NewId.dll",
+        "NewId.2.1.3.nupkg",
+        "NewId.2.1.3.nupkg.sha512",
+        "NewId.nuspec"
+      ]
+    },
     "Newtonsoft.Json/7.0.1": {
       "type": "package",
       "sha512": "q3V4KLetMLnt1gpAVWgtXnHjKs0UG/RalBc29u2ZKxd5t5Ze4JBL5WiiYIklJyK/5CRiIiNwigVQUo0FgbsuWA==",
@@ -6318,6 +6494,20 @@
         "Npgsql.3.1.0-alpha5.nupkg",
         "Npgsql.3.1.0-alpha5.nupkg.sha512",
         "Npgsql.nuspec"
+      ]
+    },
+    "RabbitMQ.Client/3.6.0": {
+      "type": "package",
+      "sha512": "SERgu0RH68f4MkoefaiOHP8BqRfPCAIYMUSe07VT7PXTKWX+yykDAZfiV7J7pF+6rW7/XxYR1LjsCTJG8rod/g==",
+      "files": [
+        "lib/net45/RabbitMQ.Client.dll",
+        "lib/net45/RabbitMQ.Client.xml",
+        "lib/netcore45/RabbitMQ.Client.dll",
+        "lib/netcore45/RabbitMQ.Client.xml",
+        "RabbitMQ.Client.3.6.0.nupkg",
+        "RabbitMQ.Client.3.6.0.nupkg.sha512",
+        "RabbitMQ.Client.nuspec",
+        "RabbitMQ.Client.nuspec~"
       ]
     },
     "Serilog/2.0.0-beta-403": {
