@@ -11,6 +11,7 @@ import { reduxReactRouter } from 'redux-router';
 import { createHistory } from 'history';
 
 import membership from './api/membership';
+import vehicleMonitor from './api/vehicleMonitor'
 import reducers from './state/reducers';
 import dispatcher from './state/dispatcher';
 
@@ -49,4 +50,4 @@ ReactDom.render((
 ), contentElement);
 
 membership.initialize();
-
+vehicleMonitor.initialize();

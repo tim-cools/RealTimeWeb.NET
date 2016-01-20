@@ -1,8 +1,8 @@
 using System;
-using MassTransit;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,7 +21,6 @@ namespace Soloco.RealTimeWeb
 
         private readonly IApplicationEnvironment _applicationEnvironment;
         private readonly IConfigurationRoot _configuration;
-        private BusHandle _busHandle;
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment)
         {
@@ -76,12 +75,11 @@ namespace Soloco.RealTimeWeb
                 configuration.AddRegistry<CommonRegistry>();
                 configuration.AddRegistry<MembershipRegistry>();
             });
-
+            
             container.Populate(services);
 
             return container.GetInstance<IServiceProvider>();
         }
-
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime lifetime)
         {
@@ -90,10 +88,11 @@ namespace Soloco.RealTimeWeb
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
             ConfigureLogging(loggerFactory);
-            ConfigureWebApp(app, env);
 
             app.InitalizeDatabase()
-                .InitalizeBus(_configuration, lifetime);
+               .InitalizeBus(_configuration, lifetime);
+
+            ConfigureWebApp(app, env);
         }
 
         private void ConfigureLogging(ILoggerFactory loggerFactory)
@@ -116,11 +115,12 @@ namespace Soloco.RealTimeWeb
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
                .UseStaticFiles()
+               .UseSignalR()
                .ConfigureAuthentication(_configuration)
                .UseCors(defaultName)
                .UseMvc(routes => { routes.MapRoute(name: defaultName, template: "{controller=Home}/{action=Index}/{id?}"); });
         }
-
+        
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

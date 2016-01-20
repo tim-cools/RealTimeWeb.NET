@@ -1,5 +1,4 @@
 ﻿using System;
-using MassTransit.RabbitMqTransport;
 using Microsoft.AspNet.Builder;
 using Soloco.RealTimeWeb.Membership.Messages.Infrastructure;
 

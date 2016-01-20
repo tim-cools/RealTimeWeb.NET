@@ -4,6 +4,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common.MessageBus;
+using Soloco.RealTimeWeb.Infrastructure.VehicleMonitor;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
@@ -18,7 +19,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             {
                 busConfigurator.ReceiveEndpoint("Soloco.RealTimeWeb", endpointConfiguration =>
                 {
-                    endpointConfiguration.Consumer(() => new VehicleDrivingConsumer());
+                    endpointConfiguration.Consumer(() => new VehicleMonitoConsumer());
                 });
             });
 
