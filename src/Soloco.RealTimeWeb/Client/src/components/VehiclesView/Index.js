@@ -23,7 +23,7 @@ export class View extends Component {
         if (this.state.icons[id]) {
             return this.state.icons[id];
         }
-        const icon = '~/img/marker_' + Object.keys(this.state.icons).length + '.png';
+        const icon = '/img/marker_' + Object.keys(this.state.icons).length + '.png';
         this.state.icons[id] = icon;
         return icon;
     }
@@ -31,7 +31,7 @@ export class View extends Component {
     render() {
 
         var list = this.props.vehicles.map((vehicle, index) => (
-            <div key={vehicle.id}><img src={this.vehicleIcon(vehicle.id)} /> { vehicle.name }: { vehicle.state } </div>
+            <div key={vehicle.id}><img src={ this.vehicleIcon(vehicle.id) } /> { vehicle.name }: { vehicle.state } </div>
         ));
 
         return (
@@ -52,7 +52,7 @@ export class View extends Component {
                                                     position={{ lat: vehicle.latitude, lng: vehicle.longitude }}
                                                     key={ vehicle.id }
                                                     title={ vehicle.name}
-                                                    
+                                                    icon={ this.vehicleIcon(vehicle.id) }
                                                     />
                                                   );
                                         })}

@@ -45,7 +45,7 @@ namespace Soloco.RealTimeWeb.Environment
 
             _vehicleSimulations = CreateSimulators(6);
 
-            _timer = new Timer(1000) { AutoReset = true };
+            _timer = new Timer(100) { AutoReset = true };
             _timer.Elapsed += UpdateSimulators;
         }
 
