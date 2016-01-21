@@ -3,6 +3,8 @@ using System;
 using System.Threading;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
+using Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain;
+using Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Services;
 
 namespace Soloco.RealTimeWeb.Environment
 {
@@ -16,7 +18,7 @@ namespace Soloco.RealTimeWeb.Environment
             var bus = CreateBus(configuration);
             var busHandle = bus.Start();
 
-            var service = new SimulateVehicleDataService(bus);
+            var service = new SimulateVehicleDataService(bus, new RoutePlanner());
             StopOnCancelKeyPress(service);
 
             try

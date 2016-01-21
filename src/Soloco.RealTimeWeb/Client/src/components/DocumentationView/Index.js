@@ -4,7 +4,7 @@ import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap
 import Markdown from 'react-remarkable';
 import Navigation from './Navigation';
 
-import documentation from '../../api/documentation'
+import documentation from '../../services/documentation'
 
 export class View extends Component {
     

@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Navbar, NavbarBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 import SubNav from './SubNav'
-import navigate from './../../api/navigate';
+import navigate from './../../services/navigate';
 
 class Navigation extends Component {
 

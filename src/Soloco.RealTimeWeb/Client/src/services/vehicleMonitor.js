@@ -3,6 +3,7 @@ import { actions as userStateActions } from '../state/user';
 const proxy = $.connection.vehicleMonitor;
 
 function initialize() {
+
     proxy.client.vehicleDriving = function(data) {
         console.log(data);
     };

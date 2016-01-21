@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Input, Button, Panel, Grid, Row, Col, Jumbotron } from 'react-bootstrap';
 
-import membership from '../../api/membership'
+import membership from '../../services/membership'
 
 class LogonPage extends Component {
     

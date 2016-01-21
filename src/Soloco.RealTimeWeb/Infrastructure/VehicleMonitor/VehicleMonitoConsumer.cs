@@ -12,7 +12,9 @@ namespace Soloco.RealTimeWeb.Infrastructure.VehicleMonitor
         {
             var clientEvent = new
             {
-                id = context.Message.Id
+                id = context.Message.VehicleId,
+                origin = context.Message.Origin,
+                destination = context.Message.Destination
             };
 
             var clients = GetHubClients();

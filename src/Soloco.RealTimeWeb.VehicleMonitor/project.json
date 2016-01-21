@@ -2,7 +2,7 @@
   "version": "1.0.0-rc1-final",
   "description": "RealTimeWeb VehicleMonitor",
   "authors": [ "Class Library template" ],
-  "tags": [""],
+  "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
   "tooling": {
@@ -20,5 +20,10 @@
     "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
     "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final",
-    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final"  }
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc1-final",
+    "Automatonymous": "3.1.0",
+    "MassTransit.Automatonymous": "3.1.2",
+    "Soloco.RealTimeWeb.VehicleMonitor.Messages": "1.0.0-rc1-final",
+    "GoogleMapsApi": "0.42.0" 
+  }
 }
