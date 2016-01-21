@@ -62,10 +62,10 @@ class LogonPage extends Component {
                         </Button>
                         {loader}
                         {errors}
-                        <Button bsStyle="facebook" bsSize="large" className="btn-block" onClick={this.facebook.bind(this)}>
+                        <Button bsSize="large" className="btn-block btn-facebook" onClick={this.facebook.bind(this)}>
                             <i className="fa fa-facebook"></i> | Connect with Facebook
                         </Button>
-                        <Button bsStyle="google-plus" bsSize="large" className="btn-block" onClick={this.google.bind(this)}>
+                        <Button bsSize="large" className="btn-block btn-google-plus" onClick={this.google.bind(this)}>
                             <i className="fa fa-google-plus"></i> | Connect with Google+
                         </Button> 
                     </Panel>

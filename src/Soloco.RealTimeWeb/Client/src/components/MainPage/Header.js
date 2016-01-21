@@ -12,14 +12,14 @@ class Header extends Component {
 
         var items = userAuthenticated
             ? [ (
-                <Nav onSelect={(key, href) =>navigate.to(href)}>
+                <Nav key="left" onSelect={(key, href) => navigate.to(href)}>
                     <NavItem href='/home'>Home</NavItem>
                     <NavItem href='/documentation'>Documentation</NavItem>
                     <NavItem href='/vehicles'>Vehicles</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
-                <Nav pullRight={true} onSelect={(key, href) =>navigate.to(href)}>
+                <Nav key="right" pullRight={true} onSelect={(key, href) =>navigate.to(href)}>
                     <NavItem href='/profile'>{ userName }</NavItem>
                     <NavItem onSelect={() => membership.logOff()}>
                         Log Off
@@ -27,12 +27,12 @@ class Header extends Component {
                 </Nav>
                 ) ]
             :  [ (
-                <Nav onSelect={(key, href) => navigate.to(href)}>
+                <Nav key="left" onSelect={(key, href) => navigate.to(href)}>
                     <NavItem href='/documentation'>Documentation</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
-                <Nav pullRight={true}>
+                <Nav key="right" pullRight={true}>
                     <NavItem onSelect={() => navigate.to('/register')}>
                     Join
                     </NavItem>

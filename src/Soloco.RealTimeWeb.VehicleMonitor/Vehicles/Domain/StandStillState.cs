@@ -10,16 +10,17 @@ namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain
 
         public StandStillState(VehicleSimulationContext context)
         {
-            Console.WriteLine("StandStill:" + context.VehicleId);
-
             _context = context;
             _pauseOver = DateTime.Now.AddSeconds(context.Random.Next(20));
+
+            Console.WriteLine("StandStill:" + context.VehicleId + " (Wait until " + _pauseOver + ")");
             _context.PublishEvent(new VehicleStopped(context.VehicleId, context.Location.Name, context.Location.Position.Latitude, context.Location.Position.Longitude));
         }
 
         public override VehicleState Update()
         {
-            if (_pauseOver >= DateTime.Now)
+            Console.WriteLine("Update StandStill (Wait until " + _pauseOver + ") "  + DateTime.Now);
+            if (DateTime.Now >= _pauseOver)
             {
                 return new PlanningState(_context);
             }
