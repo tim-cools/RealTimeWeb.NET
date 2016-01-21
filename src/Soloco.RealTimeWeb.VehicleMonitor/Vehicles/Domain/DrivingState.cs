@@ -14,7 +14,7 @@ namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain
             _context = context;
 
             var route = _context.Route;
-            _context.PublishEvent(new VehicleDriving(_context.VehicleId, route.Origin.Name, route.Destination.Name));
+            _context.PublishEvent(new VehicleDriving(_context.VehicleId, _context.Name, route.Origin.Name, route.Destination.Name));
         }
 
         public override VehicleState Update()
@@ -24,7 +24,7 @@ namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain
 
             if (position != null)
             {
-                _context.PublishEvent(new VehicleMoved(_context.VehicleId, position.Latitude, position.Longitude));
+                _context.PublishEvent(new VehicleMoved(_context.VehicleId, _context.Name, position.Latitude, position.Longitude));
             }
 
             if (route.IsFinishd())

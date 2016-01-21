@@ -5,15 +5,15 @@ const proxy = $.connection.vehicleMonitor;
 function initialize() {
 
     proxy.client.vehicleDriving = function(data) {
-        vehiclesStateActions.driving(data.id, data.origin, data.destination);
+        vehiclesStateActions.driving(data.id, data.name, data.origin, data.destination);
     };
 
     proxy.client.vehicleMoved = function(data) {
-        vehiclesStateActions.moved(data.id, data.latitude, data.longitude);
+        vehiclesStateActions.moved(data.id, data.name, data.latitude, data.longitude);
     };
 
     proxy.client.vehicleStopped = function(data) {
-        vehiclesStateActions.stopped(data.id, data.location, data.latitude, data.longitude);
+        vehiclesStateActions.stopped(data.id, data.name, data.location, data.latitude, data.longitude);
     };
 
 }

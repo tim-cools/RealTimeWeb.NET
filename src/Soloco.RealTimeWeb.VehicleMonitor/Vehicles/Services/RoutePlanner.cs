@@ -34,7 +34,8 @@ namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Services
             var request = new DirectionsRequest
             {
                 Origin = origin.Name,
-                Destination = destination.Name
+                Destination = destination.Name,
+                TravelMode = TravelMode.Driving
             };
 
             return await CallGoogleService(origin, request, destination);
@@ -66,7 +67,10 @@ namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Services
         {
             var points = result.Routes.First()
                 .Legs.SelectMany(leg => leg.Steps)
-                .Select(step => new Position(step.EndLocation.Latitude, step.EndLocation.Longitude))
+                .Select(step => new RouteLeg(
+                    new Position(step.StartLocation.Latitude, step.StartLocation.Longitude),
+                    new Position(step.EndLocation.Latitude, step.EndLocation.Longitude),
+                    step.Distance.Value))
                 .ToArray();
 
             return new Route(origin, destination, points);

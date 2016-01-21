@@ -13,6 +13,7 @@ namespace Soloco.RealTimeWeb.Infrastructure.VehicleMonitor
             var clientEvent = new
             {
                 id = context.Message.VehicleId,
+                name = context.Message.VehicleName,
                 origin = context.Message.Origin,
                 destination = context.Message.Destination
             };
@@ -28,6 +29,7 @@ namespace Soloco.RealTimeWeb.Infrastructure.VehicleMonitor
             var clientEvent = new
             {
                 id = context.Message.VehicleId,
+                name = context.Message.VehicleName,
                 latitude = context.Message.Latitude,
                 longitude = context.Message.Longitude
             };
@@ -43,6 +45,7 @@ namespace Soloco.RealTimeWeb.Infrastructure.VehicleMonitor
             var clientEvent = new
             {
                 id = context.Message.VehicleId,
+                name = context.Message.VehicleName,
                 location = context.Message.Location,
                 latitude = context.Message.Latitude,
                 longitude = context.Message.Longitude

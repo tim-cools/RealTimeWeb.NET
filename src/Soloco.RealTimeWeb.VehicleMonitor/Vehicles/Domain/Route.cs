@@ -1,33 +1,44 @@
 using System;
 using System.Collections.Generic;
+using Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Services;
 
 namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain
 {
     public class Route
     {
-        private readonly Position[] _points;
+        private readonly RouteLeg[] _legs;
         private int _index = 0;
 
         public Location Origin { get; }
         public Location Destination { get; }
 
-        public Route(Location origin, Location destination, Position[] points)
+        public Route(Location origin, Location destination, RouteLeg[] legs)
         {
-            _points = points;
+            _legs = legs;
             Origin = origin;
             Destination = destination;
         }
 
         public Position NextPosition()
         {
-            return _index < _points.Length 
-                ? _points[_index++] 
-                : null;
+
+            if (_index == _legs.Length)
+            {
+                return null;
+            }
+
+            var routeLeg = _legs[_index];
+            var position = routeLeg.NextPosition();
+            if (routeLeg.IsFinishd())
+            {
+                _index ++;
+            }
+            return position;
         }
 
         public bool IsFinishd()
         {
-            return _index == _points.Length;
+            return _index == _legs.Length;
         }
     }
 }

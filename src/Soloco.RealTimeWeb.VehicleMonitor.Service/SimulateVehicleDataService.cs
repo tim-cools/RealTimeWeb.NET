@@ -8,6 +8,28 @@ namespace Soloco.RealTimeWeb.Environment
 {
     internal class SimulateVehicleDataService : IDisposable
     {
+        private readonly string[] _names = {
+            "Yer",
+            "Dwana",
+            "Jonas",
+            "Aliza",
+            "Hallie",
+            "Oneida",
+            "Fletcher",
+            "Moshe",
+            "Maryrose",
+            "Leona",
+            "Torri",
+            "Concetta",
+            "Archie",
+            "Dulcie",
+            "Jarrett",
+            "Princess",
+            "Joanne",
+            "Maricela",
+            "Gwyneth",
+            "Jennell"};
+
         private readonly IBusControl _bus;
         private readonly Timer _timer;
         private readonly VehicleSimulation[] _vehicleSimulations;
@@ -32,7 +54,7 @@ namespace Soloco.RealTimeWeb.Environment
             var result = new VehicleSimulation[numberOf];
             for (var i = 0; i < numberOf; i++)
             {
-                result[i] = new VehicleSimulation(_bus, Guid.NewGuid(), _routePlanner);
+                result[i] = new VehicleSimulation(_bus, Guid.NewGuid(), _names[i], _routePlanner);
             }
             return result;
         }

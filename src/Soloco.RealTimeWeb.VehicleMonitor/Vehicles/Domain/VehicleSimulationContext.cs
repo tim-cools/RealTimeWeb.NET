@@ -13,18 +13,20 @@ namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain
 
         public Random Random { get; }
         public Guid VehicleId { get; }
+        public string Name { get; }
 
         public Route Route => _route;
 
         public Location Location { get; private set; }
 
-        public VehicleSimulationContext(IRoutePlanner routePlanner, Guid vehicleId, IBus bus)
+        public VehicleSimulationContext(IRoutePlanner routePlanner, Guid vehicleId, string name, IBus bus)
         {
             _routePlanner = routePlanner;
             _bus = bus;
 
             Random = new Random();
             VehicleId = vehicleId;
+            Name = name;
             _bus = bus;
             Location = routePlanner.RandomLocation();
         }

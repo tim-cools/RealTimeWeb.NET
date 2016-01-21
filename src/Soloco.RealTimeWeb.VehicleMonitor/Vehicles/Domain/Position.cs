@@ -5,7 +5,7 @@
         public double Longitude { get; }
         public double Latitude { get; }
 
-        public Position(double longitude, double latitude)
+        public Position(double latitude, double longitude)
         {
             Longitude = longitude;
             Latitude = latitude;

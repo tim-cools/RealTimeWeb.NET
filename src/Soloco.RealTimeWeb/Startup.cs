@@ -3,6 +3,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Cors.Infrastructure;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.SignalR;
+using Microsoft.Data.Entity.ChangeTracking.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -118,7 +119,13 @@ namespace Soloco.RealTimeWeb
                .UseSignalR()
                .ConfigureAuthentication(_configuration)
                .UseCors(defaultName)
-               .UseMvc(routes => { routes.MapRoute(name: defaultName, template: "{controller=Home}/{action=Index}/{id?}"); });
+               .UseMvc(routes =>
+               {
+                   routes.MapRoute(name: defaultName, template: "{controller=Home}/{action=Index}/{id?}");
+                   routes.MapRoute(name: "vehicles", template: "vehicles", defaults: 
+                       new { controller = "Home", action = "Index"}
+                       );
+               });
         }
         
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
