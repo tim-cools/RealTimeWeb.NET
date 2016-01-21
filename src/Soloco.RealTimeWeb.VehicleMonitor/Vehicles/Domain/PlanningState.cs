@@ -1,5 +1,4 @@
 using System;
-using Soloco.RealTimeWeb.VehicleMonitor.Messages.Vehicle;
 
 namespace Soloco.RealTimeWeb.VehicleMonitor.Vehicles.Domain
 {
