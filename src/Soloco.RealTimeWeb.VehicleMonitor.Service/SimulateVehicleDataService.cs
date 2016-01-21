@@ -43,7 +43,7 @@ namespace Soloco.RealTimeWeb.Environment
             _bus = bus;
             _routePlanner = routePlanner;
 
-            _vehicleSimulations = CreateSimulators(4);
+            _vehicleSimulations = CreateSimulators(6);
 
             _timer = new Timer(1000) { AutoReset = true };
             _timer.Elapsed += UpdateSimulators;
