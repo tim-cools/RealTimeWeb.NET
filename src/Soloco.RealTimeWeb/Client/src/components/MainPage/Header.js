@@ -15,6 +15,7 @@ class Header extends Component {
                 <Nav onSelect={(key, href) =>navigate.to(href)}>
                     <NavItem href='/home'>Home</NavItem>
                     <NavItem href='/documentation'>Documentation</NavItem>
+                    <NavItem href='/vehicles'>Vehicles</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (
@@ -43,7 +44,7 @@ class Header extends Component {
 
         return (
             <Navbar>
-                <NavbarBrand>Soloco - Real Time Web .NET</NavbarBrand>
+                <NavbarBrand>Real Time Web .NET</NavbarBrand>
                 {items}
             </Navbar>
         );

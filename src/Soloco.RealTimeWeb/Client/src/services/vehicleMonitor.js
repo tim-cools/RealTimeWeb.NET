@@ -8,6 +8,14 @@ function initialize() {
         console.log(data);
     };
 
+    proxy.client.vehicleMoved = function(data) {
+        console.log(data);
+    };
+
+    proxy.client.vehicleStopped = function(data) {
+        console.log(data);
+    };
+
     $.connection.hub.start()
         .done(function() { console.log('VehicleMonitor hub connected, connection ID=' + $.connection.hub.id); })
         .fail(function() { console.log('Could not Connect!'); });

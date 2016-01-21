@@ -6,7 +6,7 @@ using Soloco.RealTimeWeb.VehicleMonitor.Messages.Vehicle;
 
 namespace Soloco.RealTimeWeb.Infrastructure.VehicleMonitor
 {
-    public class VehicleMonitoConsumer : IConsumer<VehicleDriving>
+    public class VehicleMonitoConsumer : IConsumer<VehicleDriving>, IConsumer<VehicleMoved>, IConsumer<VehicleStopped>
     {
         public Task Consume(ConsumeContext<VehicleDriving> context)
         {
@@ -23,9 +23,40 @@ namespace Soloco.RealTimeWeb.Infrastructure.VehicleMonitor
             return Task.FromResult(true);
         }
 
+        public Task Consume(ConsumeContext<VehicleMoved> context)
+        {
+            var clientEvent = new
+            {
+                id = context.Message.VehicleId,
+                latitude = context.Message.Latitude,
+                longitude = context.Message.Longitude
+            };
+
+            var clients = GetHubClients();
+            clients.All.vehicleMoved(clientEvent);
+
+            return Task.FromResult(true);
+        }
+
+        public Task Consume(ConsumeContext<VehicleStopped> context)
+        {
+            var clientEvent = new
+            {
+                id = context.Message.VehicleId,
+                location = context.Message.Location,
+                latitude = context.Message.Latitude,
+                longitude = context.Message.Longitude
+            };
+
+            var clients = GetHubClients();
+            clients.All.vehicleStopped(clientEvent);
+
+            return Task.FromResult(true);
+        }
+
         private static IHubConnectionContext<dynamic> GetHubClients()
         {
-            //todo use IoC for this, SignalR is currently on hold (https://github.com/aspnet/Home/wiki/Roadmap#future-work)
+            //todo use IoC for this, SignalR 3 is currently on hold (https://github.com/aspnet/Home/wiki/Roadmap#future-work)
             var _connectionManager = GlobalHost.ConnectionManager;
             return _connectionManager.GetHubContext<VehicleMonitorHub>().Clients;
         }
