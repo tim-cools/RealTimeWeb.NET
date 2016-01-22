@@ -48,7 +48,7 @@ export function mapStateToProps(state, props) {
     const documentation = state.documentation;
     const id = props && props.routeParams ? props.routeParams.id : null;
     return {
-        headers: documentation.headers ? documentation.headers : null,
+        headers: documentation.headers ? documentation.headers : [],
         id: id,
         document: id && documentation.documents && documentation.documents[id]
             ?  documentation.documents[id]

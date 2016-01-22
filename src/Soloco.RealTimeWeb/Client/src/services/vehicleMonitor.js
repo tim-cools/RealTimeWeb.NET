@@ -15,7 +15,6 @@ function initialize() {
     proxy.client.vehicleStopped = function(data) {
         vehiclesStateActions.stopped(data.id, data.name, data.location, data.latitude, data.longitude);
     };
-
 }
 
 function startListening() {
@@ -25,9 +24,7 @@ function startListening() {
 }
 
 function stopListening() {
-    $.connection.hub.stop()
-        .done(function() { console.log('VehicleMonitor hub stopped'); })
-        .fail(function() { console.log('Could not Connect!'); });
+    $.connection.hub.stop();
 }
 
 export default {

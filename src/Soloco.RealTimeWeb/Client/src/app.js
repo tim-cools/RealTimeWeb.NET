@@ -29,11 +29,6 @@ const store = storeFactory(reducers);
 dispatcher.set(store.dispatch);
 
 let contentElement = document.getElementById('application-content');
-var elements = [ 
-    <Provider store={store}>
-        <Router />
-    </Provider>    
-];
 
 //if (window.location.hostname === 'localhost'){
 //    elements.push(
@@ -45,7 +40,9 @@ var elements = [
 
 ReactDom.render((
     <div>
-        {elements}
+        <Provider store={store}>
+            <Router />
+        </Provider>    
     </div>
 ), contentElement);
 

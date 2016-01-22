@@ -72,18 +72,20 @@ export class View extends Component {
     }
 }
 
-View.propTypes = {
-    vehicles: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        state: PropTypes.string.isRequired,
-        latitude: PropTypes.number,
-        longitude: PropTypes.number
-    }))
-};
+//View.propTypes = {
+//    vehicles: PropTypes.arrayOf(PropTypes.shape({
+//        id: PropTypes.string.isRequired,
+//        name: PropTypes.string.isRequired,
+//        state: PropTypes.string.isRequired,
+//        latitude: PropTypes.number,
+//        longitude: PropTypes.number
+//    }))
+//};
 
 export function mapStateToProps(state, props) {
-    let vehicles = Object.keys(state.vehicles).map(function (key) { return state.vehicles[key] });
+    let vehicles = Object.keys(state.vehicles).map(key => {
+        return { state: '', ...state.vehicles[key] }
+    });
     return {
         vehicles: vehicles
     };
