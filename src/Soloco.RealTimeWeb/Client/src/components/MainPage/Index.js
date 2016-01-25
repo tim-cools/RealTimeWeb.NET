@@ -28,11 +28,11 @@ MainPage.propTypes = {
     name: PropTypes.string
 };
 
-function select(state) {
+function mapStateToProps(state) {
     return {
         loggedOn: state.user.status === userStatus.authenticated,
         name: state.user.name
     };
 }
 
-export default connect(select)(MainPage);
+export default connect(mapStateToProps)(MainPage);

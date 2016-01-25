@@ -12,7 +12,7 @@ class Footer extends Component {
         return (
             <div>
                 <div style={separatorStyle}/>
-                <div>© 2015 Soloco</div>
+                <div>© 2015-2016 Soloco</div>
             </div>
         );
     }

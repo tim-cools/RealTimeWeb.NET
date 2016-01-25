@@ -40,10 +40,6 @@ var config = {
     documentation: [
         '../../doc/**/*.*'
     ],
-    styles: {
-        source: ['Client/src/**/*.less'],
-        destination: 'app.css'
-    },
     tools: './Client/tools/**/*.js'
 };
 
@@ -87,13 +83,6 @@ gulp.task('documentation', function () {
         .pipe(gulp.dest(path.join(config.target, 'documentation')));
 });
 
-gulp.task('stylesheets', function compile() {
-    return gulp.src(config.styles.source)
-        .pipe(concat(config.styles.destination))
-        .pipe(cssnano())
-        .pipe(gulp.dest(config.target));
-});
-
 gulp.task('watch-dev', function() {
     gulp.watch(config.tools, ['build']);
     gulp.watch(config.appWatch, ['application']);
@@ -102,6 +91,6 @@ gulp.task('watch-dev', function() {
     gulp.watch(config.styles.source, ['styles']);
 });
 
-gulp.task('build', gulpSequence('clean', 'application', 'vendor', 'statics', 'documentation', 'stylesheets'));
-gulp.task('build-dev', gulpSequence('application', 'statics', 'stylesheets'));
-gulp.task('default', gulpSequence('statics', 'stylesheets', 'watch'));
+gulp.task('build', gulpSequence('clean', 'application', 'vendor', 'statics', 'documentation'));
+gulp.task('build-dev', gulpSequence('application', 'statics'));
+gulp.task('default', gulpSequence('statics', 'watch'));
