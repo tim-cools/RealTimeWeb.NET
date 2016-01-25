@@ -32,7 +32,7 @@ describe('Components', () => {
                assertProps({
                    document: null,
                    id: null,
-                   headers: null
+                   headers: []
                 });
             });
 
@@ -50,7 +50,7 @@ describe('Components', () => {
                 assertProps({
                     document: { content:'c'},
                     id: '1',
-                    headers: null
+                    headers: []
                 }, '1');
             });
 
@@ -59,7 +59,7 @@ describe('Components', () => {
                 assertProps({
                     document: 'c',
                     id: '1',
-                    headers: null
+                    headers: []
                 }, '1');
             });
         });

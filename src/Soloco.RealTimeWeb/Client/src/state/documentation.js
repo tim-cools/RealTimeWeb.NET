@@ -53,7 +53,7 @@ export function reducer(state = {}, action) {
             };
 
         case actionsDefinitions.DOCUMENT_LOADED:
-            var documents = { ...state.documents };
+            var documents = state.documents ? { ...state.documents } : {};
             documents[action.id] = action.document;
             return {
                 headers: state.headers,
@@ -61,7 +61,7 @@ export function reducer(state = {}, action) {
             };
 
         case actionsDefinitions.DOCUMENT_ERROR:
-            var documents = { ...state.documents };
+            var documents = state.documents ? { ...state.documents } : {};
             documents[action.id] = action.error;
             return {
                 headers: state.headers,
