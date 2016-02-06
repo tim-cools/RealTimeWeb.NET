@@ -90,8 +90,11 @@ namespace Soloco.RealTimeWeb
 
             ConfigureLogging(loggerFactory);
 
-            app.InitalizeDatabase()
-               .InitalizeBus(_configuration, lifetime);
+            if (_configuration.GeneralConfigured())
+            {
+                app.InitalizeDatabase()
+                    .InitalizeBus(_configuration, lifetime);
+            }
 
             ConfigureWebApp(app, env);
         }

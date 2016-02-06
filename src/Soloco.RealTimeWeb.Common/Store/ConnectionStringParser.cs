@@ -18,12 +18,8 @@ namespace Soloco.RealTimeWeb.Common.Store
 
         public string GetString(string name = "documentStore")
         {
-            var connectionString = _configuration[$"connectionStrings:{name}"];
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                throw new InvalidOperationException($"ConnectionString '{name}' not found in application configuration.");
-            }
-            return connectionString;
+            var connectionString = _configuration.ConnectionString(name);
+            return string.IsNullOrWhiteSpace(connectionString) ? null : connectionString;
         }
         
         public ConnectionString Parse(string name = "documentStore")

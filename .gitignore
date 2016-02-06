@@ -173,3 +173,4 @@ results
 
 # aspnet 5 config files
 appsettings.private.json
+appsettings.*.local.json

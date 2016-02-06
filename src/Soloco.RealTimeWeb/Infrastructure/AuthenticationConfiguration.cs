@@ -15,7 +15,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 
-            app.UseIdentity()
+            app 
                 .UseWhen(IsApi, ApiAuthentication(configuration))
                 .UseWhen(IsWeb, WebAuthentication)
                 .ConfigureWhen(configuration.AuthenticationFacebookConfigured(), FacebookAuthentication(configuration))
@@ -25,9 +25,9 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return app;
         }
 
-        private static bool IsWeb(HttpContext context)
+        private static bool IsApi(HttpContext context)
         {
-            return !IsApi(context);
+            return context.Request.Path.StartsWithSegments(new PathString("/api"));
         }
 
         private static Action<IApplicationBuilder> ApiAuthentication(IConfiguration configuration)
@@ -43,9 +43,9 @@ namespace Soloco.RealTimeWeb.Infrastructure
             });
         }
 
-        private static bool IsApi(HttpContext context)
+        private static bool IsWeb(HttpContext context)
         {
-            return context.Request.Path.StartsWithSegments(new PathString("/api"));
+            return !IsApi(context);
         }
 
         private static void WebAuthentication(IApplicationBuilder branch)
@@ -89,7 +89,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             options.AuthorizationEndpointPath = "/account/authorize";
             options.TokenEndpointPath = "/token";
 
-            options.AccessTokenLifetime = TimeSpan.FromMinutes(1);
+            options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
             options.RefreshTokenLifetime = TimeSpan.FromHours(24);
         }
     }

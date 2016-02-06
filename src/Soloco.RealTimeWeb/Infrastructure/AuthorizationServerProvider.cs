@@ -104,7 +104,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
             identity.AddClaim(ClaimTypes.Name, result.UserName, "id_token token");
             identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), "id_token token");
 
-            var properties = new AuthenticationProperties(); // new Dictionary<string, string> { { "as:client_id", context.ClientId ?? string.Empty } });
+            var properties = new AuthenticationProperties();
             var principal = new ClaimsPrincipal(new[] { identity });
 
             return CreateAuthenticationTicket(principal, properties, context.Options, context);

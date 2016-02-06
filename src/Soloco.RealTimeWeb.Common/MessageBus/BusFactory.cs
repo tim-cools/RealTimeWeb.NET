@@ -11,10 +11,17 @@ namespace Soloco.RealTimeWeb.Common.MessageBus
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
-            var host = new Uri(configuration["rabbitMq:hostName"]);
+            var hostName = configuration["rabbitMq:hostName"];
             var userName = configuration["rabbitMq:userName"];
             var password = configuration["rabbitMq:password"];
 
+            if (string.IsNullOrWhiteSpace(hostName) || string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
+            {
+                return null;
+            }
+
+            var host = new Uri(hostName);
+            
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfigurator =>
             {
                 busConfigurator.Host(host, hostConfigurator =>

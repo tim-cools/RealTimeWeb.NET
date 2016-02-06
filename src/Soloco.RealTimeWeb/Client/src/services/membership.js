@@ -104,6 +104,7 @@ function externalProviderCompleted(fragment) {
     const data = 'grant_type=authorization_code&code=' + fragment.code 
         + '&client_id=' + api.clientId 
         + '&scope=offline_access' 
+        + '&scope=offline_access' 
         + '&redirect_uri=' + redirectUri;
 
     api.post('token', data, handleResponse, handleError);

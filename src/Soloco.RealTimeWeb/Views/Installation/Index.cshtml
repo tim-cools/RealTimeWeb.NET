@@ -33,24 +33,48 @@
         {
             <p>Enter here the configuration needed to run the application locally.</p>
             <form action="" method="post">
+                <h2>Connection Strings</h2>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConnectionString)
+                    @Html.EditorFor(model => model.ConnectionString, new { htmlAttributes = new { @class = "form-control", placeholder = "Normal" } })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConnectionStringAdmin)
+                    @Html.EditorFor(model => model.ConnectionStringAdmin, new {htmlAttributes = new {@class = "form-control", placeholder = "Administrator"}})
+                </div>
+
+                <h2>Rabbit Mq</h2>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RabbitMqHostName)
+                    @Html.EditorFor(model => model.RabbitMqHostName, new { htmlAttributes = new { @class = "form-control", placeholder = "Host Name" } })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RabbitMqUserName)
+                    @Html.EditorFor(model => model.RabbitMqUserName, new { htmlAttributes = new { @class = "form-control", placeholder = "User Name" } })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RabbitMqPassword)
+                    @Html.EditorFor(model => model.RabbitMqPassword, new {htmlAttributes = new {@class = "form-control", placeholder = "Password"}})
+                </div>
+
                 <h2>Google Authentication</h2>
                 <div class="form-group">
-                    <label for="googleClientId">Client ID</label>
-                    <input type="text" class="form-control" id="googleClientId" name="googleClientId" placeholder="Google Client ID">
+                    @Html.LabelFor(model => model.GoogleClientId)
+                    @Html.EditorFor(model => model.GoogleClientId, new { htmlAttributes = new { @class = "form-control", placeholder = "Client ID" } })
                 </div>
                 <div class="form-group">
-                    <label for="googleClientSecret">Client Secret</label>
-                    <input type="text" class="form-control" id="googleClientSecret" name="googleClientSecret" placeholder="Google Client Secret">
-                    <p class="help-block">Add link to instructions.</p>
+                    @Html.LabelFor(model => model.GoogleClientSecret)
+                    @Html.EditorFor(model => model.GoogleClientSecret, new { htmlAttributes = new { @class = "form-control", placeholder = "Client Secret" } })
                 </div>
+
                 <h2>Facebook Authentication</h2>
                 <div class="form-group">
-                    <label for="facebookAppId">App ID</label>
-                    <input type="text" class="form-control" id="facebookAppId" name="facebookAppId" placeholder="Facebook App ID">
+                    @Html.LabelFor(model => model.FacebookAppId)
+                    @Html.EditorFor(model => model.FacebookAppId, new { htmlAttributes = new { @class = "form-control", placeholder = "App ID" }})
                 </div>
                 <div class="form-group">
-                    <label for="facebookAppSecret">App Secret</label>
-                    <input type="text" class="form-control" id="facebookAppSecret" name="facebookAppSecret" placeholder="Facebook App Secret">
+                    @Html.LabelFor(model => model.FacebookAppSecret)
+                    @Html.EditorFor(model => model.FacebookAppSecret, new { htmlAttributes = new { @class = "form-control", placeholder = "App Secret" }})
                     <p class="help-block">Add link to instructions.</p>
                 </div>
                 <button type="submit" class="btn btn-default">Save settings</button>
@@ -60,11 +84,18 @@
         {
             <p>
                 The configuration file <strong>appsettings.private.json</strong> is created in web folder.
-                This file is .ignored by git. If you need to change the configuration in the future you can edit the file manually.
-                You can also remove the file en restart the web application
+                This file is .ignored by git. If you need to change the configuration in the future you can:
             </p>
+            <ul>
+                <li>
+                    Set"general:configured" to false in the <strong>appsettings.private.json</strong> in web folder.
+                    When the application is restarted this installation screen is shown again. (<strong>RECOMMENDED</strong>)
+                </li>
+                <li>Edit the files manually.</li>
+                <li>Remove the file en restart the web application to start from scratch</li>
+            </ul>
 
-            <p><strong>Restart the web application in order reload the configuration and make the changes active.</strong>
+            <p><strong>Restart the web application in order to reload the configuration and make the changes active.</strong>
             </p>
         }
     </div>

@@ -73,5 +73,12 @@ namespace Soloco.RealTimeWeb.Common
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             return configuration["authentication:facebook:appSecret"];
         }
+
+        public static string ConnectionString(this IConfiguration configuration, string name = "documentStore")
+        {
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            
+            return configuration[$"connectionStrings:{name}"];
+        }
     }
 }

@@ -43,7 +43,8 @@ namespace Soloco.RealTimeWeb.Common.Tests.Storage
         private string CreateScript()
         {
             var connectionString = _connectionStringParser.Parse();
-            var script = typeof(TestStoreDatabaseFactory).ReadResourceString("CreateStore.sql")
+            var script = typeof(TestStoreDatabaseFactory)
+                .ReadResourceString("CreateStore.sql")
                 .Replace("{database}", connectionString.Database)
                 .Replace("{userId}", connectionString.UserId)
                 .Replace("{password}", connectionString.Password);

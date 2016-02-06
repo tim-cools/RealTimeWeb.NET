@@ -23,10 +23,13 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 });
             });
 
-            var busHandle = busControl.Start();
+            if (busControl != null)
+            {
+                var busHandle = busControl.Start();
 
-            //todo: handler the bus lifetime by the container
-            lifetime.ApplicationStopping.Register(() => { busHandle.Dispose(); });
+                //todo: handler the bus lifetime by the container
+                lifetime.ApplicationStopping.Register(() => { busHandle.Dispose(); });
+            }
 
             return app;
         }

@@ -22,8 +22,7 @@ namespace Soloco.RealTimeWeb.Infrastructure.Configuration
         public Task<Result> Handle(StoreConfigurationCommand command)
         {
             var json = CreateJson(command);
-            var fileName = "appsettings.private.json";
-            var localConfigFileName = Path.Combine(_applicationEnvironment.ApplicationBasePath, fileName);
+            var localConfigFileName = ConfigurationData.GetFileName(_applicationEnvironment.ApplicationBasePath);
 
             File.WriteAllText(localConfigFileName, json);
 
@@ -51,6 +50,21 @@ namespace Soloco.RealTimeWeb.Infrastructure.Configuration
                                 {"appSecret", command.FacebookAppSecret}
                             }
                         }
+                    }
+                },
+                {
+                    "connectionStrings", new JObject
+                    {
+                        {"documentStore", command.ConnectionString},
+                        {"documentStoreAdmin", command.ConnectionStringAdmin}
+                    }
+                },
+                {
+                    "rabbitMq", new JObject
+                    {
+                        {"hostName", command.RabbitMqHostName},
+                        {"userName", command.RabbitMqUserName},
+                        {"password", command.RabbitMqPassword},
                     }
                 },
                 {

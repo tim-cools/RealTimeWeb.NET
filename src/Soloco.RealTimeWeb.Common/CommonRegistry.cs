@@ -2,6 +2,7 @@
 using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
+using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Common.StructureMap;
@@ -22,38 +23,54 @@ namespace Soloco.RealTimeWeb.Common
                 options.Convention<AllInterfacesConvention>();
             });
 
-            RegisterMarten();
+            RegisterMartenCommon();
+            RegisterMartenSession();
         }
 
-        private void RegisterMarten()
+        private void RegisterMartenCommon()
         {
-            var store = new InMemoryStore();
-
             ForSingletonOf<IDocumentSchema>().Use<DocumentSchema>();
-            ForSingletonOf<IDocumentStore>().Use("Create DocumentStore", context =>
-            {
-                //var connectionString = resolver.Resolve<ConnectionStringParser>().GetString();
-                //return DocumentStore.For(connectionString);
-                return store;
-            });
-
-            For<IQuerySession>().Use("Create QuerySession", context =>
-            {
-                //resolver.Resolve<IDocumentStore>().QuerySession());
-                return context.GetInstance<IDocumentSession>();
-            }).ContainerScoped();
-
-            For<IDocumentSession>().Use("Create DocumentSession", context =>
-            {
-                //resolver.Resolve<IDocumentStore>().DirtyTrackedSession(), Reuse.InResolutionScope);
-                return store;
-            }).ContainerScoped();
-
             For<ISerializer>().Use<JsonNetSerializer>();
             For<IDocumentSchemaCreation>().Use<DevelopmentSchemaCreation>();
             For<ICommandRunner>().Use<CommandRunner>();
             For<IDocumentCleaner>().Use<DocumentCleaner>();
             For<IMartenQueryExecutor>().Use<MartenQueryExecutor>();
+        }
+
+        private void RegisterMartenSession()
+        {
+            var store = new InMemoryStore();
+
+            ForSingletonOf<IDocumentStore>().Use("Create DocumentStore", context =>
+            {
+                var connectionString = context.GetInstance<ConnectionStringParser>().GetString();
+
+                return !string.IsNullOrWhiteSpace(connectionString)
+                    ? DocumentStore.For(connectionString)
+                    : (IDocumentStore) store;
+            });
+
+            For<IQuerySession>()
+                .Use("Create QuerySession", context =>
+                {
+                    var connectionString = context.GetInstance<ConnectionStringParser>().GetString();
+
+                    return !string.IsNullOrWhiteSpace(connectionString) 
+                        ? context.GetInstance<IDocumentStore>().QuerySession() 
+                        : store;
+                })
+                .ContainerScoped();
+
+            For<IDocumentSession>()
+                .Use("Create DocumentSession", context =>
+                {
+                    var connectionString = context.GetInstance<ConnectionStringParser>().GetString();
+
+                    return !string.IsNullOrWhiteSpace(connectionString)
+                        ? context.GetInstance<IDocumentStore>().DirtyTrackedSession()
+                        : store;
+                })
+                .ContainerScoped();
         }
     }
 }
