@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Amazon;
 using Microsoft.Extensions.Configuration;
 
 namespace Soloco.RealTimeWeb.Environment.Core.Configuration
 {
-    public class Settings
+    public class Settings : ISettings
     {
-        public IAmazonSettings Amazon { get; private set; }
-        public IDatabaseSettings Database { get; private set; }
+        public ClusterSettings Cluster { get; }
+        public AmazonSettings Amazon { get; }
+        public DatabaseSettings Database { get; }
 
         public Settings(string[] args)
         {
@@ -16,6 +16,7 @@ namespace Soloco.RealTimeWeb.Environment.Core.Configuration
 
             AddCustomConverters();
 
+            Cluster = configuration.Get<ClusterSettings>("cluster");
             Amazon = configuration.Get<AmazonSettings>("amazon");
             Database = configuration.Get<DatabaseSettings>("database");
         }

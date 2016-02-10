@@ -8,66 +8,63 @@ using Soloco.RealTimeWeb.Environment.Core;
 
 namespace Soloco.RealTimeWeb.Environment.Migrations
 {
-    public class M201512021606_CreatePostgreSQLDatabase : IMigration
+    public class M201512021606_CreatePostgreSQLDatabase : IMigration, IDisposable
     {
         private readonly MigrationContext _context;
+        private readonly IAmazonRDS _client;
 
         public M201512021606_CreatePostgreSQLDatabase(MigrationContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
             _context = context;
+            _client = CreateClient();
         }
 
         public void Up()
         {
-            using (var client = CreateClient())
+            return;
+            if (!DatabaseExists())
             {
-                if (!DatabaseExists(client))
-                {
-                    CreateDatabase(client);
-                    WaitUntilInitialized(client);
-                }
+                CreateDatabase();
+                WaitUntilInitialized();
             }
         }
 
         public void Down()
         {
-            using (var client = CreateClient())
+            if (DatabaseExists())
             {
-                if (DatabaseExists(client))
-                {
-                    DeleteDatabase(client);
-                    WaitUntilDatabaseDoesNotExists(client);
-                }
+                DeleteDatabase();
+                WaitUntilDatabaseDoesNotExists();
             }
         }
 
-        private void WaitUntilDatabaseDoesNotExists(IAmazonRDS client)
+        private void WaitUntilDatabaseDoesNotExists()
         {
-            while (GetDatabaseInstance(client) != null)
+            while (GetDatabaseInstance() != null)
             {
                 Thread.Sleep(1000);
             }
         }
 
-        private void DeleteDatabase(IAmazonRDS client)
+        private void DeleteDatabase()
         {
             var request = new DeleteDBInstanceRequest
             {
                 DBInstanceIdentifier = _context.Settings.Database.Name,
                 SkipFinalSnapshot = true
             };
-            client.DeleteDBInstance(request);
+            _client.DeleteDBInstance(request);
         }
 
-        private void WaitUntilInitialized(IAmazonRDS client)
+        private void WaitUntilInitialized()
         {
-            var instance = GetDatabaseInstance(client);
+            var instance = GetDatabaseInstance();
             while (NotInitialized(instance))
             {
                 Thread.Sleep(1000);
-                instance = GetDatabaseInstance(client);
+                instance = GetDatabaseInstance();
             }
         }
 
@@ -77,18 +74,18 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             return instance.DBInstanceStatus == "creating";
         }
 
-        private bool DatabaseExists(IAmazonRDS client)
+        private bool DatabaseExists()
         {
-            var instance = GetDatabaseInstance(client);
+            var instance = GetDatabaseInstance();
             var databaseExists = instance != null;
             _context.Logger.WriteLine("DatabaseExists: " + databaseExists);
             return databaseExists;
         }
 
-        private DBInstance GetDatabaseInstance(IAmazonRDS client)
+        private DBInstance GetDatabaseInstance()
         {
             var request = new DescribeDBInstancesRequest();
-            var instances = client.DescribeDBInstances(request);
+            var instances = _client.DescribeDBInstances(request);
 
             return instances.DBInstances
                 .FirstOrDefault(
@@ -97,7 +94,7 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
                             StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private void CreateDatabase(IAmazonRDS client)
+        private void CreateDatabase()
         {
             var request = new CreateDBInstanceRequest
             {
@@ -113,13 +110,18 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
                 DBInstanceIdentifier = _context.Settings.Database.Name
             };
 
-            client.CreateDBInstance(request);
+            _client.CreateDBInstance(request);
         }
 
         private IAmazonRDS CreateClient()
         {
             var credentials = new BasicAWSCredentials(_context.Settings.Amazon.AccessKey, _context.Settings.Amazon.SecretKey);
             return new AmazonRDSClient(credentials, _context.Settings.Amazon.Region);
+        }
+
+        public void Dispose()
+        {
+            _client.Dispose();
         }
     }
 }

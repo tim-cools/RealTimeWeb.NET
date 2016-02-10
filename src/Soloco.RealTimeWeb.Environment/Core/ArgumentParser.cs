@@ -15,11 +15,11 @@ namespace Soloco.RealTimeWeb.Environment.Core
             {
                 switch (arg)
                 {
-                    case "--up":
+                    case "--migrate-up":
                         command = MigrationCommand.Up;
                         break;
 
-                    case "--down":
+                    case "--migrate-down":
                         command = MigrationCommand.Down;
                         break;
 

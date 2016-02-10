@@ -1,6 +1,6 @@
 namespace Soloco.RealTimeWeb.Environment.Core.Configuration
 {
-    public class DatabaseSettings : IDatabaseSettings
+    public class DatabaseSettings
     {
         public string Name { get; set; }
         public int BackupRetentionPeriod { get; set; }

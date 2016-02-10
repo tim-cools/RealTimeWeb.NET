@@ -2,7 +2,7 @@ using Amazon;
 
 namespace Soloco.RealTimeWeb.Environment.Core.Configuration
 {
-    public class AmazonSettings : IAmazonSettings
+    public class AmazonSettings
     {
         public string AccessKey { get; set; }
         public string SecretKey { get; set; }

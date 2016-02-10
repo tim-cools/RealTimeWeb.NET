@@ -27,23 +27,26 @@ namespace Soloco.RealTimeWeb.Environment.Core
         private void Migrate(MigrationContext context, Action<IMigration> action)
         {
             var migrations = GetMigrations(context);
-            foreach (var migration in migrations)
+            foreach (var migration in migrations.Select(type => CreateInstance(type, context)))
             {
                 using (_logger.Scope("Execute migration: " + migration.GetType().Name))
                 {
                     action(migration);
                 }
+
+                var disposable = migration as IDisposable;
+                disposable?.Dispose();
             }
         }
 
-        private IMigration[] GetMigrations(MigrationContext context)
+        private Type[] GetMigrations(MigrationContext context)
         {
             var types = typeof(Runner)
                 .Assembly
                 .GetTypes()
                 .Where(type => typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract);
 
-            var migrations = types.Select(type => CreateInstance(type, context)).ToArray();
+            var migrations = types.ToArray();
 
             _logger.WriteLine("Migrations found: " + migrations.Length);
 
