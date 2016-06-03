@@ -31,10 +31,7 @@ namespace Soloco.RealTimeWeb.Common
         {
             ForSingletonOf<IDocumentSchema>().Use<DocumentSchema>();
             For<ISerializer>().Use<JsonNetSerializer>();
-            For<IDocumentSchemaCreation>().Use<DevelopmentSchemaCreation>();
-            For<ICommandRunner>().Use<CommandRunner>();
             For<IDocumentCleaner>().Use<DocumentCleaner>();
-            For<IMartenQueryExecutor>().Use<MartenQueryExecutor>();
         }
 
         private void RegisterMartenSession()

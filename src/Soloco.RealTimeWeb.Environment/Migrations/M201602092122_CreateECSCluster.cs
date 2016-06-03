@@ -2,16 +2,18 @@
 using Amazon.ECS;
 using Amazon.ECS.Model;
 using Amazon.Runtime;
+using Task = System.Threading.Tasks.Task;
 using Soloco.RealTimeWeb.Environment.Core;
+using System.Threading.Tasks;
 
 namespace Soloco.RealTimeWeb.Environment.Migrations
 {
-    public class M20160209_CreateECSCluster : IMigration, IDisposable
+    public class M201602092122_CreateECSCluster : IMigration, IDisposable
     {
         private readonly MigrationContext _context;
         private readonly IAmazonECS _client;
 
-        public M20160209_CreateECSCluster(MigrationContext context)
+        public M201602092122_CreateECSCluster(MigrationContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -19,44 +21,44 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             _client = CreateClient();
         }
 
-        public void Up()
+        public async System.Threading.Tasks.Task Up()
         {
-            if (!ClusterExists())
+            if (!await ClusterExists())
             {
-                CreateCluster();
+                await CreateCluster();
             }
         }
 
-        public void Down()
+        public async System.Threading.Tasks.Task Down()
         {
-            if (ClusterExists())
+            if (await ClusterExists())
             {
-                DeleteCluster();
+                await DeleteCluster();
             }
         }
 
-        private bool ClusterExists()
+        private async Task<bool> ClusterExists()
         {
-            var response = _client.ListClusters(new ListClustersRequest());
+            var response = await _client.ListClustersAsync(new ListClustersRequest());
             return response.ClusterArns.Contains(_context.Settings.Cluster.Name);
         }
 
-        public void CreateCluster()
+        public async Task CreateCluster()
         {
             var request = new CreateClusterRequest
             {
                 ClusterName = _context.Settings.Cluster.Name
             };
-            _client.CreateCluster(request);
+            await _client.CreateClusterAsync(request);
         }
 
-        private void DeleteCluster()
+        private async Task DeleteCluster()
         {
             var request = new DeleteClusterRequest
             {
                 Cluster = _context.Settings.Cluster.Name
             };
-            _client.DeleteCluster(request);
+            await _client.DeleteClusterAsync(request);
         }
 
         private IAmazonECS CreateClient()

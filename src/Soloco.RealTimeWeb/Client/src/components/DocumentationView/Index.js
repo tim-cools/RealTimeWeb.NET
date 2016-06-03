@@ -11,7 +11,7 @@ export class View extends Component {
     componentDidMount() {
         documentation.getDocuments();
     }
-
+	
     componentDidUpdate() {
         if (this.props.id && !this.props.document) {
             documentation.getDocument(this.props.id);

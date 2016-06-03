@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Soloco.RealTimeWeb.Environment.Migrations;
+using System.Threading.Tasks;
 
 namespace Soloco.RealTimeWeb.Environment.Core
 {
@@ -14,26 +15,37 @@ namespace Soloco.RealTimeWeb.Environment.Core
             _logger = logger;
         }
 
-        public void Up(MigrationContext context)
-        {
-            Migrate(context, migration => migration.Up());
-        }
-
-        public void Down(MigrationContext context)
-        {
-            Migrate(context, migration => migration.Down());
-        }
-
-        private void Migrate(MigrationContext context, Action<IMigration> action)
+        public async Task Up(MigrationContext context)
         {
             var migrations = GetMigrations(context);
+            await Migrate(context, migrations, migration => migration.Up());
+        }
+
+        public async Task Down(MigrationContext context)
+        {
+            var migrations = GetMigrations(context);
+            await Migrate(context, migrations.Reverse(), migration => migration.Down());
+        }
+
+        private async Task Migrate(MigrationContext context, IEnumerable<Type> migrations, Func<IMigration, Task> action)
+        {
             foreach (var migration in migrations.Select(type => CreateInstance(type, context)))
             {
                 using (_logger.Scope("Execute migration: " + migration.GetType().Name))
                 {
-                    action(migration);
+                    await Migrate(migration, action);
                 }
+            }
+        }
 
+        private Task Migrate(IMigration migration, Func<IMigration, Task> action)
+        {
+            try
+            {
+                return action(migration);
+            }
+            finally
+            {
                 var disposable = migration as IDisposable;
                 disposable?.Dispose();
             }
@@ -42,9 +54,10 @@ namespace Soloco.RealTimeWeb.Environment.Core
         private Type[] GetMigrations(MigrationContext context)
         {
             var types = typeof(Runner)
+                .GetTypeInfo()
                 .Assembly
                 .GetTypes()
-                .Where(type => typeof(IMigration).IsAssignableFrom(type) && !type.IsAbstract);
+                .Where(type => typeof(IMigration).IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract);
 
             var migrations = types.ToArray();
 

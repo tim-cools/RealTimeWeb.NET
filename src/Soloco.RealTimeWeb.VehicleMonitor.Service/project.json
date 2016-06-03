@@ -1,24 +1,20 @@
 {
-  "version": "1.0.0-rc1-final",
+  "version": "1.0.0-rc2-final",
   "description": "RealTimeWeb VehicleMonitor Service",
-  "authors": [ "" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+
   "tooling": {
     "defaultNamespace": "Soloco.RealTimeWeb.VehicleMonitor.Service"
   },
 
   "dependencies": {
-    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Binder": "1.0.0-rc1-final",
-    "MassTransit": "3.1.2",
-    "MassTransit.RabbitMQ": "3.1.2",
-    "Soloco.RealTimeWeb.VehicleMonitor.Messages": "1.0.0-rc1-final",
-    "Soloco.RealTimeWeb.VehicleMonitor": "1.0.0-rc1-final"
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Binder": "1.0.0-rc2-final",
+    "MassTransit": "3.3.3",
+    "MassTransit.RabbitMQ": "3.3.3",
+    "Soloco.RealTimeWeb.VehicleMonitor.Messages": "1.0.0-rc2-final",
+    "Soloco.RealTimeWeb.VehicleMonitor": "1.0.0-rc2-final"
   },
 
   "commands": {
@@ -26,6 +22,6 @@
   },
 
   "frameworks": {
-    "dnx451": { }
+    "net46": { }
   }
 }

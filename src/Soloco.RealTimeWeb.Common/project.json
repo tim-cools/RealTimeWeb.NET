@@ -1,31 +1,25 @@
 {
-  "version": "1.0.0-rc1-final",
+  "version": "1.0.0-rc2-final",
   "description": "Soloco.RealTimeWeb.Common Class Library",
-  "authors": [ "Class Library template" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
 
   "tooling": {
     "defaultNamespace": "Soloco.RealTimeWeb.Common"
   },
 
   "dependencies": {
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.WebApi.Client": "5.2.3",
-    "Microsoft.AspNet.WebApi.Core": "5.2.3",
-    "Newtonsoft.Json": "7.0.1",
-    "Npgsql": "3.1.0-alpha6",
-    "Serilog": "2.0.0-beta-403",
-    "Shouldly": "2.6.0",
-    "StructureMap.Dnx": "0.4.0-alpha4",
-    "Marten": "0.5.0.9",
-    "MassTransit": "3.1.2",
-    "MassTransit.RabbitMQ": "3.1.2"
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Newtonsoft.Json": "8.0.3",
+    "Npgsql": "3.1.0-beta0001",
+    "Serilog": "1.5.14",
+    "Shouldly": "2.7.0",
+    "StructureMap.Dnx": "0.5.1-rc2-final",
+    "Marten": "0.9.4.464",
+    "MassTransit": "3.3.3",
+    "MassTransit.RabbitMQ": "3.3.3"    
   },
 
   "frameworks": {
-    "dnx451": {
+    "net46": {
       "frameworkAssemblies": {
         "System.Data": "4.0.0.0"
       }

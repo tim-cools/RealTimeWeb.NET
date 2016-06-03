@@ -1,44 +1,36 @@
 ﻿{
-  "version": "1.0.0-rc1-final",
-  "compilationOptions": {
+  "version": "1.0.0-rc2-final",
+  "buildOptions": {
     "emitEntryPoint": true
   },
 
   "dependencies": {
-    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Npgsql": "3.1.0-alpha5",
-    "Soloco.RealTimeWeb.Common": "1.0.0-rc1-final"
+    "Microsoft.AspNetCore.IISPlatformHandler": "0.0.1-alpha",
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc2-final",
+    "Npgsql": "3.1.0-beta0001",
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc2-final"
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://*:5800"
+    "web": "Microsoft.AspNetCore.Server.Kestrel --server.urls http://*:5800"
   },
 
   "frameworks": {
-    "dnx451": {
-      "dependencies": {
-        "DryIoc.Dnx.DependencyInjection": "1.0.0-rc1"
-      },
-      "frameworkAssemblies": {
-        "System.Data": "4.0.0.0"
-      }
-    }
+    "net46": { }
   },
 
-  "exclude": [
-    "wwwroot",
-    "node_modules"
-  ],
-  "publishExclude": [
-    "**.user",
-    "**.vspscc"
-  ]
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "Views",
+      "appsettings.json",
+      "web.config"
+    ]
+  }
 }

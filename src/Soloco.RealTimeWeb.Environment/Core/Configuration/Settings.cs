@@ -23,7 +23,7 @@ namespace Soloco.RealTimeWeb.Environment.Core.Configuration
 
         private static void AddCustomConverters()
         {
-            TypeDescriptor.AddAttributes(typeof (RegionEndpoint), new TypeConverterAttribute(typeof (AmazonRegionConverter)));
+            //TypeDescriptor.AddAttributes(typeof (RegionEndpoint), new TypeConverterAttribute(typeof (AmazonRegionConverter)));
         }
 
         private static IConfigurationRoot BuildConfigurationRoot(string[] values)

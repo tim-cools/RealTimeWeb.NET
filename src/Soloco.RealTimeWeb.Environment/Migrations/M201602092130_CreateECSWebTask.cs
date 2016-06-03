@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Amazon.ECS;
 using Amazon.ECS.Model;
 using Amazon.Runtime;
@@ -8,13 +9,13 @@ using Soloco.RealTimeWeb.Environment.Core.Configuration;
 
 namespace Soloco.RealTimeWeb.Environment.Migrations
 {
-    public class M20160209213000_CreateECSWebTask : IMigration, IDisposable
+    public class M201602092130_CreateECSWebTask : IMigration, IDisposable
     {
         private readonly MigrationContext _context;
         private readonly IAmazonECS _client;
-        private readonly TasksSettings _task;
+        private readonly TaskSettings _task;
 
-        public M20160209213000_CreateECSWebTask(MigrationContext context)
+        public M201602092130_CreateECSWebTask(MigrationContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -23,34 +24,35 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             _task = _context.Settings.Cluster.GetTask("web");
         }
 
-        public void Up()
+        public async System.Threading.Tasks.Task Up()
         {
-            var task = TaskExists();
-            if (task != null)
+            var task = await TaskExists();
+            if (task == null)
             {
-                CreateTask();
+                await CreateTask();
             }
         }
 
-        public void Down()
+        public async System.Threading.Tasks.Task Down()
         {
-            var task = TaskExists();
+            var task = await TaskExists();
             if (task != null)
             {
-                DeleteTask(task);
+                await DeleteTask(task);
             }
         }
 
-        private Task TaskExists()
+        private async Task<string> TaskExists()
         {
-            var response = _client.DescribeTasks(new DescribeTasksRequest
+            var response = await _client.ListTasksAsync(new ListTasksRequest
             {
-                Cluster = _context.Settings.Cluster.Name
+                Cluster = _context.Settings.Cluster.Name,
+                Family = _task.Name,
             });
-            return response.Tasks.FirstOrDefault(criteria => criteria.Containers.Any(container => container.Name == _task.Name));
+            return response.TaskArns.FirstOrDefault();
         }
 
-        public void CreateTask()
+        public async System.Threading.Tasks.Task CreateTask()
         {
             var request = new RegisterTaskDefinitionRequest
             {
@@ -65,24 +67,25 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
                         {
                             new PortMapping
                             {
-                                ContainerPort = 80,
+                                ContainerPort = _task.ContainerPort,
                                 HostPort = _task.HostPort,
                                 Protocol  = TransportProtocol.Tcp
                             }
                         }
                     }
-                }
+                },
+                Family = _task.Name
             };
-            _client.RegisterTaskDefinition(request);
+            await _client.RegisterTaskDefinitionAsync(request);
         }
 
-        private void DeleteTask(Task task)
+        private async System.Threading.Tasks.Task DeleteTask(string task)
         {
             var request = new DeregisterTaskDefinitionRequest
             {
-                TaskDefinition = task.TaskDefinitionArn
+                TaskDefinition = task
             };
-            _client.DeregisterTaskDefinition(request);
+            await _client.DeregisterTaskDefinitionAsync(request);
         }
 
         private IAmazonECS CreateClient()

@@ -1,8 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Marten;
+using Marten.Events;
+using Marten.Linq;
 using Marten.Schema;
+using Marten.Services;
+using Marten.Services.BatchQuerying;
+using Npgsql;
 
 namespace Soloco.RealTimeWeb.Common.Store
 {
@@ -22,6 +31,26 @@ namespace Soloco.RealTimeWeb.Common.Store
                 return _collection.Where(document => keys.Contains((TKey)document.Id))
                     .Cast<T>()
                     .ToArray();
+            }
+
+            public Task<IList<T>> ByIdAsync<TKey>(params TKey[] keys)
+            {
+                throw new NotImplementedException();
+            }
+
+            IList<T> ILoadByKeys<T>.ById<TKey>(IEnumerable<TKey> keys)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<IList<T>> ByIdAsync<TKey>(IEnumerable<TKey> keys, CancellationToken token = new CancellationToken())
+            {
+                throw new NotImplementedException();
+            }
+
+            IList<T> ILoadByKeys<T>.ById<TKey>(params TKey[] keys)
+            {
+                throw new NotImplementedException();
             }
 
             public IEnumerable<T> ById<TKey>(IEnumerable<TKey> keys)
@@ -44,11 +73,136 @@ namespace Soloco.RealTimeWeb.Common.Store
             return collection?.FirstOrDefault(document => document.Id == id);
         }
 
+        public Task<T> LoadAsync<T>(string id, CancellationToken token = new CancellationToken()) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
         public T Load<T>(ValueType id) where T : class
         {
             var collection = GetCollection<T>();
             return collection?.FirstOrDefault(document => document.Id == (Guid)id);
         }
+
+        public Task<T> LoadAsync<T>(ValueType id, CancellationToken token = new CancellationToken()) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public string FindJsonById<T>(string id) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public string FindJsonById<T>(ValueType id) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> FindJsonByIdAsync<T>(string id, CancellationToken token = new CancellationToken()) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> FindJsonByIdAsync<T>(ValueType id, CancellationToken token = new CancellationToken()) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        IMartenQueryable<T> IQuerySession.Query<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        IList<T> IQuerySession.Query<T>(string sql, params object[] parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> QueryAsync<T>(string sql, CancellationToken token = new CancellationToken(), params object[] parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IBatchedQuery CreateBatchQuery()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TOut Query<TDoc, TOut>(ICompiledQuery<TDoc, TOut> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TOut> QueryAsync<TDoc, TOut>(ICompiledQuery<TDoc, TOut> query, CancellationToken token = new CancellationToken())
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<T> LoadMany<T>(params string[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<T> LoadMany<T>(params Guid[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<T> LoadMany<T>(params int[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<T> LoadMany<T>(params long[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(params string[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(params Guid[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(params int[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(params long[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(CancellationToken token, params string[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(CancellationToken token, params Guid[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(CancellationToken token, params int[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<T>> LoadManyAsync<T>(CancellationToken token, params long[] ids) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public NpgsqlConnection Connection { get; }
+        public IMartenSessionLogger Logger { get; set; }
+        public int RequestCount { get; }
+        public IDocumentStore DocumentStore { get; }
 
         public ILoadByKeys<T> Load<T>() where T : class
         {
@@ -87,9 +241,34 @@ namespace Soloco.RealTimeWeb.Common.Store
             collection.Remove(entity);
         }
 
+        public void DeleteWhere<T>(Expression<Func<T, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SaveChanges()
         {
         }
+
+        public Task SaveChangesAsync(CancellationToken token = new CancellationToken())
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Store<T>(params T[] entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StoreObjects(IEnumerable<object> documents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IUnitOfWork PendingChanges { get; }
+        public IEventStore Events { get; }
+        public IEnumerable<IChangeSet> Commits { get; }
+        public IChangeSet LastCommit { get; }
 
         public void Store<T>(T entity) where T : class
         {
@@ -133,9 +312,34 @@ namespace Soloco.RealTimeWeb.Common.Store
             return this;
         }
 
+        public void BulkInsert<T>(T[] documents, BulkInsertMode mode = BulkInsertMode.InsertsOnly, int batchSize = 1000)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDocumentSession OpenSession(DocumentTracking tracking = DocumentTracking.IdentityOnly, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDocumentSession LightweightSession(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDocumentSession DirtyTrackedSession(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQuerySession QuerySession()
         {
             return this;
+        }
+
+        public void BulkInsertDocuments(IEnumerable<object> documents, BulkInsertMode mode = BulkInsertMode.InsertsOnly, int batchSize = 1000)
+        {
+            throw new NotImplementedException();
         }
 
         public IDocumentSchema Schema
@@ -146,7 +350,7 @@ namespace Soloco.RealTimeWeb.Common.Store
             }
         }
 
-        public AdvancedOptions Advanced => new AdvancedOptions(this);
+        public AdvancedOptions Advanced => new AdvancedOptions(this, new StoreOptions(), new JsonNetSerializer(), Schema);
 
         public IDiagnostics Diagnostics
         {
@@ -155,6 +359,8 @@ namespace Soloco.RealTimeWeb.Common.Store
                 throw new NotImplementedException();
             }
         }
+
+        public IEventStoreAdmin EventStore { get; }
 
         public void DeleteAllDocuments()
         {
@@ -177,6 +383,11 @@ namespace Soloco.RealTimeWeb.Common.Store
         }
 
         public void CompletelyRemoveAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteAllEventData()
         {
             throw new NotImplementedException();
         }
