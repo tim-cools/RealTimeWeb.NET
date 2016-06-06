@@ -1,7 +1,7 @@
 using System;
 using MassTransit;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common.MessageBus;
 using Soloco.RealTimeWeb.Infrastructure.VehicleMonitor;

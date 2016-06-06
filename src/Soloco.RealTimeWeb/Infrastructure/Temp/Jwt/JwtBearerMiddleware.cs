@@ -3,7 +3,7 @@
 
 using System;
 using System.Net.Http;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Protocols;

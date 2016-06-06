@@ -13,7 +13,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications
         {
             var container = TestContainerFactory.CreateContainer();
 
-            ShouldBeNullExtensions.ShouldNotBeNull<ITestStoreDatabaseFactory>(container.GetInstance<ITestStoreDatabaseFactory>());
+            container.GetInstance<ITestStoreDatabaseFactory>().ShouldNotBeNull();
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications
         {
             var container = TestContainerFactory.CreateContainer();
 
-            ShouldBeNullExtensions.ShouldNotBeNull<IMessageDispatcher>(container.GetInstance<IMessageDispatcher>());
+            container.GetInstance<IMessageDispatcher>().ShouldNotBeNull();
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Soloco.RealTimeWeb.Common.Tests.Unit.ContainerSpecifications
         {
             var container = TestContainerFactory.CreateContainer();
 
-            ShouldBeNullExtensions.ShouldNotBeNull<IConnectionStringParser>(container.GetInstance<IConnectionStringParser>());
+            container.GetInstance<IConnectionStringParser>().ShouldNotBeNull();
         }
     }
 }

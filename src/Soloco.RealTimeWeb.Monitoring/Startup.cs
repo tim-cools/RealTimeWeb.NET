@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Monitoring.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Monitoring
@@ -13,12 +15,13 @@ namespace Soloco.RealTimeWeb.Monitoring
 
         public Startup(IHostingEnvironment env)
         {
-            _configuration = SetupConfiguration();
+            _configuration = SetupConfiguration(env);
         }
 
-        private static IConfigurationRoot SetupConfiguration()
+        private static IConfigurationRoot SetupConfiguration(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
             return builder.Build();
@@ -27,6 +30,7 @@ namespace Soloco.RealTimeWeb.Monitoring
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton<IConnectionStringParser, ConnectionStringParser>();            
             services.AddSingleton<IMonitor, DatabaseMonitor>();            
             services.AddSingleton<IConfiguration>(provider => _configuration);
         }
@@ -35,7 +39,7 @@ namespace Soloco.RealTimeWeb.Monitoring
         {
             ConfigureLogging(loggerFactory);
 
-            ConigureWebApp(app);
+            ConfigureWebApp(app);
         }
 
         private void ConfigureLogging(ILoggerFactory loggerFactory)
@@ -44,15 +48,22 @@ namespace Soloco.RealTimeWeb.Monitoring
             loggerFactory.AddDebug();
         }
 
-        private static void ConigureWebApp(IApplicationBuilder app)
+        private static void ConfigureWebApp(IApplicationBuilder app)
         {
-            app.UseIISPlatformHandler();
-
             app.UseStaticFiles();
-
             app.UseMvc();
         }
 
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        public static void Main(string[] args)
+        {
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
+        }
     }
 }

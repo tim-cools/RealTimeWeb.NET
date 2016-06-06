@@ -24,7 +24,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         protected override void When(TestContext<IMessageDispatcher> context)
         {
             var name = Guid.NewGuid().ToString("n");
-            _command = new RegisterUserCommand(name, "eMail@future.now", "password");
+            _command = new RegisterUserCommand(name, "eMail@future.now", TestData.GeneratePassword());
 
             _result = context.Service.ExecuteNowWithTimeout(_command);
         }

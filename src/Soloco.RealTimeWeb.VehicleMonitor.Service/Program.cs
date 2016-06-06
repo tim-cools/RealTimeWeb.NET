@@ -1,5 +1,6 @@
 
 using System;
+using System.IO;
 using System.Threading;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
@@ -66,6 +67,7 @@ namespace Soloco.RealTimeWeb.Environment
         private static IConfigurationRoot BuildConfigurationRoot(string[] values)
         {
             var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.private.json", true)
                 .AddEnvironmentVariables()

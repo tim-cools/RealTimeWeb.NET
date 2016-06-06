@@ -2,7 +2,7 @@
 using System.Net.Http;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common;

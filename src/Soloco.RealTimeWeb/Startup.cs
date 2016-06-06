@@ -1,13 +1,10 @@
 using System;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Cors.Infrastructure;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Data.Entity.ChangeTracking.Internal;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;

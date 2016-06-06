@@ -105,7 +105,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
             _userName = Guid.NewGuid().ToString("n");
             _externalIdentifier = Guid.NewGuid().ToString("n");
 
-            var command = new RegisterUserCommand(_userName, _userName + "@me.com", Guid.NewGuid().ToString("n"));
+            var command = new RegisterUserCommand(_userName, _userName + "@me.com", TestData.GeneratePassword());
             var result = context.Service.ExecuteNowWithTimeout(command);
 
             result.Succeeded.ShouldBeTrue(result.ToString);
@@ -127,6 +127,14 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
         public void ThenTheUserNameShouldBeTheOriginalUserName()
         {
             _result.UserName.ShouldBe(_userName);
+        }
+    }
+
+    public class TestData
+    {
+        public static string GeneratePassword()
+        {
+            return "A1_$" + Guid.NewGuid().ToString("n");
         }
     }
 

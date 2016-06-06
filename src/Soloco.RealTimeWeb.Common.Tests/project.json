@@ -1,8 +1,12 @@
 {
   "version": "1.0.0-rc2-final",
+
+  "testRunner": "xunit",
+
   "tooling": {
     "defaultNamespace": "Soloco.RealTimeWeb.Common.Tests"
   },
+
   "dependencies": {
     "xunit": "2.1.0",
     "dotnet-test-xunit": "1.0.0-rc2-build10025",
@@ -18,14 +22,13 @@
     "Soloco.RealTimeWeb.Common": "1.0.0-rc2-final",
     "Marten": "0.9.4.464"
   },
-  "commands": {
-    "test": "xunit.runner.dnx"
-  },
+
   "frameworks": {
     "net46": { }
   },
+
   "buildOptions": {
-    "resource": [
+    "embed": [
       "Storage/CreateStore.sql"
     ]
   }

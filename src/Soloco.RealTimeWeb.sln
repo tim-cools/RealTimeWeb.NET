@@ -32,10 +32,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Operations", "Operations", "{C9C82D00-811E-4E97-8DAA-DA7B063E8DBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VehicleMonitor", "VehicleMonitor", "{34060E59-C712-4399-BA73-4F874EF9F7AE}"
-	ProjectSection(SolutionItems) = preProject
-		Soloco.RealTimeWeb.Environment\project.json = Soloco.RealTimeWeb.Environment\project.json
-		Soloco.RealTimeWeb.Environment\project.lock.json = Soloco.RealTimeWeb.Environment\project.lock.json
-	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Soloco.RealTimeWeb.VehicleMonitor", "Soloco.RealTimeWeb.VehicleMonitor\Soloco.RealTimeWeb.VehicleMonitor.xproj", "{F55AE21D-B073-484F-855B-112D549D5CF6}"
 EndProject

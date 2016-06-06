@@ -6,7 +6,7 @@
 
 using System;
 using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNet.DataProtection;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Caching.Distributed;

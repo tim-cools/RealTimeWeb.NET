@@ -1,24 +1,22 @@
-﻿{
+{
   "version": "1.0.0-rc2-final",
+
   "buildOptions": {
     "emitEntryPoint": true
   },
 
   "dependencies": {
-    "Microsoft.AspNetCore.IISPlatformHandler": "0.0.1-alpha",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc2-final",
     "Npgsql": "3.1.0-beta0001",
     "Soloco.RealTimeWeb.Common": "1.0.0-rc2-final"
-  },
-
-  "commands": {
-    "web": "Microsoft.AspNetCore.Server.Kestrel --server.urls http://*:5800"
   },
 
   "frameworks": {

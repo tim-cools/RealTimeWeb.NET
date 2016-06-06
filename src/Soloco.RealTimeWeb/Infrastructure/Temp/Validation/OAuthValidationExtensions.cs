@@ -1,5 +1,5 @@
 using System;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 
 namespace AspNet.Security.OAuth.Validation
 {

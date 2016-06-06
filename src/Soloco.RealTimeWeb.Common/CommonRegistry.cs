@@ -1,8 +1,6 @@
 ﻿using Marten;
-using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
-using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Common.StructureMap;

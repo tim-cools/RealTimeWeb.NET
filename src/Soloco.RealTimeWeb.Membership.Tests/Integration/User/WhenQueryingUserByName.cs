@@ -26,7 +26,7 @@ namespace Soloco.RealTimeWeb.Membership.Tests.Integration.User
             var command = new RegisterUserCommand(
                 _userName,
                 "tim@future.now",
-                Guid.NewGuid().ToString("n")
+                TestData.GeneratePassword()
                 );
 
             context.Service.Execute(command);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using StructureMap;
 using Soloco.RealTimeWeb.Common.Tests.Storage;
@@ -16,7 +18,7 @@ namespace Soloco.RealTimeWeb.Common.Tests
             var configuration = InitializeConfiguration();
             _container = InitializeContainer(configuration);
 
-            InitializeDatabase();
+            // InitializeDatabase();
         }
 
         public IContainer OpenContainerScope()
@@ -34,8 +36,9 @@ namespace Soloco.RealTimeWeb.Common.Tests
         {
             var environment = System.Environment.GetEnvironmentVariable("Hosting:Environment") ?? "local"; //todo should be WebHostBuilder.EnvironmentKey instead of hard coded
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("../../config/appsettings.tests.json")
-                .AddJsonFile($"../../config/appsettings.tests.{environment}.json", true);
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.tests.json")
+                .AddJsonFile($"appsettings.tests.{environment}.json", true);
 
             return builder.Build();
         }

@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Marten;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Membership.Users.Domain;
 
