@@ -8,19 +8,35 @@
     }
   },
   "profiles": {
+    "web": {
+      "commandName": "web",
+      "commandLineArgs": "--server.urls http://*:5001",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:3000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "http://localhost:3000",
       "environmentVariables": {
-        "Hosting:Environment": "Development"
-      },
-      "sdkVersion": "dnx-clr-win-x86.1.0.0-rc1-update1"
-    },
-    "web": {
-      "commandName": "web",
-      "environmentVariables": {
-        "Hosting:Environment": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "Soloco.RealTimeWeb": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:3000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "web-development": {
+      "commandName": "web-development",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:3000"
     }
   }
 }

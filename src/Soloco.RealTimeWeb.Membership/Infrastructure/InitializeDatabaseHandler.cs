@@ -69,6 +69,7 @@ namespace Soloco.RealTimeWeb.Membership.Infrastructure
             existing.Secret = client.Secret;
             existing.Name = client.Name;
             existing.ApplicationType = client.ApplicationType;
+            existing.RedirectUri = client.RedirectUri;
             existing.Active = client.Active;
             existing.AllowedOrigin = client.AllowedOrigin;
         }

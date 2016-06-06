@@ -16,6 +16,7 @@ namespace Soloco.RealTimeWeb.Controllers
             _configuration = configuration;
         }
 
+
         public ActionResult Index()
         {
             if (!_configuration.GeneralConfigured())

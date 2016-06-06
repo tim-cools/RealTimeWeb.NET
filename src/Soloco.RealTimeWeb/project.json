@@ -27,6 +27,7 @@
     "Microsoft.AspNet.SignalR.Owin": "1.2.2",
     "Microsoft.AspNetCore.Owin": "1.0.0-rc2-final",
     "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging": "1.0.0-rc2-final",

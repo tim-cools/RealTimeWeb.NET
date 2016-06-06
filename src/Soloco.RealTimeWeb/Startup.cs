@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,7 @@ namespace Soloco.RealTimeWeb
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("appsettings.private.json", optional: true)
+                .AddCommandLine(Environment.GetCommandLineArgs().Skip(1).ToArray())
                 .AddEnvironmentVariables();
 
             return builder.Build();
@@ -130,14 +132,33 @@ namespace Soloco.RealTimeWeb
 
         public static void Main(string[] args)
         {
+            SetEnvironment(args);
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddCommandLine(args)
+                .Build();
+
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseConfiguration(config)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
 
             host.Run();
+        }
+
+        private static void SetEnvironment(string[] args)
+        {
+            const string environment = "ASPNETCORE_ENVIRONMENT";
+
+            var index = Array.IndexOf(args, $"--{environment}");
+            if (index >= 0)
+            {
+                Environment.SetEnvironmentVariable(environment, args[index + 1]);
+            }
         }
     }
 }

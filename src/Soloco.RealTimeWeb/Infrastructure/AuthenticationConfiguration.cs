@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using AspNet.Security.OAuth.Validation;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -32,15 +33,15 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
         private static Action<IApplicationBuilder> ApiAuthentication(IConfiguration configuration)
         {
-            return branch => branch.UseJwtBearerAuthentication(new JwtBearerOptions
+            var options = new OAuthValidationOptions
             {
                 AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                RequireHttpsMetadata = false,
+                AutomaticChallenge = true
+            };
 
-                Audience = configuration.ApiHostName(),
-                Authority = configuration.ApiHostName()
-            });
+            options.Audiences.Add(configuration.ApiHostName());
+
+            return branch => branch.UseOAuthValidation(options);
         }
 
         private static bool IsWeb(HttpContext context)
@@ -57,7 +58,7 @@ namespace Soloco.RealTimeWeb.Infrastructure
                 AuthenticationScheme = "ServerCookie",
                 CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
                 ExpireTimeSpan = TimeSpan.FromMinutes(5),
-                LoginPath = new Microsoft.AspNetCore.Http.PathString(new PathString("/signin"))
+                LoginPath = new PathString(new PathString("/signin"))
             });
         }
 
@@ -92,8 +93,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
             options.AuthorizationEndpointPath = "/account/authorize";
             options.TokenEndpointPath = "/token";
 
-            options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
-            options.RefreshTokenLifetime = TimeSpan.FromHours(24);
+            options.AccessTokenLifetime = TimeSpan.FromMinutes(1);
+            options.RefreshTokenLifetime = TimeSpan.FromHours(10);
         }
     }
 }

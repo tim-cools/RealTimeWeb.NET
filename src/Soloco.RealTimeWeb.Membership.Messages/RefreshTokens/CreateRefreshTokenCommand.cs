@@ -6,7 +6,7 @@ namespace Soloco.RealTimeWeb.Membership.Messages.RefreshTokens
 {
     public class CreateRefreshTokenCommand : IMessage<Result>
     {
-        public string RefreshToken { get; }
+        public string TicketId { get; }
 
         public string ClientId { get; }
         public string UserId { get; }
@@ -17,9 +17,9 @@ namespace Soloco.RealTimeWeb.Membership.Messages.RefreshTokens
         public DateTimeOffset ExpiresUtc { get; }
         public DateTimeOffset IssuedUtc { get; set; }
 
-        public CreateRefreshTokenCommand(string refreshToken, string clientId, string userId, string userName, string ipAddress, DateTimeOffset issuedUtc, DateTimeOffset expiresUtc)
+        public CreateRefreshTokenCommand(string ticketId, string clientId, string userId, string userName, string ipAddress, DateTimeOffset issuedUtc, DateTimeOffset expiresUtc)
         {
-            RefreshToken = refreshToken;
+            TicketId = ticketId;
             ClientId = clientId;
             UserId = userId;
             UserName = userName;

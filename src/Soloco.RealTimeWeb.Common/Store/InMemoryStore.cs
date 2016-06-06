@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,6 +12,7 @@ using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
 using Marten.Services.BatchQuerying;
+using Marten.Services.Includes;
 using Npgsql;
 
 namespace Soloco.RealTimeWeb.Common.Store
@@ -388,6 +390,124 @@ namespace Soloco.RealTimeWeb.Common.Store
         }
 
         public void DeleteAllEventData()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal struct Wrapper<T> : IMartenQueryable<T>
+    {
+        private readonly IQueryable<T> _query;
+
+        public Wrapper(IQueryable<T> query)
+        {
+            _query = query;
+
+            Expression = null;
+            ElementType = null;
+            Provider = null;
+            Includes = null;
+            Statistics = null;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _query.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public Expression Expression { get; }
+        public Type ElementType { get; set; }
+        public IQueryProvider Provider { get; set; }
+
+        public IEnumerable<IIncludeJoin> Includes { get; set; }
+        public QueryStatistics Statistics { get; set; }
+
+        public Task<IList<TResult>> ToListAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AnyAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> CountAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<long> CountLongAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> FirstAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> FirstOrDefaultAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> SingleAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> SingleOrDefaultAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> SumAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> MinAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TResult> MaxAsync<TResult>(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<double> AverageAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public QueryPlan Explain(FetchType fetchType = FetchType.FetchMany)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMartenQueryable<T> Include<TInclude>(Expression<Func<T, object>> idSource, Action<TInclude> callback, JoinType joinType = JoinType.Inner) where TInclude : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMartenQueryable<T> Include<TInclude>(Expression<Func<T, object>> idSource, IList<TInclude> list, JoinType joinType = JoinType.Inner) where TInclude : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMartenQueryable<T> Include<TInclude, TKey>(Expression<Func<T, object>> idSource, IDictionary<TKey, TInclude> dictionary, JoinType joinType = JoinType.Inner) where TInclude : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMartenQueryable<T> Stats(out QueryStatistics stats)
         {
             throw new NotImplementedException();
         }

@@ -26,6 +26,12 @@ namespace Soloco.RealTimeWeb.Infrastructure.Configuration
 
             File.WriteAllText(localConfigFileName, json);
 
+            var solutionConfigFileName = ConfigurationData.GetSolutionConfigFileName(_applicationEnvironment.ApplicationBasePath);
+            if (solutionConfigFileName != null)
+            {
+                File.WriteAllText(solutionConfigFileName, json);
+            }
+
             return Task.FromResult(Result.Success);
         }
 

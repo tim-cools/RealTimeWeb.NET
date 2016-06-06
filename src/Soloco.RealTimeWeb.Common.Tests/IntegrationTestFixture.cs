@@ -34,7 +34,7 @@ namespace Soloco.RealTimeWeb.Common.Tests
 
         private IConfigurationRoot InitializeConfiguration()
         {
-            var environment = System.Environment.GetEnvironmentVariable("Hosting:Environment") ?? "local"; //todo should be WebHostBuilder.EnvironmentKey instead of hard coded
+            var environment = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "local"; //todo should be WebHostBuilder.EnvironmentKey instead of hard coded
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.tests.json")

@@ -13,6 +13,6 @@ namespace Soloco.RealTimeWeb.Membership.RefreshTokens.Domain
         public DateTimeOffset? ExpiresUtc { get; set; }
         public DateTimeOffset? IssuedUtc { get; set; }
 
-        public string Hash { get; set; }
+        public string TicketId { get; set; }
     }
 }

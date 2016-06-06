@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,47 +22,48 @@ namespace Soloco.RealTimeWeb.Infrastructure
 {
     public class AuthorizationServerProvider : OpenIdConnectServerProvider
     {
-        ///// <summary>
-        ///// Validates whether the client is a valid known application in our system.
-        ///// </summary>
-        //public override async Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
-        //{
-        //    var query = new ClientValidator(context.ClientId, context.ClientSecret);
-        //    var result = await ExecuteMessage(context, query);
+        /// <summary>
+        /// Validates whether the client is a valid known application in our system.
+        /// </summary>
+        public override async Task ValidateTokenRequest(ValidateTokenRequestContext context)
+        {
+            var query = new ClientValidator(context.ClientId, context.ClientSecret);
+            var result = await ExecuteMessage(context, query);
 
-        //    if (!result.Succeeded)
-        //    {
-        //        context.Reject(
-        //            error: "invalid_client",
-        //            description: "Client not found in the database: ensure that your client_id is correct");
+            if (!result.Succeeded)
+            {
+                context.Reject(
+                    error: "invalid_client",
+                    description: "Client not found in the database: ensure that your client_id is correct");
 
-        //        return;
-        //    }
+                return;
+            }
 
-        //    context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
+            context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
 
-        //    context.Validated();
-        //}
-        
-        ///// <summary>
-        ///// Validate wether the redirect uri is valid for the specific client .
-        ///// </summary>
-        //public override async Task ValidateClientRedirectUri(ValidateClientRedirectUriContext context)
-        //{
-        //    var query = new ClientRedirectUriValidator(context.ClientId, context.RedirectUri);
-        //    var result = await ExecuteMessage(context, query);
+            context.Validate();
+        }
 
-        //    if (!result.Succeeded)
-        //    {
-        //        context.Reject(
-        //            error: "invalid_client",
-        //            description: "Invalid redirect uri");
+        /// <summary>
+        /// Validate wether the redirect uri is valid for the specific client .
+        /// </summary>
+        public override async Task ValidateAuthorizationRequest(ValidateAuthorizationRequestContext context)
+        {
+            var query = new ClientRedirectUriValidator(context.ClientId, context.RedirectUri);
+            var result = await ExecuteMessage(context, query);
 
-        //        return;
-        //    }
+            if (!result.Succeeded)
+            {
+                Debugger.Launch();
+                context.Reject(
+                    error: "invalid_client",
+                    description: "Invalid redirect uri");
 
-        //    context.Validated();
-        //}
+                return;
+            }
+
+            context.Validate();
+        }
 
         /// <summary>
         /// Validates the userName and password provided by the user.
@@ -102,8 +104,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
         private static AuthenticationTicket CreateAuthenticationTicket(LoginResult result, GrantResourceOwnerCredentialsContext context)
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.Name, result.UserName, "id_token token");
-            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), "id_token token");
+            identity.AddClaim(ClaimTypes.Name, result.UserName, OpenIdConnectConstants.Destinations.AccessToken, OpenIdConnectConstants.Destinations.IdentityToken);
+            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), OpenIdConnectConstants.Destinations.AccessToken, OpenIdConnectConstants.Destinations.IdentityToken);
 
             var properties = new AuthenticationProperties();
             var principal = new ClaimsPrincipal(new[] { identity });
@@ -117,16 +119,10 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// </summary>
         public override async Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
-            var originalClient = context.Ticket.Properties.Items["client_id"];
-            if (originalClient != context.ClientId)
-            {
-                context.Reject("invalid_clientId", "Refresh token is issued to a different clientId.");
-                return;
-            }
+            Debugger.Launch();
 
-            var properties = context.Ticket.Properties;
-            var validator = new RefreshTokenValidator(context.Request.RefreshToken,
-                properties.Items["client_id"],
+            var validator = new RefreshTokenValidator(context.Ticket.GetTicketId(),
+                context.ClientId,
                 context.Ticket.Principal.GetClaim(ClaimTypes.NameIdentifier));
 
             var result = await ExecuteMessage(context, validator);
@@ -146,7 +142,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
         {
             var configuration = Configuration(context);
             var ticket = new AuthenticationTicket(principal, authenticationProperties, options.AuthenticationScheme);
-            ticket.SetResources(new[] { configuration.ApiHostName() });
+            ticket.SetResources(configuration.ApiHostName());
+            ticket.SetScopes(OpenIdConnectConstants.Scopes.OpenId, OpenIdConnectConstants.Scopes.Email, OpenIdConnectConstants.Scopes.Profile, OpenIdConnectConstants.Scopes.OfflineAccess);
             return ticket;
         }
 
@@ -166,8 +163,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
         public override async Task SerializeRefreshToken(SerializeRefreshTokenContext context)
         {
-            //context.RefreshToken = await context.RefreshTokenSerializeTicketAsync();
-
             await StoreRefreshToken(context);
         }
 
@@ -177,8 +172,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
             var properties = context.Ticket.Properties;
 
             var command = new CreateRefreshTokenCommand(
-                context.RefreshToken,
-                properties.Items["client_id"],
+                context.Ticket.GetTicketId(),
+                context.Request.ClientId,
                 principal.GetClaim(ClaimTypes.NameIdentifier),
                 principal.GetClaim(ClaimTypes.Name),
                 context.HttpContext.Connection.RemoteIpAddress?.ToString(),
