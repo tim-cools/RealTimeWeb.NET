@@ -1,6 +1,6 @@
 # RealTimeWeb.NET 
 
-*This is currently not fully working, I'm wainting for RC2 to update this to the latest bits*
+*06/06/2016: updated to rc2*
 
 Windows (mono): [![Build status](https://ci.appveyor.com/api/projects/status/lholf4sk5h4tas4h?svg=true)](https://ci.appveyor.com/project/tim-cools/realtimeweb-net)
 Linux (mono): [![Build Status](https://travis-ci.org/tim-cools/RealTimeWeb.NET.svg)](https://travis-ci.org/tim-cools/RealTimeWeb.NET)
