@@ -1,6 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {

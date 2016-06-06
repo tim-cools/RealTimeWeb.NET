@@ -3,8 +3,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Server;
-using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using AspNet.Security.OpenIdConnect.Extensions;
@@ -15,52 +15,53 @@ using Soloco.RealTimeWeb.Membership.Messages.Clients;
 using Soloco.RealTimeWeb.Membership.Messages.RefreshTokens;
 using Soloco.RealTimeWeb.Membership.Messages.Users;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
+using AuthenticationProperties=Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties;
 
 namespace Soloco.RealTimeWeb.Infrastructure
 {
     public class AuthorizationServerProvider : OpenIdConnectServerProvider
     {
-        /// <summary>
-        /// Validates whether the client is a valid known application in our system.
-        /// </summary>
-        public override async Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
-        {
-            var query = new ClientValidator(context.ClientId, context.ClientSecret);
-            var result = await ExecuteMessage(context, query);
+        ///// <summary>
+        ///// Validates whether the client is a valid known application in our system.
+        ///// </summary>
+        //public override async Task ValidateClientAuthentication(ValidateClientAuthenticationContext context)
+        //{
+        //    var query = new ClientValidator(context.ClientId, context.ClientSecret);
+        //    var result = await ExecuteMessage(context, query);
 
-            if (!result.Succeeded)
-            {
-                context.Rejected(
-                    error: "invalid_client",
-                    description: "Client not found in the database: ensure that your client_id is correct");
+        //    if (!result.Succeeded)
+        //    {
+        //        context.Reject(
+        //            error: "invalid_client",
+        //            description: "Client not found in the database: ensure that your client_id is correct");
 
-                return;
-            }
+        //        return;
+        //    }
 
-            context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
+        //    context.HttpContext.Items.Add("as:clientAllowedOrigin", result.AllowedOrigin);
 
-            context.Validated();
-        }
+        //    context.Validated();
+        //}
         
-        /// <summary>
-        /// Validate wether the redirect uri is valid for the specific client .
-        /// </summary>
-        public override async Task ValidateClientRedirectUri(ValidateClientRedirectUriContext context)
-        {
-            var query = new ClientRedirectUriValidator(context.ClientId, context.RedirectUri);
-            var result = await ExecuteMessage(context, query);
+        ///// <summary>
+        ///// Validate wether the redirect uri is valid for the specific client .
+        ///// </summary>
+        //public override async Task ValidateClientRedirectUri(ValidateClientRedirectUriContext context)
+        //{
+        //    var query = new ClientRedirectUriValidator(context.ClientId, context.RedirectUri);
+        //    var result = await ExecuteMessage(context, query);
 
-            if (!result.Succeeded)
-            {
-                context.Rejected(
-                    error: "invalid_client",
-                    description: "Invalid redirect uri");
+        //    if (!result.Succeeded)
+        //    {
+        //        context.Reject(
+        //            error: "invalid_client",
+        //            description: "Invalid redirect uri");
 
-                return;
-            }
+        //        return;
+        //    }
 
-            context.Validated();
-        }
+        //    context.Validated();
+        //}
 
         /// <summary>
         /// Validates the userName and password provided by the user.
@@ -72,14 +73,14 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             if (!result.Succeeded)
             {
-                context.Rejected("invalid_grant", "The user name or password is incorrect.");
+                context.Reject("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
 
             SetCorsHeader(context);
 
             var ticket = CreateAuthenticationTicket(result, context);
-            context.Validated(ticket);
+            context.Validate(ticket);
         }
 
         /// <summary>
@@ -116,29 +117,29 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// </summary>
         public override async Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
-            var originalClient = context.AuthenticationTicket.Properties.Items["client_id"];
+            var originalClient = context.Ticket.Properties.Items["client_id"];
             if (originalClient != context.ClientId)
             {
-                context.Rejected("invalid_clientId", "Refresh token is issued to a different clientId.");
+                context.Reject("invalid_clientId", "Refresh token is issued to a different clientId.");
                 return;
             }
 
-            var properties = context.AuthenticationTicket.Properties;
+            var properties = context.Ticket.Properties;
             var validator = new RefreshTokenValidator(context.Request.RefreshToken,
                 properties.Items["client_id"],
-                context.AuthenticationTicket.Principal.GetClaim(ClaimTypes.NameIdentifier));
+                context.Ticket.Principal.GetClaim(ClaimTypes.NameIdentifier));
 
             var result = await ExecuteMessage(context, validator);
             if (!result.Succeeded)
             {
-                context.Rejected(OpenIdConnectConstants.Errors.InvalidRequest, "Could not validate refresh_token.");
+                context.Reject(OpenIdConnectConstants.Errors.InvalidRequest, "Could not validate refresh_token.");
                 return;
             }
 
-            var principal = new ClaimsPrincipal(context.AuthenticationTicket.Principal);
-            var ticket = CreateAuthenticationTicket(principal, context.AuthenticationTicket.Properties, context.Options, context);
+            var principal = new ClaimsPrincipal(context.Ticket.Principal);
+            var ticket = CreateAuthenticationTicket(principal, context.Ticket.Properties, context.Options, context);
 
-            context.Validated(ticket);
+            context.Validate(ticket);
         }
 
         private static AuthenticationTicket CreateAuthenticationTicket(ClaimsPrincipal principal, AuthenticationProperties authenticationProperties, OpenIdConnectServerOptions options, BaseContext context)
@@ -149,31 +150,31 @@ namespace Soloco.RealTimeWeb.Infrastructure
             return ticket;
         }
 
-        public override Task TokenEndpointResponse(TokenEndpointResponseContext context)
+        public override Task ApplyTokenResponse(ApplyTokenResponseContext context)
         {
             AddCustomPropertiesTokenResponsePayload(context);
             return Task.FromResult(true);
         }
 
-        private static void AddCustomPropertiesTokenResponsePayload(TokenEndpointResponseContext context)
+        private static void AddCustomPropertiesTokenResponsePayload(ApplyTokenResponseContext context)
         {
             foreach (var property in context.HttpContext.Items.Where(item => item.Key.ToString().StartsWith("as:")))
             {
-                context.Payload.Add(property.Key as string, new JValue(property.Value));
+                context.Response.Add(property.Key as string, new JValue(property.Value));
             }
         }
 
         public override async Task SerializeRefreshToken(SerializeRefreshTokenContext context)
         {
-            context.RefreshToken = await context.SerializeTicketAsync();
+            //context.RefreshToken = await context.RefreshTokenSerializeTicketAsync();
 
             await StoreRefreshToken(context);
         }
 
         private async Task StoreRefreshToken(SerializeRefreshTokenContext context)
         {
-            var principal = context.AuthenticationTicket.Principal;
-            var properties = context.AuthenticationTicket.Properties;
+            var principal = context.Ticket.Principal;
+            var properties = context.Ticket.Properties;
 
             var command = new CreateRefreshTokenCommand(
                 context.RefreshToken,

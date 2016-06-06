@@ -6,9 +6,9 @@ namespace Soloco.RealTimeWeb.Infrastructure.Documentation
 {
     public class DocumentationFiles : IDocumentationFiles
     {
-        private readonly IApplicationEnvironment _applicationEnvironment;
+        private readonly ApplicationEnvironment _applicationEnvironment;
 
-        public DocumentationFiles(IApplicationEnvironment applicationEnvironment)
+        public DocumentationFiles(ApplicationEnvironment applicationEnvironment)
         {
             if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
             _applicationEnvironment = applicationEnvironment;

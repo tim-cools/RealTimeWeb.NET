@@ -6,7 +6,7 @@ using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Xunit;
 
-namespace Soloco.RealTimeWeb.Membership.Tests.Acceptance.Api.Account
+namespace Soloco.RealTimeWeb.Tests.Acceptance.Api.Account
 {
     public class WhenGettingTheCurrentAccount : ServiceTestBase<IMessageDispatcher>,
         IClassFixture<WebIntegrationTestFixture>

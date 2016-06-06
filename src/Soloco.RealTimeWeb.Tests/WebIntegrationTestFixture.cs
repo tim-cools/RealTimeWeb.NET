@@ -1,8 +1,8 @@
-﻿using StructureMap;
-using Soloco.RealTimeWeb.Common.Tests;
+﻿using Soloco.RealTimeWeb.Common.Tests;
 using Soloco.RealTimeWeb.Infrastructure;
+using StructureMap;
 
-namespace Soloco.RealTimeWeb.Membership.Tests
+namespace Soloco.RealTimeWeb.Tests
 {
     public class WebIntegrationTestFixture : IntegrationTestFixture
     {

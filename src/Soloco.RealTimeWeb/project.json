@@ -1,9 +1,7 @@
 {
   "version": "1.0.0-rc2-final",
-  "userSecretsId": "aspnet5-Soloco.RealTimeWeb-558eb18b-8a95-46ae-81c6-4145390ed7e7",
-  "compilationOptions": {
-    "emitEntryPoint": true
-  },
+  "userSecretsId": "aspnetcore-Soloco.RealTimeWeb-558eb18b-8a95-46ae-81c6-4145390ed7e7",
+
   "tooling": {
     "defaultNamespace": "Soloco.RealTimeWeb"
   },
@@ -24,22 +22,29 @@
     "Microsoft.AspNetCore.Mvc.Razor": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Identity": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Http.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc2-final",
     "Microsoft.AspNet.SignalR.Core": "2.2.0",
     "Microsoft.AspNet.SignalR.Owin": "1.2.2",
-    "Microsoft.AspNet.Owin": "1.0.0-rc1-final",
+    "Microsoft.AspNetCore.Owin": "1.0.0-rc2-final",
     "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc2-final",
-    "Soloco.RealTimeWeb.Common": "1.0.0-rc2-final",
-    "Soloco.RealTimeWeb.Membership": "1.0.0-rc2-final",
-    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc2-final",
     "Microsoft.IdentityModel.Protocols.OpenIdConnect": "2.0.0-rc2-305061149",
+    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
+    "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta5-final",
+    "AspNet.Security.OpenIdConnect.Extensions": "1.0.0-beta5-final",
+    "AspNet.Security.OAuth.Validation": "1.0.0-alpha1-final",
     "Newtonsoft.Json": "8.0.3",
     "MassTransit": "3.3.3",
     "MassTransit.RabbitMQ": "3.3.3",
+    "Soloco.RealTimeWeb.Common": "1.0.0-rc2-final",
+    "Soloco.RealTimeWeb.Membership": "1.0.0-rc2-final",
+    "Soloco.RealTimeWeb.Membership.Messages": "1.0.0-rc2-final",
     "Soloco.RealTimeWeb.VehicleMonitor.Messages": "1.0.0-rc2-final"
   },
 
@@ -75,6 +80,14 @@
 
   "frameworks": {
     "net46": { }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true,
+    "copyToOutput": [
+      "appsettings*.json"
+    ]
   },
 
   "exclude": [

@@ -6,7 +6,7 @@ using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Tests;
 using Xunit;
 
-namespace Soloco.RealTimeWeb.Membership.Tests.Acceptance.Api.Documents
+namespace Soloco.RealTimeWeb.Tests.Acceptance.Api.Documents
 {
     public class WhenGettingTheDocuments : ServiceTestBase<IMessageDispatcher>,
         IClassFixture<WebIntegrationTestFixture>

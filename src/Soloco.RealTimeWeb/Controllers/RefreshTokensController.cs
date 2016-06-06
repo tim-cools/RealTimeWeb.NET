@@ -36,7 +36,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var command = new DeleteRefreshTokenCommand(tokenId);
             var result = await _messageDispatcher.Execute(command);
 
-            return result.Succeeded ? (IActionResult) Ok() : HttpBadRequest("Token Id does not exist");
+            return result.Succeeded ? (IActionResult) Ok() : BadRequest("Token Id does not exist");
         }
     }
 }

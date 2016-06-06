@@ -1,10 +1,9 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
-using Microsoft.AspNet.Http.Authentication;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Infrastructure;
@@ -36,7 +35,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var response = HttpContext.GetOpenIdConnectResponse();
             if (response != null)
             {
-                return HttpBadRequest(response);
+                return BadRequest(response);
             }
 
             var request = HttpContext.GetOpenIdConnectRequest();
@@ -45,7 +44,7 @@ namespace Soloco.RealTimeWeb.Controllers
                 return InvalidRequest("An internal error has occurred");
             }
 
-            var redirectUri = "/account/authorize/complete?unique_id=" + request.GetUniqueIdentifier();
+            var redirectUri = "/account/authorize/complete?unique_id=" + request.GetRequestId();
             if (User.Identities.Any(identity => identity.IsAuthenticated))
             {
                 return Redirect(redirectUri);
@@ -104,22 +103,22 @@ namespace Soloco.RealTimeWeb.Controllers
         private static AuthenticationProperties CreateAuthenticationProperties()
         {
             var properties = new AuthenticationProperties();
-            properties.SetScopes(new[]
-            {
-                OpenIdConnectConstants.Scopes.OpenId,
-                OpenIdConnectConstants.Scopes.Email,
-                OpenIdConnectConstants.Scopes.Profile,
-                OpenIdConnectConstants.Scopes.OfflineAccess
-            });
-            properties.SetResources(new[] { "http://localhost:3000/" });
+            //properties.SetScopes(new[]
+            //{
+            //    OpenIdConnectConstants.Scopes.OpenId,
+            //    OpenIdConnectConstants.Scopes.Email,
+            //    OpenIdConnectConstants.Scopes.Profile,
+            //    OpenIdConnectConstants.Scopes.OfflineAccess
+            //});
+            //properties.SetResources(new[] { "http://localhost:3000/" });
             return properties;
         }
 
         private ClaimsPrincipal CreateClaimsPrincipal(LoginResult result, ValidateClientResult client)
         {
             var identity = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.Name, result.UserName, destination: "id_token token");
-            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), destination: "id_token token");
+            identity.AddClaim(ClaimTypes.Name, result.UserName, "id_token token");
+            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), "id_token token");
 
             identity.Actor = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
             identity.Actor.AddClaim(ClaimTypes.NameIdentifier, client.Id.ToString());
@@ -148,7 +147,7 @@ namespace Soloco.RealTimeWeb.Controllers
 
         private BadRequestObjectResult InvalidRequest(string message)
         {
-            return HttpBadRequest(new
+            return BadRequest(new
             {
                 Error = "invalid_request",
                 ErrorDescription = message
@@ -157,7 +156,7 @@ namespace Soloco.RealTimeWeb.Controllers
 
         private BadRequestObjectResult InvalidRequest(string error, string message)
         {
-            return HttpBadRequest(new
+            return BadRequest(new
             {
                 Error = error,
                 ErrorDescription = message

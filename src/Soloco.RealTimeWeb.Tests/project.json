@@ -1,8 +1,16 @@
 {
   "version": "1.0.0-rc2-final",
 
+  "testRunner": "xunit",
+
   "tooling": {
     "defaultNamespace": "Soloco.RealTimeWeb.Tests"
+  },
+
+  "buildOptions": {
+    "copyToOutput": [
+      "appsettings.*.json"
+    ]
   },
 
   "dependencies": {

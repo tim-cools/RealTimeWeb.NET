@@ -10,9 +10,9 @@ namespace Soloco.RealTimeWeb.Infrastructure.Configuration
 {
     public class StoreConfigurationHandler : IHandleMessage<StoreConfigurationCommand, Result>
     {
-        private readonly IApplicationEnvironment _applicationEnvironment;
+        private readonly ApplicationEnvironment _applicationEnvironment;
 
-        public StoreConfigurationHandler(IApplicationEnvironment applicationEnvironment)
+        public StoreConfigurationHandler(ApplicationEnvironment applicationEnvironment)
         {
             if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
 

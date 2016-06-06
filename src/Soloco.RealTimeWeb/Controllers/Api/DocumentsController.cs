@@ -34,7 +34,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         {
             var query = new DocumentQuery(id);
             var document = await _messageDispatcher.Execute(query);
-            return document != null ? (IActionResult) Json(document) : HttpNotFound();
+            return document != null ? (IActionResult) Json(document) : NotFound();
         }
     }
 }

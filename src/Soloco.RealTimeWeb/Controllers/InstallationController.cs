@@ -35,7 +35,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var result = await _messageDispatcher.Execute(query);
             if (!result.Succeeded)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             var response = MapResponse(result);
@@ -72,7 +72,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var result = await _messageDispatcher.Execute(command);
             if (!result.Succeeded)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             return View(new InstallationResponse(true));

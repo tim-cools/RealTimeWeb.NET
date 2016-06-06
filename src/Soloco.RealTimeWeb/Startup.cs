@@ -1,10 +1,12 @@
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using StructureMap;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Infrastructure;
@@ -17,15 +19,12 @@ namespace Soloco.RealTimeWeb
     {
         private const string defaultName = "default";
 
-        private readonly IApplicationEnvironment _applicationEnvironment;
         private readonly IConfigurationRoot _configuration;
 
-        public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment)
+        public Startup(IHostingEnvironment env)
         {
             if (env == null) throw new ArgumentNullException(nameof(env));
-            if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
 
-            _applicationEnvironment = applicationEnvironment;
             _configuration = SetupConfiguration(env);
         }
 
@@ -45,7 +44,7 @@ namespace Soloco.RealTimeWeb
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddIdentity<User, Role>();
-            services.AddCaching();
+            services.AddMemoryCache();
             services.AddAuthentication(options =>  { options.SignInScheme = "ServerCookie"; });
             services.AddMvc();
             services.AddCors(ConfigureCors);
@@ -67,7 +66,7 @@ namespace Soloco.RealTimeWeb
             var container = new Container(configuration =>
             {
                 configuration.For<IConfiguration>().Use(_configuration);
-                configuration.For<IApplicationEnvironment>().Use(_applicationEnvironment);
+                configuration.For<ApplicationEnvironment>().Use(PlatformServices.Default.Application);
 
                 configuration.AddRegistry<WebRegistry>();
                 configuration.AddRegistry<CommonRegistry>();
@@ -114,8 +113,9 @@ namespace Soloco.RealTimeWeb
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
-               .UseStaticFiles()
+
+            //todo was .UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
+            app.UseStaticFiles()
                .UseSignalR()
                .ConfigureAuthentication(_configuration)
                .UseCors(defaultName)
@@ -127,7 +127,17 @@ namespace Soloco.RealTimeWeb
                        );
                });
         }
-        
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+        public static void Main(string[] args)
+        {
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
+        }
     }
 }
