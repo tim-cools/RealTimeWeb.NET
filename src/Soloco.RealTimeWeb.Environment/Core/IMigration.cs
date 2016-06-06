@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
+
 namespace Soloco.RealTimeWeb.Environment.Core
 {
     internal interface IMigration
     {
-        void Up();
-        void Down();
+        Task Up();
+        Task Down();
     }
 }

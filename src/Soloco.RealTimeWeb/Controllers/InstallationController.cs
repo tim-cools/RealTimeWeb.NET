@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
@@ -35,7 +36,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var result = await _messageDispatcher.Execute(query);
             if (!result.Succeeded)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             var response = MapResponse(result);
@@ -72,7 +73,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var result = await _messageDispatcher.Execute(command);
             if (!result.Succeeded)
             {
-                return HttpBadRequest();
+                return BadRequest();
             }
 
             return View(new InstallationResponse(true));

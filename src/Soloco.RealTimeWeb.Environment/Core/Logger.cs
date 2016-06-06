@@ -6,6 +6,7 @@ namespace Soloco.RealTimeWeb.Environment.Core
 {
     public class Logger : ILogger
     {
+        private readonly object _lock = new object();
         private int _indent;
         private string _indentString;
 
@@ -55,12 +56,6 @@ namespace Soloco.RealTimeWeb.Environment.Core
         public IDisposable Scope(string title, params object[] args)
         {
             return new Log(this, title, args);
-        }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        private static void LogSynchronized(string data, string file)
-        {
-            File.AppendAllText(file, data);
         }
 
         private void Indent(int value)

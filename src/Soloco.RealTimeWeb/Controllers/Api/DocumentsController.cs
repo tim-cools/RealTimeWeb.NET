@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Infrastructure.Documentation;
 
@@ -34,7 +34,7 @@ namespace Soloco.RealTimeWeb.Controllers.Api
         {
             var query = new DocumentQuery(id);
             var document = await _messageDispatcher.Execute(query);
-            return document != null ? (IActionResult) Json(document) : HttpNotFound();
+            return document != null ? (IActionResult) Json(document) : NotFound();
         }
     }
 }

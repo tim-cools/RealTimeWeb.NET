@@ -3,7 +3,7 @@ using Shouldly;
 using Soloco.RealTimeWeb.Infrastructure.Documentation;
 using Xunit;
 
-namespace Soloco.RealTimeWeb.Membership.Tests.Unit.Documents.DocumentsControllerSpecifications
+namespace Soloco.RealTimeWeb.Tests.Unit.Documents.DocumentsControllerSpecifications
 {
     public class WhenGettingDocuments
     {

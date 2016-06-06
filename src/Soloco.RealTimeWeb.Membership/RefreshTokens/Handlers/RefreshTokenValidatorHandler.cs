@@ -24,9 +24,7 @@ namespace Soloco.RealTimeWeb.Membership.RefreshTokens.Handlers
 
         private Result Validate(RefreshTokenValidator query)
         {
-            var hash = Hasher.ComputeSHA256(query.RefreshToken);
-
-            var token = Session.GetFirst<Domain.RefreshToken>(criteria => criteria.Hash == hash);
+            var token = Session.GetFirst<Domain.RefreshToken>(criteria => criteria.TicketId == query.TicketId);
             if (token == null)
             {
                 return Result.Failed("Unknown refresh token");

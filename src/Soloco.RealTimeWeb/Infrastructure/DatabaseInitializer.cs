@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using Soloco.RealTimeWeb.Membership.Messages.Infrastructure;
 
 namespace Soloco.RealTimeWeb.Infrastructure

@@ -1,8 +1,6 @@
 ﻿using Marten;
-using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
-using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Common.Store;
 using Soloco.RealTimeWeb.Common.StructureMap;
@@ -31,10 +29,7 @@ namespace Soloco.RealTimeWeb.Common
         {
             ForSingletonOf<IDocumentSchema>().Use<DocumentSchema>();
             For<ISerializer>().Use<JsonNetSerializer>();
-            For<IDocumentSchemaCreation>().Use<DevelopmentSchemaCreation>();
-            For<ICommandRunner>().Use<CommandRunner>();
             For<IDocumentCleaner>().Use<DocumentCleaner>();
-            For<IMartenQueryExecutor>().Use<MartenQueryExecutor>();
         }
 
         private void RegisterMartenSession()

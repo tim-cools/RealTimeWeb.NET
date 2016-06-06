@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.RefreshTokens;
 
@@ -20,7 +20,7 @@ namespace Soloco.RealTimeWeb.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Microsoft.AspNet.Mvc.Route("")]
+        [Route("")]
         public async Task<IActionResult> Get()
         {
             var query = new RefreshTokensQuery();
@@ -30,13 +30,13 @@ namespace Soloco.RealTimeWeb.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Microsoft.AspNet.Mvc.Route("")]
+        [Route("")]
         public async Task<IActionResult> Delete(Guid tokenId)
         {
             var command = new DeleteRefreshTokenCommand(tokenId);
             var result = await _messageDispatcher.Execute(command);
 
-            return result.Succeeded ? (IActionResult) Ok() : HttpBadRequest("Token Id does not exist");
+            return result.Succeeded ? (IActionResult) Ok() : BadRequest("Token Id does not exist");
         }
     }
 }

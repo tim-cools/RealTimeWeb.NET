@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Amazon.RDS;
 using Amazon.RDS.Model;
 using Amazon.Runtime;
+
 using Soloco.RealTimeWeb.Environment.Core;
 
 namespace Soloco.RealTimeWeb.Environment.Migrations
@@ -21,50 +23,50 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             _client = CreateClient();
         }
 
-        public void Up()
+        public async Task Up()
         {
             return;
-            if (!DatabaseExists())
+            if (!await DatabaseExists())
             {
-                CreateDatabase();
-                WaitUntilInitialized();
+                await CreateDatabase();
+                await WaitUntilInitialized();
             }
         }
 
-        public void Down()
+        public async Task Down()
         {
-            if (DatabaseExists())
+            if (await DatabaseExists())
             {
-                DeleteDatabase();
-                WaitUntilDatabaseDoesNotExists();
+                await DeleteDatabase();
+                await WaitUntilDatabaseDoesNotExists();
             }
         }
 
-        private void WaitUntilDatabaseDoesNotExists()
+        private async Task WaitUntilDatabaseDoesNotExists()
         {
-            while (GetDatabaseInstance() != null)
+            while (await GetDatabaseInstance() != null)
             {
                 Thread.Sleep(1000);
             }
         }
 
-        private void DeleteDatabase()
+        private async Task DeleteDatabase()
         {
             var request = new DeleteDBInstanceRequest
             {
                 DBInstanceIdentifier = _context.Settings.Database.Name,
                 SkipFinalSnapshot = true
             };
-            _client.DeleteDBInstance(request);
+            await _client.DeleteDBInstanceAsync(request);
         }
 
-        private void WaitUntilInitialized()
+        private async Task WaitUntilInitialized()
         {
-            var instance = GetDatabaseInstance();
+            var instance = await GetDatabaseInstance();
             while (NotInitialized(instance))
             {
                 Thread.Sleep(1000);
-                instance = GetDatabaseInstance();
+                instance = await GetDatabaseInstance();
             }
         }
 
@@ -74,27 +76,27 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
             return instance.DBInstanceStatus == "creating";
         }
 
-        private bool DatabaseExists()
+        private async Task<bool> DatabaseExists()
         {
-            var instance = GetDatabaseInstance();
+            var instance = await GetDatabaseInstance();
             var databaseExists = instance != null;
             _context.Logger.WriteLine("DatabaseExists: " + databaseExists);
             return databaseExists;
         }
 
-        private DBInstance GetDatabaseInstance()
+        private async Task<DBInstance> GetDatabaseInstance()
         {
             var request = new DescribeDBInstancesRequest();
-            var instances = _client.DescribeDBInstances(request);
+            var instances = await _client.DescribeDBInstancesAsync(request);
 
             return instances.DBInstances
                 .FirstOrDefault(
                     instance =>
                         string.Equals(instance.DBInstanceIdentifier, _context.Settings.Database.Name,
-                            StringComparison.InvariantCultureIgnoreCase));
+                            StringComparison.OrdinalIgnoreCase));
         }
 
-        private void CreateDatabase()
+        private Task CreateDatabase()
         {
             var request = new CreateDBInstanceRequest
             {
@@ -110,7 +112,7 @@ namespace Soloco.RealTimeWeb.Environment.Migrations
                 DBInstanceIdentifier = _context.Settings.Database.Name
             };
 
-            _client.CreateDBInstance(request);
+            return _client.CreateDBInstanceAsync(request);
         }
 
         private IAmazonRDS CreateClient()

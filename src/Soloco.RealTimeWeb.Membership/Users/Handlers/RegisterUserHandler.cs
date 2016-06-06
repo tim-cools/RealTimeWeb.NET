@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Marten;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Membership.Messages.Users;

@@ -14,7 +14,6 @@ class Header extends Component {
             ? [ (
                 <Nav key="left" onSelect={(key, href) => navigate.to(href)}>
                     <NavItem href='/home'>Home</NavItem>
-                    <NavItem href='/documentation'>Documentation</NavItem>
                     <NavItem href='/vehicles'>Vehicles</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
@@ -28,7 +27,6 @@ class Header extends Component {
                 ) ]
             :  [ (
                 <Nav key="left" onSelect={(key, href) => navigate.to(href)}>
-                    <NavItem href='/documentation'>Documentation</NavItem>
                     <NavItem href='/about'>About</NavItem>
                 </Nav>
                 ), (

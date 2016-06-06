@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Net.Http;
+using AspNet.Security.OAuth.Validation;
 using AspNet.Security.OpenIdConnect.Server;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common;
 
@@ -32,15 +33,15 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
         private static Action<IApplicationBuilder> ApiAuthentication(IConfiguration configuration)
         {
-            return branch => branch.UseJwtBearerAuthentication(options =>
+            var options = new OAuthValidationOptions
             {
-                options.AutomaticAuthenticate = true;
-                options.AutomaticChallenge = true;
-                options.RequireHttpsMetadata = false;
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            };
 
-                options.Audience = configuration.ApiHostName();
-                options.Authority = configuration.ApiHostName();
-            });
+            options.Audiences.Add(configuration.ApiHostName());
+
+            return branch => branch.UseOAuthValidation(options);
         }
 
         private static bool IsWeb(HttpContext context)
@@ -50,36 +51,39 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
         private static void WebAuthentication(IApplicationBuilder branch)
         {
-            branch.UseCookieAuthentication(options =>
+            branch.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                options.AutomaticAuthenticate = true;
-                options.AutomaticChallenge = true;
-                options.AuthenticationScheme = "ServerCookie";
-                options.CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                options.LoginPath = new PathString("/signin");
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                AuthenticationScheme = "ServerCookie",
+                CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
+                ExpireTimeSpan = TimeSpan.FromMinutes(5),
+                LoginPath = new PathString(new PathString("/signin"))
             });
         }
 
         private static Action<IApplicationBuilder> GoogleAuthentication(IConfiguration configuration)
         {
-            return app => app.UseGoogleAuthentication(options =>
+            return app => app.UseGoogleAuthentication(new GoogleOptions
             {
-                options.ClientId = configuration.AuthenticationGoogleClientId();
-                options.ClientSecret = configuration.AuthenticationGoogleClientSecret();
+                ClientId = configuration.AuthenticationGoogleClientId(),
+                ClientSecret = configuration.AuthenticationGoogleClientSecret()
             });
         }
 
         private static Action<IApplicationBuilder> FacebookAuthentication(IConfiguration configuration)
         {
-            return app => app.UseFacebookAuthentication(options =>
+            var options = new FacebookOptions
             {
-                options.AppId = configuration.AuthenticationFacebookAppId();
-                options.AppSecret = configuration.AuthenticationFacebookAppSecret();
-                options.BackchannelHttpHandler = new HttpClientHandler();
-                options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email";
-                options.Scope.Add("email");
-            });
+                AppId = configuration.AuthenticationFacebookAppId(),
+                AppSecret = configuration.AuthenticationFacebookAppSecret(),
+                BackchannelHttpHandler = new HttpClientHandler(),
+                UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email",
+            };
+
+            options.Scope.Add("email");
+
+            return app => app.UseFacebookAuthentication(options);
         }
 
         private static void ServerOptions(OpenIdConnectServerOptions options)
@@ -89,8 +93,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
             options.AuthorizationEndpointPath = "/account/authorize";
             options.TokenEndpointPath = "/token";
 
-            options.AccessTokenLifetime = TimeSpan.FromMinutes(20);
-            options.RefreshTokenLifetime = TimeSpan.FromHours(24);
+            options.AccessTokenLifetime = TimeSpan.FromMinutes(1);
+            options.RefreshTokenLifetime = TimeSpan.FromHours(10);
         }
     }
 }

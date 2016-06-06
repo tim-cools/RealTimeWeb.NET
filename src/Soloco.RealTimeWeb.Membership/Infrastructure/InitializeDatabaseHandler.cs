@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Marten;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Common;
 using Soloco.RealTimeWeb.Common.Messages;
@@ -69,6 +69,7 @@ namespace Soloco.RealTimeWeb.Membership.Infrastructure
             existing.Secret = client.Secret;
             existing.Name = client.Name;
             existing.ApplicationType = client.ApplicationType;
+            existing.RedirectUri = client.RedirectUri;
             existing.Active = client.Active;
             existing.AllowedOrigin = client.AllowedOrigin;
         }

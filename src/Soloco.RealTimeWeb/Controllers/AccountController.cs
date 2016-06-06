@@ -1,28 +1,33 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Soloco.RealTimeWeb.Common.Messages;
 using Soloco.RealTimeWeb.Infrastructure;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Soloco.RealTimeWeb.Membership.Messages.Clients;
 using Soloco.RealTimeWeb.Membership.Messages.Users;
 using Soloco.RealTimeWeb.Membership.Messages.ViewModel;
+using Soloco.RealTimeWeb.Common;
 
 namespace Soloco.RealTimeWeb.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IMessageDispatcher _messageDispatcher;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IMessageDispatcher messageDispatcher)
+        public AccountController(IMessageDispatcher messageDispatcher, IConfiguration configuration)
         {
             _messageDispatcher = messageDispatcher;
+            _configuration = configuration;
         }
 
         [HttpGet("~/account/authorize/connect")]
@@ -36,7 +41,7 @@ namespace Soloco.RealTimeWeb.Controllers
             var response = HttpContext.GetOpenIdConnectResponse();
             if (response != null)
             {
-                return HttpBadRequest(response);
+                return BadRequest(response);
             }
 
             var request = HttpContext.GetOpenIdConnectRequest();
@@ -45,7 +50,7 @@ namespace Soloco.RealTimeWeb.Controllers
                 return InvalidRequest("An internal error has occurred");
             }
 
-            var redirectUri = "/account/authorize/complete?unique_id=" + request.GetUniqueIdentifier();
+            var redirectUri = "/account/authorize/complete?request_id=" + request.GetRequestId();
             if (User.Identities.Any(identity => identity.IsAuthenticated))
             {
                 return Redirect(redirectUri);
@@ -94,32 +99,26 @@ namespace Soloco.RealTimeWeb.Controllers
             }
 
             var principal = CreateClaimsPrincipal(result, applicationResult);
-            var properties = CreateAuthenticationProperties();
+            var properties = CreateAuthenticationProperties(principal);
 
             await HttpContext.Authentication.SignInAsync(OpenIdConnectServerDefaults.AuthenticationScheme, principal, properties);
 
             return new EmptyResult();
         }
 
-        private static AuthenticationProperties CreateAuthenticationProperties()
+        private AuthenticationProperties CreateAuthenticationProperties(ClaimsPrincipal principal)
         {
-            var properties = new AuthenticationProperties();
-            properties.SetScopes(new[]
-            {
-                OpenIdConnectConstants.Scopes.OpenId,
-                OpenIdConnectConstants.Scopes.Email,
-                OpenIdConnectConstants.Scopes.Profile,
-                OpenIdConnectConstants.Scopes.OfflineAccess
-            });
-            properties.SetResources(new[] { "http://localhost:3000/" });
-            return properties;
+            var ticket = new AuthenticationTicket(principal, null, OpenIdConnectServerDefaults.AuthenticationScheme);
+            ticket.SetResources(_configuration.WebHostName());
+            ticket.SetScopes(OpenIdConnectConstants.Scopes.OpenId, OpenIdConnectConstants.Scopes.Email, OpenIdConnectConstants.Scopes.Profile, OpenIdConnectConstants.Scopes.OfflineAccess);
+            return ticket.Properties;
         }
 
         private ClaimsPrincipal CreateClaimsPrincipal(LoginResult result, ValidateClientResult client)
         {
             var identity = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
-            identity.AddClaim(ClaimTypes.Name, result.UserName, destination: "id_token token");
-            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), destination: "id_token token");
+            identity.AddClaim(ClaimTypes.Name, result.UserName, OpenIdConnectConstants.Destinations.AccessToken, OpenIdConnectConstants.Destinations.IdentityToken);
+            identity.AddClaim(ClaimTypes.NameIdentifier, result.UserId.ToString(), OpenIdConnectConstants.Destinations.AccessToken, OpenIdConnectConstants.Destinations.IdentityToken);
 
             identity.Actor = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
             identity.Actor.AddClaim(ClaimTypes.NameIdentifier, client.Id.ToString());
@@ -148,7 +147,7 @@ namespace Soloco.RealTimeWeb.Controllers
 
         private BadRequestObjectResult InvalidRequest(string message)
         {
-            return HttpBadRequest(new
+            return BadRequest(new
             {
                 Error = "invalid_request",
                 ErrorDescription = message
@@ -157,7 +156,7 @@ namespace Soloco.RealTimeWeb.Controllers
 
         private BadRequestObjectResult InvalidRequest(string error, string message)
         {
-            return HttpBadRequest(new
+            return BadRequest(new
             {
                 Error = error,
                 ErrorDescription = message

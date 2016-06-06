@@ -10,9 +10,9 @@ namespace Soloco.RealTimeWeb.Infrastructure.Configuration
 {
     public class StoreConfigurationHandler : IHandleMessage<StoreConfigurationCommand, Result>
     {
-        private readonly IApplicationEnvironment _applicationEnvironment;
+        private readonly ApplicationEnvironment _applicationEnvironment;
 
-        public StoreConfigurationHandler(IApplicationEnvironment applicationEnvironment)
+        public StoreConfigurationHandler(ApplicationEnvironment applicationEnvironment)
         {
             if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
 
@@ -25,6 +25,12 @@ namespace Soloco.RealTimeWeb.Infrastructure.Configuration
             var localConfigFileName = ConfigurationData.GetFileName(_applicationEnvironment.ApplicationBasePath);
 
             File.WriteAllText(localConfigFileName, json);
+
+            var solutionConfigFileName = ConfigurationData.GetSolutionConfigFileName(_applicationEnvironment.ApplicationBasePath);
+            if (solutionConfigFileName != null)
+            {
+                File.WriteAllText(solutionConfigFileName, json);
+            }
 
             return Task.FromResult(Result.Success);
         }

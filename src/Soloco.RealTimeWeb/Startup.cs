@@ -1,9 +1,9 @@
 using System;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Cors.Infrastructure;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Data.Entity.ChangeTracking.Internal;
+using System.IO;
+using System.Linq;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,15 +20,12 @@ namespace Soloco.RealTimeWeb
     {
         private const string defaultName = "default";
 
-        private readonly IApplicationEnvironment _applicationEnvironment;
         private readonly IConfigurationRoot _configuration;
 
-        public Startup(IHostingEnvironment env, IApplicationEnvironment applicationEnvironment)
+        public Startup(IHostingEnvironment env)
         {
             if (env == null) throw new ArgumentNullException(nameof(env));
-            if (applicationEnvironment == null) throw new ArgumentNullException(nameof(applicationEnvironment));
 
-            _applicationEnvironment = applicationEnvironment;
             _configuration = SetupConfiguration(env);
         }
 
@@ -38,6 +35,7 @@ namespace Soloco.RealTimeWeb
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("appsettings.private.json", optional: true)
+                .AddCommandLine(Environment.GetCommandLineArgs().Skip(1).ToArray())
                 .AddEnvironmentVariables();
 
             return builder.Build();
@@ -48,7 +46,7 @@ namespace Soloco.RealTimeWeb
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddIdentity<User, Role>();
-            services.AddCaching();
+            services.AddMemoryCache();
             services.AddAuthentication(options =>  { options.SignInScheme = "ServerCookie"; });
             services.AddMvc();
             services.AddCors(ConfigureCors);
@@ -70,7 +68,7 @@ namespace Soloco.RealTimeWeb
             var container = new Container(configuration =>
             {
                 configuration.For<IConfiguration>().Use(_configuration);
-                configuration.For<IApplicationEnvironment>().Use(_applicationEnvironment);
+                configuration.For<ApplicationEnvironment>().Use(PlatformServices.Default.Application);
 
                 configuration.AddRegistry<WebRegistry>();
                 configuration.AddRegistry<CommonRegistry>();
@@ -117,8 +115,9 @@ namespace Soloco.RealTimeWeb
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
-               .UseStaticFiles()
+
+            //todo was .UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear())
+            app.UseStaticFiles()
                .UseSignalR()
                .ConfigureAuthentication(_configuration)
                .UseCors(defaultName)
@@ -130,7 +129,36 @@ namespace Soloco.RealTimeWeb
                        );
                });
         }
-        
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+        public static void Main(string[] args)
+        {
+            SetEnvironment(args);
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddCommandLine(args)
+                .Build();
+
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseConfiguration(config)
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
+        }
+
+        private static void SetEnvironment(string[] args)
+        {
+            const string environment = "ASPNETCORE_ENVIRONMENT";
+
+            var index = Array.IndexOf(args, $"--{environment}");
+            if (index >= 0)
+            {
+                Environment.SetEnvironmentVariable(environment, args[index + 1]);
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Soloco.RealTimeWeb.Environment
 {
     public class Program
     {
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
             var argument = ArgumentParser.Parse(args);
             var setting = new Settings(argument.Settings);
@@ -17,11 +17,11 @@ namespace Soloco.RealTimeWeb.Environment
 
             if (argument.Command == MigrationCommand.Up)
             {
-                runner.Up(context);
+                await runner.Up(context);
             }
             else if (argument.Command == MigrationCommand.Down)
             {
-                runner.Down(context);
+                await runner.Down(context);
             }
 
             WaitForUserIfDebuggerAttached();

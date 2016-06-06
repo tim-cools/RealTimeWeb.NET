@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Soloco.RealTimeWeb.Common;
 
 namespace Soloco.RealTimeWeb.Membership.Users.Handlers
