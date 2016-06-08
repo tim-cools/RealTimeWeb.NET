@@ -54,7 +54,6 @@ namespace Soloco.RealTimeWeb.Infrastructure
 
             if (!result.Succeeded)
             {
-                Debugger.Launch();
                 context.Reject(
                     error: "invalid_client",
                     description: "Invalid redirect uri");
@@ -119,9 +118,8 @@ namespace Soloco.RealTimeWeb.Infrastructure
         /// </summary>
         public override async Task GrantRefreshToken(GrantRefreshTokenContext context)
         {
-            Debugger.Launch();
-
-            var validator = new RefreshTokenValidator(context.Ticket.GetTicketId(),
+            var validator = new RefreshTokenValidator(
+                context.Ticket.GetTicketId(),
                 context.ClientId,
                 context.Ticket.Principal.GetClaim(ClaimTypes.NameIdentifier));
 

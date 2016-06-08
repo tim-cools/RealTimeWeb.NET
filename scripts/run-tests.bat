@@ -1,5 +1,5 @@
 if not "%1"=="" (
-	set Hosting:Environment=%1
+	set ASPNETCORE_ENVIRONMENT=%1
 )
 
 dotnet test ./src/Soloco.RealTimeWeb.Common.Tests
